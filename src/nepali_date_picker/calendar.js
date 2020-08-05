@@ -7,7 +7,7 @@ class NepaliCalendar extends Component {
         value: "2076-01-12"
     }
 
-    constructor(props: Readonly<{}>) {
+    constructor(props) {
         super(props)
 
         this.state = {

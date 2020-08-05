@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './nepali_date_picker.css'
-import NepaliCalendar from './calendar'
+import NepaliCalendar from './calendar.js'
+import { calendarFunctions } from './helper.js'
 
 class NepaliDatePicker extends Component {
     static propTypes = {
@@ -14,6 +15,10 @@ class NepaliDatePicker extends Component {
                   <NepaliCalendar   />
             </div>
         )
+    }
+
+    componentDidMount(){
+        console.log(calendarFunctions.getNepaliNumber(2));
     }
 }
 
