@@ -1,0 +1,108 @@
+
+:root{
+    --cl-primary:#3851A3;
+    --cl-primary2: rgba(56, 81, 163, 0.2);
+    --cl-danger:#F15C61;
+    --cl-success:#3FBEB2;
+    --cl-secondary:#878F9D;
+    
+}
+.hand-cursor{
+    cursor: pointer !important;
+  }
+
+.rl-nepali-datepicker-wrapper{
+
+}
+.rl-nepali-datepicker-wrapper ul {list-style-type: none;}
+
+.rl-nepali-date-panel{
+    width: 290px;
+}
+.rl-nepali-date-body{
+    padding: 8px 12px;
+}
+
+.rl-nepali-date-panel .left-actions div,
+.rl-nepali-date-panel .right-actions div
+{
+    color: #ddd;
+}
+
+.rl-nepali-date-panel .left-actions div:hover,
+.rl-nepali-date-panel .right-actions div:hover{
+    color: white;
+}
+
+.rl-nepali-date-panel .rl-nepalo-date-body{
+    padding: 8px 12px;
+}
+/* Month header */
+.month-header {
+    /* width: 100%; */
+    background: var(--cl-primary);
+    text-align: center;
+    padding: 12px 8px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+.month-header .left-actions , .month-header .right-actions{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.month-header .left-actions :first-child, .month-header .right-actions :first-child{
+    margin-right: 12px;
+}
+
+.rl-nepali-date-content{
+    width: 100%;
+}
+
+.rl-nepali-date-content th, .rl-nepali-date-content td{
+    color:black;
+    font-weight: 400;
+
+}
+.rl-picker-cell{
+    border-radius: 2px;
+    padding: 4px;
+    cursor: pointer;
+}
+.rl-picker-cell .rl-picker-cell-inner{
+    position: relative;
+    z-index: 2;
+    margin: auto;
+    min-width: 24px;
+    width: inherit;
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 2px;
+    -webkit-transition: background .3s,border .3s;
+    transition: background .3s,border .3s;
+
+   
+}
+.rl-picker-cell:hover  .rl-picker-cell-inner{
+    background-color: var(--cl-primary2);
+}
+
+.rl-picker-cell.active .rl-picker-cell-inner{
+    background-color: var(--cl-primary);
+    color: white;
+}
+
+.rl-picker-cell.today .rl-picker-cell-inner{
+    border-color: var(--cl-primary);
+    border: 1px solid;
+}
+
+.rl-picker-cell.other-month .rl-picker-cell-inner{
+   color:rgba(0,0,0,.4);
+   /* background-color:var(--cl-secondary) ; */
+}
