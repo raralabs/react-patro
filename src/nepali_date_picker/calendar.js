@@ -32,7 +32,8 @@ class NepaliCalendar extends Component {
                 month: null,
                 year: null,
                 daysInMonth: 0,
-                weekDay: 0
+                weekDay: 0,
+                dayValue: null
             },
 
             calendarDataAD: {
@@ -40,10 +41,16 @@ class NepaliCalendar extends Component {
                 month: null,
                 year: null,
                 daysInMonth: 0,
-                weekDay: 0
+                weekDay: 0,
+                dayValue: null
             },
 
             currentRenderingDate: moment(),
+            todayDataBS:{
+                date: null,
+                month: null,
+                year: null,
+            },
 
             calendarType: "BS"
 
@@ -71,7 +78,7 @@ class NepaliCalendar extends Component {
         let calendarDataBS = this.state.calendarDataBS;
         var nextMonth = (calendarDataBS.month + 1 <= 12) ? calendarDataBS.month + 1 : 1;
         var nextYear = (nextMonth !== 1) ? calendarDataBS.year : calendarDataBS.year + 1;
-        var nextDate = calendarDataBS.dateValue;
+        var nextDate = calendarDataBS.dayValue;
         if (nextYear < calendarData.minBsYear || nextYear > calendarData.maxBsYear) {
             return null;
         }
@@ -87,7 +94,7 @@ class NepaliCalendar extends Component {
         let calendarDataBS = this.state.calendarDataBS;
         var prevMonth = (calendarDataBS.month - 1 > 0) ? calendarDataBS.month - 1 : 12;
         var prevYear = (prevMonth !== 12) ? calendarDataBS.year : calendarDataBS.year - 1;
-        var prevDate = calendarDataBS.dateValue;
+        var prevDate = calendarDataBS.dayValue;
         if (prevYear < calendarData.minBsYear || prevYear > calendarData.maxBsYear) {
             return null;
         }
@@ -96,7 +103,6 @@ class NepaliCalendar extends Component {
     }
 
     renderCurrentMonth = () => {
-        let calendarDataBS = this.state.currentRenderingDate;
 
         var currentDate = new Date();
         var currentBsDate = calendarFunctions.getBsDateByAdDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
@@ -105,6 +111,13 @@ class NepaliCalendar extends Component {
         var bsYear = currentBsDate.bsYear;
         var bsMonth = currentBsDate.bsMonth;
         var bsDate = currentBsDate.bsDate;
+        this.setState({
+            todayDataBS:{
+                date:bsDate,
+                month:bsMonth,
+                year:bsYear
+            }
+        })
         this.setCalendarData(bsYear, bsMonth, bsDate)
     }
 
@@ -118,7 +131,7 @@ class NepaliCalendar extends Component {
                 year: _data.bsYear,
                 daysInMonth: _data.bsMonthDays,
                 weekDay: _data.weekDay,
-                dateValue: bsDate
+                dayValue: bsDate
             }
         })
     }
@@ -131,13 +144,15 @@ class NepaliCalendar extends Component {
 
 
     render() {
-        const { calendarDataBS, calendarDataAD, calendarType } = this.state;
+        const { calendarDataBS, calendarDataAD, calendarType, selected_data,todayDataBS } = this.state;
 
         let _calendarData = calendarType == "BS" ? calendarDataBS : calendarDataAD;
         let _previousCalendarData = this.getPreviousBSMonthData(_calendarData);
         let previouseMonthDays = _previousCalendarData && _previousCalendarData.bsMonthDays || 30;
 
-        console.log("prev", _previousCalendarData)
+
+
+        console.log("selected data", selected_data)
 
 
 
@@ -194,27 +209,52 @@ class NepaliCalendar extends Component {
                                                 indexedItem - _calendarData.daysInMonth - _calendarData.weekDay + 1
                                                 : indexedItem - _calendarData.weekDay + 1
 
+                                        let isSelected = false;
+                                        let isToday=false;
+                                        if (selected_data.day && value_item == selected_data.day && 
+                                            _calendarData.month==selected_data.month&&isOfThisMonth){
+                                            isSelected=true
+                                        }
+
+                                        if(todayDataBS.date==value_item&&todayDataBS.month==_calendarData.month){
+                                            isToday=true
+                                        }
 
 
-                                        console.log("is of this month", isOfThisMonth, indexedItem)
+                                            // console.log("is of this month", isOfThisMonth, indexedItem)
 
-                                        return <td
-                                            onClick={(e) => {
-                                                console.log("clicked value is")
-                                            }}
-                                            className={`rl-picker-cell 
-                                        ${index1 * 7 + index2 == 20 ? 'active' : ''}
-                                        ${index1 * 7 + index2 == 13 ? 'today' : ''}
+                                            return <td
+                                                onClick={(e) => {
+                                                    if (isOfThisMonth) {
+                                                        this.setState({
+                                                            selected_data: {
+                                                                day: value_item,
+                                                                month: _calendarData.month,
+                                                                year: _calendarData.year
+                                                            },
+                                                        })
+                                                    } else if (index1 == 0) {
+                                                        // previous month date selected
+                                                        this.renderPreviousBSMonth()
+                                                    } else {
+                                                        // next month date selected
+                                                        this.renderNextBSMonth()
+                                                    }
+                                                    console.log("clicked value is")
+                                                }}
+                                                className={`rl-picker-cell 
+                                        ${isSelected ? 'active' : ''}
+                                        ${isToday? 'today' : ''}
 
                                         ${!isOfThisMonth ? 'other-month' : ''}`
 
-                                            }>
-                                            <div className='rl-picker-cell-inner'>
+                                                }>
+                                                <div className='rl-picker-cell-inner'>
 
-                                                {value_item}
+                                                    {value_item}
 
-                                            </div>
-                                        </td>
+                                                </div>
+                                            </td>
                                     })}
                                 </tr>
                             })}
