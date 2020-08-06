@@ -121,6 +121,7 @@ class NepaliCalendar extends Component {
         this.setCalendarData(bsYear, bsMonth, bsDate)
     }
     renderBSYear=(bsYear)=>{
+        console.log("rendering  for",bsYear)
         let calendarDataBS = this.state.calendarDataBS;
         var prevMonth = (calendarDataBS.month);
         var prevYear = bsYear;
@@ -180,7 +181,24 @@ class NepaliCalendar extends Component {
                         }} className='prev-month hand-cursor'>&#10094;</div>
                     </div>
                     <div className='month-header-content'>
-                        {this.getMonthValue(_calendarData.month)} &nbsp; {calendarFunctions.getNepaliNumber(_calendarData.year||0)}
+                        {this.getMonthValue(_calendarData.month)} &nbsp; 
+                        <div key={`${_calendarData.year}--`} tabIndex={0} className='inline-dropdown'>
+                            <div className='value'>{calendarFunctions.getNepaliNumber(_calendarData.year||0)}</div>
+                            <div className='inline-dropdown-container'>
+                                {Array(20).fill("").map((val,_selection_index)=>{
+                                    let yr=_calendarData.year||0;
+                                    let max_yr_to_show=yr+5;
+                                    let max_options_to_show=20;
+
+                                    let yr_item=max_yr_to_show - (max_options_to_show - _selection_index);
+                                    return yr!=0?<div  onClick={()=>{
+                                        this.renderBSYear(yr_item)
+                                    }} className={`inline-dropdown-item ${yr_item==_calendarData.year?'selected':''}`}>{calendarFunctions.getNepaliNumber(yr_item)}</div>:null
+                                })}
+                            </div>
+                        </div>
+                        
+
 
                     </div>
                     <div className='right-actions'>

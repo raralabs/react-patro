@@ -1,43 +1,43 @@
-
-:root{
-    --cl-primary:#3851A3;
+:root {
+    --cl-primary: #3851A3;
     --cl-primary2: rgba(56, 81, 163, 0.2);
-    --cl-danger:#F15C61;
-    --cl-success:#3FBEB2;
-    --cl-secondary:#878F9D;
-    
+    --cl-danger: #F15C61;
+    --cl-success: #3FBEB2;
+    --cl-secondary: #878F9D;
 }
-.hand-cursor{
+
+.hand-cursor {
     cursor: pointer !important;
-  }
-
-.rl-nepali-datepicker-wrapper{
-
 }
-.rl-nepali-datepicker-wrapper ul {list-style-type: none;}
 
-.rl-nepali-date-panel{
+.rl-nepali-datepicker-wrapper {}
+
+.rl-nepali-datepicker-wrapper ul {
+    list-style-type: none;
+}
+
+.rl-nepali-date-panel {
     width: 290px;
 }
-.rl-nepali-date-body{
+
+.rl-nepali-date-body {
     padding: 8px 12px;
 }
 
-.rl-nepali-date-panel .left-actions div,
-.rl-nepali-date-panel .right-actions div
-{
+.rl-nepali-date-panel .left-actions div, .rl-nepali-date-panel .right-actions div {
     color: #ddd;
 }
 
-.rl-nepali-date-panel .left-actions div:hover,
-.rl-nepali-date-panel .right-actions div:hover{
+.rl-nepali-date-panel .left-actions div:hover, .rl-nepali-date-panel .right-actions div:hover {
     color: white;
 }
 
-.rl-nepali-date-panel .rl-nepalo-date-body{
+.rl-nepali-date-panel .rl-nepalo-date-body {
     padding: 8px 12px;
 }
+
 /* Month header */
+
 .month-header {
     /* width: 100%; */
     background: var(--cl-primary);
@@ -48,34 +48,36 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-  }
-.month-header .left-actions , .month-header .right-actions{
+}
+
+.month-header .left-actions, .month-header .right-actions {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.month-header .left-actions :first-child, .month-header .right-actions :first-child{
+.month-header .left-actions :first-child, .month-header .right-actions :first-child {
     margin-right: 12px;
 }
 
-.rl-nepali-date-content{
+.rl-nepali-date-content {
     width: 100%;
 }
 
-.rl-nepali-date-content th, .rl-nepali-date-content td{
-    color:black;
+.rl-nepali-date-content th, .rl-nepali-date-content td {
+    color: black;
     font-weight: 400;
-
 }
-.rl-picker-cell{
+
+.rl-picker-cell {
     border-radius: 2px;
     padding: 4px;
     cursor: pointer;
 }
-.rl-picker-cell .rl-picker-cell-inner{
+
+.rl-picker-cell .rl-picker-cell-inner {
     position: relative;
-    z-index: 2;
+    /* z-index: 2; */
     margin: auto;
     min-width: 24px;
     width: inherit;
@@ -83,26 +85,74 @@
     height: 24px;
     line-height: 24px;
     border-radius: 2px;
-    -webkit-transition: background .3s,border .3s;
-    transition: background .3s,border .3s;
-
-   
+    -webkit-transition: background .3s, border .3s;
+    transition: background .3s, border .3s;
 }
-.rl-picker-cell:hover  .rl-picker-cell-inner{
+
+.rl-picker-cell:hover .rl-picker-cell-inner {
     background-color: var(--cl-primary2);
 }
 
-.rl-picker-cell.active .rl-picker-cell-inner{
+.rl-picker-cell.active .rl-picker-cell-inner {
     background-color: var(--cl-primary);
     color: white;
 }
 
-.rl-picker-cell.today .rl-picker-cell-inner{
+.rl-picker-cell.today .rl-picker-cell-inner {
     border-color: var(--cl-primary);
     border: 1px solid;
 }
 
-.rl-picker-cell.other-month .rl-picker-cell-inner{
-   color:rgba(0,0,0,.4);
-   /* background-color:var(--cl-secondary) ; */
+.rl-picker-cell.other-month .rl-picker-cell-inner {
+    color: rgba(0, 0, 0, .4);
+    /* background-color:var(--cl-secondary) ; */
 }
+
+/* INLINE DROPDOWN CSS START*/
+
+.inline-dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    text-align: left;
+}
+
+.inline-dropdown:focus { pointer-events:none; }
+.inline-dropdown:focus .inline-dropdown-container{ opacity:1; visibility:visible; }
+.inline-dropdown-container {
+    width: auto;
+    margin:3px 0 0 0;
+    padding: 10px;
+    border-radius:3px;
+    border-radius:3px;
+    pointer-events: auto;
+    position: absolute;
+    z-index: 3;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 1s;
+    height: 200px;
+    overflow-y: scroll;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(19, 31, 54, 0.25);
+    border-radius: 4px;
+    color: black;
+}
+.inline-dropdown-container  .inline-dropdown-item{
+    cursor: pointer;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.inline-dropdown-container  .inline-dropdown-item:hover{
+    background-color: var(--cl-primary2);
+}
+
+.inline-dropdown-container  .inline-dropdown-item.selected{
+    background-color: var(--cl-primary);
+    color: white;
+}
+/* INLINE DROPDOWN CSS END */
