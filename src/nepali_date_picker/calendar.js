@@ -166,7 +166,7 @@ class NepaliCalendar extends Component {
                         }} className='prev-month hand-cursor'>&#10094;</div>
                     </div>
                     <div className='month-header-content'>
-                        {this.getMonthValue(_calendarData.month)} &nbsp; {_calendarData.year}
+                        {this.getMonthValue(_calendarData.month)} &nbsp; {calendarFunctions.getNepaliNumber(_calendarData.year||0)}
 
                     </div>
                     <div className='right-actions'>
@@ -181,14 +181,9 @@ class NepaliCalendar extends Component {
                     <table className='rl-nepali-date-content'>
                         <thead>
                             <tr>
-                                <th>Su</th>
-                                <th>Mo</th>
-                                <th>Tu</th>
-                                <th>We</th>
-                                <th>Th</th>
-                                <th>Fr</th>
-                                <th>Sa</th>
-
+                                {calendarData.bsDays.map((val,ind)=>{
+                                    return <th  key={`${ind}-m`}>{val}</th>
+                                })}
                             </tr>
                         </thead>
                         <tbody>
@@ -251,7 +246,7 @@ class NepaliCalendar extends Component {
                                                 }>
                                                 <div className='rl-picker-cell-inner'>
 
-                                                    {value_item}
+                                                    {calendarFunctions.getNepaliNumber(value_item)}
 
                                                 </div>
                                             </td>

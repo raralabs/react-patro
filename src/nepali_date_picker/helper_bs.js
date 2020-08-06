@@ -98,7 +98,15 @@ export const validationFunctions = {
         }
     },
     validatePositiveNumber: function (numberParameters) {
-        console.log("validate positive number",numberParameters)
+        console.log("validate positive number", numberParameters);
+        Object.keys(numberParameters).map((key) => {
+            let value = numberParameters[key];
+            if (typeof value !== "number" || value === null || value < 0) {
+                throw new ReferenceError("Invalid parameters: " + Object.keys(numberParameters).join(", "));
+            } else if (key === "yearDiff" && value > (calendarData.maxBsYear - calendarData.minBsYear + 1)) {
+                throw new RangeError("Parameter yearDiff value should be in range of 0 to " + (calendarData.maxBsYear - calendarData.minBsYear + 1));
+            }
+        })
         // $.each(numberParameters, function (key, value) {
         //     if (typeof value !== "number" || value === null || value < 0) {
         //         throw new ReferenceError("Invalid parameters: " + Object.keys(numberParameters).join(", "));
@@ -154,7 +162,7 @@ export const calendarFunctions = Object.seal({
         return number;
     },
     getBsMonthInfoByBsDate: function (bsYear, bsMonth, bsDate, dateFormatPattern) {
-        validationFunctions.validateRequiredParameters({"bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate});
+        validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
         validationFunctions.validateBsYear(bsYear);
         validationFunctions.validateBsMonth(bsMonth);
         validationFunctions.validateBsDate(bsDate);
@@ -174,7 +182,7 @@ export const calendarFunctions = Object.seal({
         var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
         var weekDay = eqAdDate.getDay() + 1;
         var formattedDate = calendarFunctions.bsDateFormat(dateFormatPattern, bsYear, bsMonth, bsDate);
-        console.log("ad date",eqAdDate,bsDate)
+        console.log("ad date", eqAdDate, bsDate)
         return {
             bsYear: bsYear,
             bsMonth: bsMonth,
@@ -187,7 +195,7 @@ export const calendarFunctions = Object.seal({
         };
     },
     getAdDateByBsDate: function (bsYear, bsMonth, bsDate) {
-        validationFunctions.validateRequiredParameters({"bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate});
+        validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
         validationFunctions.validateBsYear(bsYear);
         validationFunctions.validateBsMonth(bsMonth);
         validationFunctions.validateBsDate(bsDate);
@@ -197,7 +205,7 @@ export const calendarFunctions = Object.seal({
         return adDate;
     },
     getTotalDaysNumFromMinBsYear: function (bsYear, bsMonth, bsDate) {
-        validationFunctions.validateRequiredParameters({"bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate});
+        validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
         validationFunctions.validateBsYear(bsYear);
         validationFunctions.validateBsMonth(bsMonth);
         validationFunctions.validateBsDate(bsDate);
@@ -237,9 +245,9 @@ export const calendarFunctions = Object.seal({
      * @returns {int}
      */
     getMonthDaysNumFormMinBsYear: function (bsMonth, yearDiff) {
-        validationFunctions.validateRequiredParameters({"bsMonth": bsMonth, "yearDiff": yearDiff});
+        validationFunctions.validateRequiredParameters({ "bsMonth": bsMonth, "yearDiff": yearDiff });
         validationFunctions.validateBsMonth(bsMonth);
-        validationFunctions.validatePositiveNumber({"yearDiff": yearDiff});
+        validationFunctions.validatePositiveNumber({ "yearDiff": yearDiff });
 
         var yearCount = 0;
         var monthDaysFromMinBsYear = 0;
@@ -273,7 +281,7 @@ export const calendarFunctions = Object.seal({
      * @returns {int} days
      */
     getBsMonthDays: function (bsYear, bsMonth) {
-        validationFunctions.validateRequiredParameters({"bsYear": bsYear, "bsMonth": bsMonth});
+        validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth });
         validationFunctions.validateBsYear(bsYear);
         validationFunctions.validateBsMonth(bsMonth);
 
@@ -299,13 +307,13 @@ export const calendarFunctions = Object.seal({
         return null;
     },
     getBsDateByAdDate: function (adYear, adMonth, adDate) {
-        validationFunctions.validateRequiredParameters({"adYear": adYear, "adMonth": adMonth, "adDate": adDate});
+        validationFunctions.validateRequiredParameters({ "adYear": adYear, "adMonth": adMonth, "adDate": adDate });
         validationFunctions.validateAdYear(adYear);
         validationFunctions.validateAdMonth(adMonth);
         validationFunctions.validateAdDate(adDate);
 
         var bsYear = adYear + 57;
-        var bsMonth = (adMonth + 9 ) % 12;
+        var bsMonth = (adMonth + 9) % 12;
         bsMonth = bsMonth === 0 ? 12 : bsMonth;
         var bsDate = 1;
 
@@ -334,7 +342,7 @@ export const calendarFunctions = Object.seal({
         };
     },
     getBsYearByAdDate: function (adYear, adMonth, adDate) {
-        validationFunctions.validateRequiredParameters({"adYear": adYear, "adMonth": adMonth, "adDate": adDate});
+        validationFunctions.validateRequiredParameters({ "adYear": adYear, "adMonth": adMonth, "adDate": adDate });
         validationFunctions.validateAdYear(adYear);
         validationFunctions.validateAdMonth(adMonth);
         validationFunctions.validateAdDate(adDate);
@@ -343,7 +351,7 @@ export const calendarFunctions = Object.seal({
         return bsDate.bsYear;
     },
     getBsMonthByAdDate: function (adYear, adMonth, adDate) {
-        validationFunctions.validateRequiredParameters({"adYear": adYear, "adMonth": adMonth, "adDate": adDate});
+        validationFunctions.validateRequiredParameters({ "adYear": adYear, "adMonth": adMonth, "adDate": adDate });
         validationFunctions.validateAdYear(adYear);
         validationFunctions.validateAdMonth(adMonth);
         validationFunctions.validateAdDate(adDate);
