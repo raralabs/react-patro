@@ -120,6 +120,16 @@ class NepaliCalendar extends Component {
         })
         this.setCalendarData(bsYear, bsMonth, bsDate)
     }
+    renderBSYear=(bsYear)=>{
+        let calendarDataBS = this.state.calendarDataBS;
+        var prevMonth = (calendarDataBS.month);
+        var prevYear = bsYear;
+        var prevDate = calendarDataBS.dayValue;
+        if (prevYear < calendarData.minBsYear || prevYear > calendarData.maxBsYear) {
+            return null;
+        }
+        this.setCalendarData(prevYear, prevMonth, prevDate)
+    }
 
     setCalendarData = (bsYear, bsMonth, bsDate) => {
         let _data = calendarFunctions.getBsMonthInfoByBsDate(bsYear, bsMonth, bsDate, this.props.dateFormat || "%D, %M %d, %y");
@@ -160,7 +170,11 @@ class NepaliCalendar extends Component {
             <div className='rl-nepali-date-panel'>
                 <div className="month-header">
                     <div className='left-actions'>
-                        <div title="Previous Year" className='prev-year hand-cursor'>&#10094;&#10094;</div>
+                        <div title="Previous Year" 
+                         onClick={()=>{
+                            this.renderBSYear(_calendarData.year-1)
+                        }}
+                        className='prev-year hand-cursor'>&#10094;&#10094;</div>
                         <div title="Previous Month" onClick={() => {
                             this.renderPreviousBSMonth()
                         }} className='prev-month hand-cursor'>&#10094;</div>
@@ -173,7 +187,9 @@ class NepaliCalendar extends Component {
                         <div title="Next Month" onClick={() => {
                             this.renderNextBSMonth()
                         }} className='next-month hand-cursor'>&#10095;</div>
-                        <div title="Next Year" className='next-year hand-cursor'>&#10095;&#10095;</div>
+                        <div onClick={()=>{
+                            this.renderBSYear(_calendarData.year+1)
+                        }} title="Next Year" className='next-year hand-cursor'>&#10095;&#10095;</div>
                     </div>
 
                 </div>
@@ -211,7 +227,7 @@ class NepaliCalendar extends Component {
                                             isSelected=true
                                         }
 
-                                        if(todayDataBS.date==value_item&&todayDataBS.month==_calendarData.month){
+                                        if(todayDataBS.date==value_item&&todayDataBS.month==_calendarData.month&&todayDataBS.year==_calendarData.year){
                                             isToday=true
                                         }
 
