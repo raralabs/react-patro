@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './nepali_date_picker.css'
 import NepaliCalendar from './calendar.js'
-import { calendarFunctions } from './helper.js'
+import { calendarFunctions } from './helper_bs.js'
 
 class NepaliDatePicker extends Component {
     static propTypes = {

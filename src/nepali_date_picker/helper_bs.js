@@ -174,6 +174,7 @@ export const calendarFunctions = Object.seal({
         var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
         var weekDay = eqAdDate.getDay() + 1;
         var formattedDate = calendarFunctions.bsDateFormat(dateFormatPattern, bsYear, bsMonth, bsDate);
+        console.log("ad date",eqAdDate,bsDate)
         return {
             bsYear: bsYear,
             bsMonth: bsMonth,
