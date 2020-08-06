@@ -47,7 +47,7 @@ class NepaliCalendar extends Component {
 
             currentRenderingDate: moment(),
             todayDataBS:{
-                date: null,
+                day: null,
                 month: null,
                 year: null,
             },
@@ -113,7 +113,7 @@ class NepaliCalendar extends Component {
         var bsDate = currentBsDate.bsDate;
         this.setState({
             todayDataBS:{
-                date:bsDate,
+                day:bsDate,
                 month:bsMonth,
                 year:bsYear
             }
@@ -223,14 +223,14 @@ class NepaliCalendar extends Component {
                                         let isSelected = false;
                                         let isToday=false;
                                         if (selected_data.day && value_item == selected_data.day && 
+                                            _calendarData.year==selected_data.year&&
                                             _calendarData.month==selected_data.month&&isOfThisMonth){
                                             isSelected=true
                                         }
 
-                                        if(todayDataBS.date==value_item&&todayDataBS.month==_calendarData.month&&todayDataBS.year==_calendarData.year){
+                                        if(todayDataBS.day==value_item&&todayDataBS.month==_calendarData.month&&todayDataBS.year==_calendarData.year){
                                             isToday=true
                                         }
-
 
                                             // console.log("is of this month", isOfThisMonth, indexedItem)
 
@@ -254,9 +254,9 @@ class NepaliCalendar extends Component {
                                                     console.log("clicked value is")
                                                 }}
                                                 className={`rl-picker-cell 
-                                        ${isSelected ? 'active' : ''}
+                                        
                                         ${isToday? 'today' : ''}
-
+                                        ${isSelected ? 'active' : ''}
                                         ${!isOfThisMonth ? 'other-month' : ''}`
 
                                                 }>
@@ -271,6 +271,18 @@ class NepaliCalendar extends Component {
                             })}
                         </tbody>
                     </table>
+                    <div style={{
+                        display:'flex',
+                        flexDirection:'row',
+                        justifyContent:'center'
+                    }}>
+                    <button onClick={()=>{
+                        this.setCalendarData(todayDataBS.year,todayDataBS.month,todayDataBS.day);
+                        this.setState({
+                            selected_data:todayDataBS
+                        })
+                    }}>Today</button>
+                    </div>
                 </div>
             </div>
         )
