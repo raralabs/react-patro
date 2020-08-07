@@ -253,22 +253,33 @@ class NepaliCalendar extends Component {
 
     toggleCalendarType = () => {
         let calendarType = this.state.calendarType;
+        let selected_data=this.state.selected_data;
+
+       
         switch (calendarType) {
             case "AD":
                 this.setState({
                     calendarType: "BS"
-                })
+                });
+                break;
                 // initially in AD,switch all information and selected temp data to BS
-                return;
             case "BS":
                 this.setState({
                     calendarType: "AD"
                 })
                 // initially in BS,switch all information and selected temp data to AD
-                return;
+                break;
             default:
-                return;
+                break;
         }
+        if(selected_data.day){
+            // selected  day, so render for given day  of  month
+            let bs_d_obj=calendarFunctions.getBsDateByAdDate(selected_data.year,selected_data.month+1,selected_data.day);
+            this.setCalendarBSData(bs_d_obj.bsYear,bs_d_obj.bsMonth,bs_d_obj.bsDate);
+        };
+
+        
+       
     }
 
 
