@@ -164,7 +164,7 @@ class NepaliCalendar extends Component {
         this.setState({
             todayDateAD: {
                 day: currentDate.getDate(),
-                month: currentDate.getMonth(),
+                month: currentDate.getMonth()+1,
                 year: currentDate.getFullYear()
             },
             todayDateBS: {
@@ -235,7 +235,7 @@ class NepaliCalendar extends Component {
 
 
     getMonthValue = (month, type = "BS") => {
-        return type == "BS" ? calendarData.bsMonths[month - 1] : calendarData.adMonth[month ]
+        return type == "BS" ? calendarData.bsMonths[month - 1] : calendarData.adMonth[month - 1 ]
     }
 
 
@@ -254,7 +254,12 @@ class NepaliCalendar extends Component {
     toggleCalendarType = () => {
         let calendarType = this.state.calendarType;
         let selected_data=this.state.selected_data;
-
+        if(selected_data.day){
+            // selected  day, so render for given day  of  month
+            let bs_d_obj=calendarFunctions.getBsDateByAdDate(selected_data.year,selected_data.month,selected_data.day);
+            console.log("rendering  for",bs_d_obj)
+            this.setCalendarBSData(bs_d_obj.bsYear,bs_d_obj.bsMonth,bs_d_obj.bsDate);
+        };
        
         switch (calendarType) {
             case "AD":
@@ -272,11 +277,7 @@ class NepaliCalendar extends Component {
             default:
                 break;
         }
-        if(selected_data.day){
-            // selected  day, so render for given day  of  month
-            let bs_d_obj=calendarFunctions.getBsDateByAdDate(selected_data.year,selected_data.month+1,selected_data.day);
-            this.setCalendarBSData(bs_d_obj.bsYear,bs_d_obj.bsMonth,bs_d_obj.bsDate);
-        };
+       
 
         
        
@@ -449,9 +450,9 @@ class NepaliCalendar extends Component {
                                             isSelected = true
                                         }
 
-                                        // if (todayDateAD.day == calendarDate && todayDateAD.month == _calendarData.month && todayDateAD.year == _calendarData.year) {
-                                        //     isToday = true
-                                        // }
+                                        if (todayDateAD.day == ad_date.day && todayDateAD.month == ad_date.month && todayDateAD.year == ad_date.year) {
+                                            isToday = true
+                                        }
 
                                         
 

@@ -199,14 +199,14 @@ export const calendarFunctions = Object.seal({
         var prevbsmonthdays = calendarFunctions.getBsMonthDays(prevbsyear, prevbsmonth);
         return {
             adYear: moment_date.year(),
-            adMonth: moment_date.month(),
+            adMonth: moment_date.month()+1,
             adDay: moment_date.date(),
             adDate: eqAdDate,
             adMonthsDay: moment_date.daysInMonth(),
             adStartingDayOfWeek: adInitialDateForMonth.day() == 0 ? 7 : adInitialDateForMonth.day(),
-            adPrevMonth: moment_date.month() - 1 != -1 ? moment_date.month()-1 : 11,
+            adPrevMonth: moment_date.month() - 1 != -1 ? moment_date.month() : 12,
             adPrevYear: moment_date.month() == 11 ? moment_date.year() - 1 : moment_date.year(),
-            adNextMonth:moment_date.add('month',1).month(),
+            adNextMonth:moment_date.add('month',2).month(),
             adNextYear:moment_date.add('month',1).year(),
             adDaysInPrevMonth: moment_date.subtract('month', 1).daysInMonth(),
 
@@ -244,7 +244,7 @@ export const calendarFunctions = Object.seal({
 
         return {
             adYear:adDate.getFullYear(),
-            adMonth:adDate.getMonth(),
+            adMonth:adDate.getMonth()+1,
             adDate:adDate.getDate()
         };
     },
