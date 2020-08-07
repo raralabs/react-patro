@@ -17,7 +17,7 @@
 }
 
 .rl-nepali-date-panel {
-    width: 290px;
+    width: 320px;
 }
 
 .rl-nepali-date-body {
@@ -71,7 +71,7 @@
 
 .rl-picker-cell {
     border-radius: 2px;
-    padding: 4px;
+    padding: 2px;
     cursor: pointer;
 }
 
@@ -79,14 +79,28 @@
     position: relative;
     /* z-index: 2; */
     margin: auto;
-    min-width: 24px;
+    min-width: 30px;
     width: inherit;
     text-align: center;
-    height: 24px;
-    line-height: 24px;
+    height: 30px;
+    line-height: 100%;
     border-radius: 2px;
     -webkit-transition: background .3s, border .3s;
     transition: background .3s, border .3s;
+    font-size: 14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rl-picker-cell .rl-picker-cell-inner .BS{
+    font-size: 14px;
+}
+.rl-picker-cell .rl-picker-cell-inner .AD{
+   position: absolute;
+   right: 2px;
+   bottom: 0px;
+   font-size: 7px;
 }
 
 .rl-picker-cell:hover .rl-picker-cell-inner {

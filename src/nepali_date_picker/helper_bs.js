@@ -180,6 +180,7 @@ export const calendarFunctions = Object.seal({
         var bsMonthDays = calendarFunctions.getBsMonthDays(bsYear, bsMonth);
         bsDate = (bsDate > bsMonthDays) ? bsMonthDays : bsDate;
         var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
+
         var weekDay = eqAdDate.getDay() + 1;
         var formattedDate = calendarFunctions.bsDateFormat(dateFormatPattern, bsYear, bsMonth, bsDate);
         console.log("ad date", eqAdDate, bsDate)
@@ -187,6 +188,9 @@ export const calendarFunctions = Object.seal({
             bsYear: bsYear,
             bsMonth: bsMonth,
             bsDate: bsDate,
+            adYear:eqAdDate.getFullYear(),
+            adMonth:eqAdDate.getMonth(),
+            adDay:eqAdDate.getDate(),
             weekDay: weekDay,
             formattedDate: formattedDate,
             adDate: eqAdDate,

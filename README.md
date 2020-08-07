@@ -8,3 +8,4 @@
 - [x] Dropdown for year select
 - [ ] Implement calendar in date picker
 - [ ] AD/BS switcher
+- [ ] AD/BS accept both value (AD as primary)
