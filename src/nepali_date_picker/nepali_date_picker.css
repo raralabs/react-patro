@@ -10,14 +10,30 @@
     cursor: pointer !important;
 }
 
-.rl-nepali-datepicker-wrapper {}
+.rl-nepali-datepicker-wrapper {
+    position: relative;
+    width: fit-content;
+  
+}
 
+.rl-nepali-datepicker-input {
+
+}
+.rl-nepali-datepicker-content{
+    position: absolute;
+    z-index: 4;
+    box-shadow: 0px 4px 10px rgba(19, 31, 54, 0.25);
+    background-color: white;
+    top: 24px;
+    right: 0px;
+}
 .rl-nepali-datepicker-wrapper ul {
     list-style-type: none;
 }
 
 .rl-nepali-date-panel {
     width: 320px;
+    z-index: 4;
 }
 
 .rl-nepali-date-body {
@@ -62,6 +78,9 @@
 
 .rl-nepali-date-content {
     width: 100%;
+}
+.rl-nepali-date-content thead th{
+    font-size: 12px;
 }
 
 .rl-nepali-date-content th, .rl-nepali-date-content td {
@@ -144,7 +163,7 @@
     border-radius:3px;
     pointer-events: auto;
     position: absolute;
-    z-index: 3;
+    z-index: 5;
     opacity: 0;
     visibility: hidden;
     transition: visibility 1s;

@@ -6,6 +6,11 @@ function App() {
   return (
     <div >
         <NepaliDatePicker />
+        <br></br>
+        <br></br>
+        {/* <NepaliDatePicker /> */}
+
+
     </div>
   );
 }

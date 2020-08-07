@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import './nepali_date_picker.css'
 import { calendarData, calendarFunctions } from './helper_bs';
 import moment from 'moment';
+import ReactDOM from 'react-dom';
 
 class NepaliCalendar extends Component {
     static propTypes = {
@@ -20,17 +21,45 @@ class NepaliCalendar extends Component {
         super(props)
 
         this.state = {
+
+            // always in ad
             selected_data: {
                 day: null,
                 month: null,
                 year: null
             },
-            selected_data_ad: {
+            calendarRenderingData: {
+                adMonth: null,
+                adYear: null,
+                adStartingDayOfWeek: null,
+                adTotalDaysInMonth: null,
+                adDayValue: null,
+                adPrevMonth: null,
+                adPrevYear: null,
+                adPrevMonthDays: null,
+                adNextMonth:null,
+                adNextYear:null,
+
+
+                bsMonth: null,
+                bsYear: null,
+                bsStartingDayOfWeek: null,
+                bsTotalDaysInMonth: null,
+                bsDayValue: null,
+                bsPrevMonth: null,
+                bsPrevYear: null,
+                bsPrevMonthDays: null,
+                bsNextMonth:null,
+                bsNextYear:null,
+
+                bsMonthFirstAdDate: null
+
+            },
+            todayDate: {
                 day: null,
                 month: null,
                 year: null
             },
-
 
             calendarDataBS: {
                 date: null,
@@ -61,6 +90,8 @@ class NepaliCalendar extends Component {
             isLoaded: false
 
         };
+
+
     };
 
 
@@ -108,6 +139,14 @@ class NepaliCalendar extends Component {
 
     }
 
+    renderADCalendarFor=(adYear,adMonth)=>{
+
+    }
+
+    renderBSCalendarFor=(bsYear,bsMonth)=>{
+
+    }
+
     renderCurrentMonth = () => {
 
         var currentDate = new Date();
@@ -116,15 +155,15 @@ class NepaliCalendar extends Component {
 
         var bsYear = currentBsDate.bsYear;
         var bsMonth = currentBsDate.bsMonth;
-        var bsDate = currentBsDate.bsDate;
+        var bsDay = currentBsDate.bsDate;
         this.setState({
             todayDataBS: {
-                day: bsDate,
+                day: bsDay,
                 month: bsMonth,
                 year: bsYear
             }
         })
-        this.setCalendarBSData(bsYear, bsMonth, bsDate)
+        this.setCalendarBSData(bsYear, bsMonth, bsDay)
     }
     renderBSYear = (bsYear) => {
         console.log("rendering  for", bsYear)
@@ -138,17 +177,46 @@ class NepaliCalendar extends Component {
         this.setCalendarBSData(prevYear, prevMonth, prevDate)
     }
 
-    setCalendarBSData = (bsYear, bsMonth, bsDate) => {
-        let _data = calendarFunctions.getBsMonthInfoByBsDate(bsYear, bsMonth, bsDate, this.props.dateFormat || "%D, %M %d, %y");
+    setCalendarBSData = (bsYear, bsMonth, bsDay) => {
+        // bsYear=2074;
+        // bsMonth=2;
+        // bsDay=31;
+        let _data = calendarFunctions.getBsMonthInfoByBsDate(bsYear, bsMonth, bsDay, this.props.dateFormat || "%D, %M %d, %y");
         console.log("nep data", _data)
         this.setState({
+            calendarRenderingData: {
+                adMonth: _data.adMonth,
+                adYear: _data.adYear,
+                adStartingDayOfWeek: _data.adStartingDayOfWeek,
+                adTotalDaysInMonth: _data.adMonthsDay,
+                adDayValue: _data.adDay,
+                adPrevMonth: _data.adPrevMonth,
+                adPrevYear: _data.adPrevYear,
+                adPrevMonthDays: _data.adDaysInPrevMonth,
+                adNextMonth:_data.adNextMonth,
+                adNextYear:_data.adNextYear,
+
+
+                bsMonth: _data.bsMonth,
+                bsYear: _data.bsYear,
+                bsStartingDayOfWeek: _data.bsStartingDayOfWeek,
+                bsTotalDaysInMonth: _data.bsMonthDays,
+                bsDayValue: _data.bsDay,
+                bsPrevMonth: _data.bsPrevMonth,
+                bsPrevYear: _data.bsPrevYear,
+                bsPrevMonthDays: _data.bsDaysInPrevMonth,
+                bsNextMonth:_data.bsNextMonth,
+                bsNextYear:_data.bsNextYear,
+
+                bsMonthFirstAdDate: _data.bsMonthFirstAdDate
+            },
             calendarDataBS: {
                 date: _data.adDate,
                 month: _data.bsMonth,
                 year: _data.bsYear,
                 daysInMonth: _data.bsMonthDays,
                 weekDay: _data.weekDay,
-                dayValue: bsDate,
+                dayValue: bsDay,
                 bsMonthFirstAdDate: _data.bsMonthFirstAdDate
             },
             isLoaded: true
@@ -156,26 +224,11 @@ class NepaliCalendar extends Component {
     }
 
 
-    setCalendarADData = (adYear, adMonth, adDate) => {
-        let _data = calendarFunctions.getad
-    }
-
-
     getMonthValue = (month, type = "BS") => {
-        return calendarData.bsMonths[month - 1]
+        return type == "BS" ? calendarData.bsMonths[month - 1] : calendarData.adMonth[month-1]
     }
 
-    onSelectAD = (adYear, adMonth, adDay) => {
-        console.log("onSelectAD", adYear, adMonth, adDay);
-        this.setState({
-            selected_data_ad: {
-                day: adDay,
-                month: adMonth,
-                year: adYear
-            },
-        })
 
-    }
 
     onSelectBS = (bsYear, bsMonth, bsDay) => {
         console.log("onSelectBS", bsYear, bsMonth, bsDay)
@@ -192,9 +245,15 @@ class NepaliCalendar extends Component {
         let calendarType = this.state.calendarType;
         switch (calendarType) {
             case "AD":
+                this.setState({
+                    calendarType: "BS"
+                })
                 // initially in AD,switch all information and selected temp data to BS
                 return;
             case "BS":
+                this.setState({
+                    calendarType: "AD"
+                })
                 // initially in BS,switch all information and selected temp data to AD
                 return;
             default:
@@ -205,19 +264,57 @@ class NepaliCalendar extends Component {
 
 
 
+    componentDidMount() {
+        this.renderCurrentMonth();
+
+        console.log("AD DATE FOR",calendarFunctions.getAdDateObjectByBsDate(2077,4,22))
+        // this.calender_picker.addEventListener('focusout',this.onFocusedOut)
+
+    }
+
+
+
+
+
     render() {
-        const { calendarDataBS, calendarDataAD, calendarType, selected_data, todayDataBS } = this.state;
+        const { calendarDataBS, calendarRenderingData, calendarType, selected_data, todayDataBS } = this.state;
+        let is_AD = calendarType == "AD";
+
+        let _month = is_AD ? calendarRenderingData.adMonth : calendarRenderingData.bsMonth;
+        let _year = is_AD ? calendarRenderingData.adYear : calendarRenderingData.bsYear;
+        let _startingDayOfWeek = is_AD ? calendarRenderingData.adStartingDayOfWeek : calendarRenderingData.bsStartingDayOfWeek;
+        let _totalDaysInMonth = is_AD ? calendarRenderingData.adTotalDaysInMonth : calendarRenderingData.bsTotalDaysInMonth;
+        let _dayValue = is_AD ? calendarRenderingData.adDayValue : calendarRenderingData.bsDayValue;
+        let _prevMonth = is_AD ? calendarRenderingData.adPrevMonth : calendarRenderingData.bsPrevMonth;
+        let _prevYear = is_AD ? calendarRenderingData.adPrevYear : calendarRenderingData.bsPrevYear;
+        let _nextMonth=is_AD?calendarRenderingData.adNextMonth:calendarRenderingData.bsNextMonth;
+        let _nextYear=is_AD?calendarRenderingData.adNextYear:calendarRenderingData.bsNextYear;
+
+        let _prevMonthDays = is_AD ? calendarRenderingData.adPrevMonthDays : calendarRenderingData.bsPrevMonthDays
+
+
+        console.log("date for", { calendarType, _month, _year, _startingDayOfWeek, _totalDaysInMonth, _dayValue, _prevMonth, _prevYear, _prevMonthDays })
+
+        const { showAnother = true } = this.props;
+
+        // showAnother enables to show another date in cell 
+        // TODO to be implemented
+
+
         if (!this.state.isLoaded) {
             return <div></div>
         }
         let _calendarData = calendarDataBS;
+
+        let days_array = calendarType == "BS" ? calendarData.bsDays : calendarData.adDays;
+
 
         var preMonth = (_calendarData.month - 1 !== 0) ? _calendarData.month - 1 : 12;
         var preYear = preMonth === 12 ? _calendarData.year - 1 : _calendarData.year;
         var preMonthDays = preYear >= calendarData.minBsYear ? calendarFunctions.getBsMonthDays(preYear, preMonth) : 30;
 
 
-        console.log("selected data", selected_data)
+        // console.log("selected data", selected_data)
 
 
 
@@ -235,10 +332,12 @@ class NepaliCalendar extends Component {
                         }} className='prev-month hand-cursor'>&#10094;</div>
                     </div>
                     <div className='month-header-content'>
-                        {this.getMonthValue(_calendarData.month)} &nbsp;
+                        {this.getMonthValue(_month, calendarType)} &nbsp;
                         <div key={`${_calendarData.year}--`} tabIndex={0} className='inline-dropdown'>
-                            <div className='value'>{calendarFunctions.getNepaliNumber(_calendarData.year || 0)}</div>
-                            <div className='inline-dropdown-container'>
+                            {is_AD ? <div className='value'>{(_year || 0)}</div> : <div className='value'>{calendarFunctions.getNepaliNumber(_year || 0)}</div>}
+
+                            {/* <div className='value'>{calendarFunctions.getNepaliNumber(_calendarData.year || 0)}</div> */}
+                            {/* <div className='inline-dropdown-container'>
                                 {Array(20).fill("").map((val, _selection_index) => {
                                     let yr = _calendarData.year || 0;
                                     let max_yr_to_show = yr + 5;
@@ -249,7 +348,7 @@ class NepaliCalendar extends Component {
                                         this.renderBSYear(yr_item)
                                     }} className={`inline-dropdown-item ${yr_item == _calendarData.year ? 'selected' : ''}`}>{calendarFunctions.getNepaliNumber(yr_item)}</div> : null
                                 })}
-                            </div>
+                            </div> */}
                         </div>
 
 
@@ -269,7 +368,7 @@ class NepaliCalendar extends Component {
                     <table className='rl-nepali-date-content'>
                         <thead>
                             <tr>
-                                {calendarData.bsDays.map((val, ind) => {
+                                {days_array.map((val, ind) => {
                                     return <th key={`${ind}-m`}>{val}</th>
                                 })}
                             </tr>
@@ -278,71 +377,144 @@ class NepaliCalendar extends Component {
                             {Array(6).fill("").map((it1, index1) => {
                                 return <tr>
                                     {Array(7).fill("").map((it2, index2) => {
-                                        var calendarDate = (index1 * 7) + index2 - (_calendarData.bsMonthFirstAdDate && _calendarData.bsMonthFirstAdDate.getDay()) + 1;
 
-                                        let isCurrentMonthDate = true;
-                                        let eng_date = new Date();
-                                        console.log("calendarDate", calendarDate)
-
-
-                                        if (calendarDate <= 0) {
-                                            calendarDate = preMonthDays + calendarDate;
-                                            var _preMonth = (_calendarData.month - 1 !== 0) ? _calendarData.month - 1 : 12;
-                                            var _preYear = _preMonth === 12 ? _calendarData.year - 1 : _calendarData.year;
-
-                                            eng_date = calendarFunctions.getAdDateByBsDate(_preYear,_preMonth, calendarDate)
-
-                                            isCurrentMonthDate = false;
-                                        } else if (calendarDate > _calendarData.daysInMonth) {
-                                            calendarDate = calendarDate - _calendarData.daysInMonth;
-                                            var _posMonth=(_calendarData.month+1>12?1:_calendarData.month+1)
-                                            var  _posYear=_posMonth==12?_calendarData.year+1:_calendarData.year
-
-                                            eng_date = calendarFunctions.getAdDateByBsDate(_posYear, _posMonth, calendarDate)
-                                            isCurrentMonthDate = false;
-                                        } else {
-                                            eng_date = calendarFunctions.getAdDateByBsDate(_calendarData.year, _calendarData.month, calendarDate)
+                                        let cell_date=(index1*7)+index2 - _startingDayOfWeek + 1;
+                                        let isCurrentMonth=true;
+                                        let main_date={
+                                            day:cell_date,
+                                            month:_month,
+                                            year:_year
                                         }
 
-                                        console.log("calendar date", calendarDate, eng_date)
+
+                                        if(cell_date<=0){
+                                            cell_date=_prevMonthDays+cell_date;
+                                            isCurrentMonth=false;
+                                            main_date={
+                                                day:cell_date,
+                                                month:_prevMonth,
+                                                year:_prevYear
+                                            }
+                                        }else if(cell_date>_totalDaysInMonth){
+                                            cell_date=cell_date-_totalDaysInMonth;
+                                            isCurrentMonth=false;
+                                            main_date={
+                                                day:cell_date,
+                                                month:_nextMonth,
+                                                year:_nextYear
+                                            }
+                                        }
+                                        let next_date_obj=is_AD?
+                                        calendarFunctions.getBsDateByAdDate(main_date.year,main_date.month,main_date.day):
+                                        calendarFunctions.getAdDateObjectByBsDate(main_date.year,main_date.month,main_date.day)
+                                        ;
+
+                                        let sub_main_date={
+                                            day:is_AD?next_date_obj.bsDate:next_date_obj.adDate,
+                                            month:is_AD?next_date_obj.bsMonth:next_date_obj.adMonth,
+                                            year:is_AD?next_date_obj.bsYear:next_date_obj.adYear
+                                        };
+
+
+                                        // let cal_date_bs=(index1*7)+index2 - calendarRenderingData.bsStartingDayOfWeek + 1;
+                                        // let cal_date=
+                                        // console.log("rendering for ",{cell_date,cal_date_bs})
+
+
+
+                                        // if (cal_date_bs <= 0) {
+                                        //     cal_date_bs = calendarRenderingData.bsPrevMonthDays + cal_date_bs;
+                                        //     isCurrentBSMonth = false;
+                                        // } else if (cal_date_bs > calendarRenderingData.bsTotalDaysInMonth) {
+                                        //     cal_date_bs = cal_date_bs - calendarRenderingData.bsTotalDaysInMonth;
+                                        //     isCurrentBSMonth = false;
+                                        // } 
+
+                                        // if (cal_date_ad <= 0) {
+                                        //     cal_date_ad = calendarRenderingData.adPrevMonthDays + cal_date_ad;
+                                        //     isCurrentADMonth = false;
+                                        // } else if (cal_date_ad > calendarRenderingData.adTotalDaysInMonth) {
+                                        //     cal_date_ad = cal_date_ad - calendarRenderingData.adTotalDaysInMonth;
+                                        //     isCurrentADMonth = false;
+                                        // } 
+
+                                        // let isCurrentMonth=is_AD?isCurrentADMonth:isCurrentBSMonth;
+
+
+                                    
+                                        
+
+                                        // var calendarDate = (index1 * 7) + index2 - (_calendarData.bsMonthFirstAdDate && _calendarData.bsMonthFirstAdDate.getDay()) + 1;
+
+                                        // let isCurrentMonthDate = true;
+                                        // let eng_date = new Date();
+                                        // // console.log("calendarDate", calendarDate)
+
+
+                                        // if (calendarDate <= 0) {
+                                        //     calendarDate = preMonthDays + calendarDate;
+                                        //     var _preMonth = (_calendarData.month - 1 !== 0) ? _calendarData.month - 1 : 12;
+                                        //     var _preYear = _preMonth === 12 ? _calendarData.year - 1 : _calendarData.year;
+
+                                        //     eng_date = calendarFunctions.getAdDateByBsDate(_preYear, _preMonth, calendarDate)
+
+                                        //     // isCurrentMonthDate = false;
+                                        // } else if (calendarDate > _calendarData.daysInMonth) {
+                                        //     calendarDate = calendarDate - _calendarData.daysInMonth;
+                                        //     var _posMonth = (_calendarData.month + 1 > 12 ? 1 : _calendarData.month + 1)
+                                        //     var _posYear = _posMonth == 12 ? _calendarData.year + 1 : _calendarData.year
+
+                                        //     eng_date = calendarFunctions.getAdDateByBsDate(_posYear, _posMonth, calendarDate)
+                                        //     // isCurrentMonthDate = false;
+                                        // } else {
+                                        //     eng_date = calendarFunctions.getAdDateByBsDate(_calendarData.year, _calendarData.month, calendarDate)
+                                        // }
+
+                                        // console.log("calendar date", calendarDate, eng_date)
                                         let isSelected = false;
                                         let isToday = false;
-                                        if (selected_data.day && calendarDate == selected_data.day &&
-                                            _calendarData.year == selected_data.year &&
-                                            _calendarData.month == selected_data.month && isCurrentMonthDate) {
-                                            isSelected = true
-                                        }
+                                        // if (selected_data.day && cell_date == selected_data.day &&
+                                        //     _calendarData.year == selected_data.year &&
+                                        //     _calendarData.month == selected_data.month && isCurrentMonthDate) {
+                                        //     isSelected = true
+                                        // }
 
-                                        if (todayDataBS.day == calendarDate && todayDataBS.month == _calendarData.month && todayDataBS.year == _calendarData.year) {
-                                            isToday = true
-                                        }
+                                        // if (todayDataBS.day == calendarDate && todayDataBS.month == _calendarData.month && todayDataBS.year == _calendarData.year) {
+                                        //     isToday = true
+                                        // }
 
                                         // console.log("is of this month", isOfThisMonth, indexedItem)
 
                                         return <td
                                             onClick={(e) => {
-                                                if (isCurrentMonthDate) {
-                                                    this.onSelectBS(_calendarData.year, _calendarData.month, calendarDate)
+                                                // if (isCurrentMonthDate) {
+                                                //     this.onSelectBS(_calendarData.year, _calendarData.month, calendarDate)
 
-                                                } else if (index1 == 0) {
-                                                    // previous month date selected
-                                                    this.renderPreviousBSMonth()
-                                                } else {
-                                                    // next month date selected
-                                                    this.renderNextBSMonth()
-                                                }
+                                                // } else if (index1 == 0) {
+                                                //     // previous month date selected
+                                                //     this.renderPreviousBSMonth()
+                                                // } else {
+                                                //     // next month date selected
+                                                //     this.renderNextBSMonth()
+                                                // }
                                                 console.log("clicked value is")
                                             }}
                                             className={`rl-picker-cell 
                                         
                                         ${isToday ? 'today' : ''}
                                         ${isSelected ? 'active' : ''}
-                                        ${!isCurrentMonthDate ? 'other-month' : ''}`
+                                        ${!isCurrentMonth ? 'other-month' : ''}`
 
                                             }>
                                             <div className={`rl-picker-cell-inner `}>
-                                                <div className="BS">{calendarFunctions.getNepaliNumber(calendarDate || 0)}</div>
-                                                <div className="AD">{moment(eng_date).format("DD")}</div>
+                                                {is_AD ? <>
+                                                    <div className="BS">{(cell_date || 0)}</div>
+                                                    <div className="AD">{calendarFunctions.getNepaliNumber(sub_main_date.day)}</div>
+                                                </> : <>
+                                                        <div className="BS">{calendarFunctions.getNepaliNumber(cell_date || 0)}</div>
+                                                        <div className="AD">{sub_main_date.day}</div>
+                                                    </>}
+
                                             </div>
                                         </td>
                                     })}
@@ -362,31 +534,18 @@ class NepaliCalendar extends Component {
                             })
                         }}>Today</button>
 
-                        {/* <button onClick={() => {
-                            switch (calendarType) {
-                                case 'AD':
-                                    this.setState({
-                                        calendarType: "BS"
-                                    })
-                                    return;
-                                case 'BS':
-                                    this.setState({
-                                        calendarType: "AD"
-                                    })
-                                    return
-                                default:
-                                    return
-                            }
-                        }}>TYPE : {calendarType}</button> */}
+                        <button onClick={() => {
+                            this.toggleCalendarType()
+                        }}>TYPE : {calendarType}</button>
                     </div>
                 </div>
             </div>
         )
     }
 
-    componentDidMount() {
-        this.renderCurrentMonth()
-    }
+
+
+
 }
 
 export default NepaliCalendar

@@ -1,11 +1,14 @@
-
+import moment from 'moment';
 
 
 
 
 export const calendarData = {
     bsMonths: ["बैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", "कार्तिक", "मंसिर", "पौष", "माघ", "फागुन", "चैत"],
+    adMonth: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    adMonthShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
     bsDays: ["आइत", "सोम", "मंगल", "बुध", "बिही", "शुक्र", "शनि"],
+    adDays: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
     nepaliNumbers: ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"],
     bsMonthUpperDays: [
         [30, 31],
@@ -98,7 +101,7 @@ export const validationFunctions = {
         }
     },
     validatePositiveNumber: function (numberParameters) {
-        console.log("validate positive number", numberParameters);
+        // console.log("validate positive number", numberParameters);
         Object.keys(numberParameters).map((key) => {
             let value = numberParameters[key];
             if (typeof value !== "number" || value === null || value < 0) {
@@ -161,41 +164,63 @@ export const calendarFunctions = Object.seal({
 
         return number;
     },
+
     getBsMonthInfoByBsDate: function (bsYear, bsMonth, bsDate, dateFormatPattern) {
         validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
         validationFunctions.validateBsYear(bsYear);
         validationFunctions.validateBsMonth(bsMonth);
         validationFunctions.validateBsDate(bsDate);
-        if (dateFormatPattern === null) {
-            dateFormatPattern = "%D, %M %d, %y";
-        } else if (typeof dateFormatPattern != "string") {
-            throw new TypeError("Invalid parameter dateFormatPattern value");
-        }
 
         var daysNumFromMinBsYear = calendarFunctions.getTotalDaysNumFromMinBsYear(bsYear, bsMonth, bsDate);
         var adDate = new Date(calendarData.minAdDateEqBsDate.ad.year, calendarData.minAdDateEqBsDate.ad.month, calendarData.minAdDateEqBsDate.ad.date - 1);
         adDate.setDate(adDate.getDate() + daysNumFromMinBsYear);
 
         var bsMonthFirstAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, 1);
+
+        console.log("ad date", adDate)
+
+
         var bsMonthDays = calendarFunctions.getBsMonthDays(bsYear, bsMonth);
         bsDate = (bsDate > bsMonthDays) ? bsMonthDays : bsDate;
         var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
+        let moment_date = moment(eqAdDate);
 
-        var weekDay = eqAdDate.getDay() + 1;
-        var formattedDate = calendarFunctions.bsDateFormat(dateFormatPattern, bsYear, bsMonth, bsDate);
+        var adInitialDateForMonth = moment_date.clone().startOf('month');
+
+        console.log("first ad date for month", adInitialDateForMonth.format('lll'))
+        // var formattedDate = calendarFunctions.bsDateFormat(dateFormatPattern, bsYear, bsMonth, bsDate);
         console.log("ad date", eqAdDate, bsDate)
+
+        var prevbsmonth = bsMonth - 1 !== 0 ? bsMonth - 1 : 12;
+        var prevbsyear = prevbsmonth == 12 ? bsYear - 1 : bsYear;
+        var nextbsmonth=bsMonth==12?1:bsMonth+1;
+        var nextbsyear=nextbsmonth==1?bsYear+1:bsYear;
+
+        var prevbsmonthdays = calendarFunctions.getBsMonthDays(prevbsyear, prevbsmonth);
         return {
+            adYear: moment_date.year(),
+            adMonth: moment_date.month() + 1,
+            adDay: moment_date.date(),
+            adDate: eqAdDate,
+            adMonthsDay: moment_date.daysInMonth(),
+            adStartingDayOfWeek: adInitialDateForMonth.day() == 0 ? 7 : adInitialDateForMonth.day(),
+            adPrevMonth: moment_date.month() - 1 != -1 ? moment_date.month()-1 : 11,
+            adPrevYear: moment_date.month() == 11 ? moment_date.year() - 1 : moment_date.year(),
+            adNextMonth:moment_date.add('month',1).month(),
+            adNextYear:moment_date.add('month',1).year(),
+            adDaysInPrevMonth: moment_date.subtract('month', 1).daysInMonth(),
+
             bsYear: bsYear,
             bsMonth: bsMonth,
-            bsDate: bsDate,
-            adYear:eqAdDate.getFullYear(),
-            adMonth:eqAdDate.getMonth(),
-            adDay:eqAdDate.getDate(),
-            weekDay: weekDay,
-            formattedDate: formattedDate,
-            adDate: eqAdDate,
+            bsDay: bsDate,//day of month
             bsMonthFirstAdDate: bsMonthFirstAdDate,
-            bsMonthDays: bsMonthDays
+            bsMonthDays: bsMonthDays,
+            bsStartingDayOfWeek: eqAdDate.getDay()-1,
+            bsPrevMonth: prevbsmonth,
+            bsPrevYear: prevbsyear,
+            bsNextMonth:nextbsmonth,
+            bsNextYear:nextbsyear,
+            bsDaysInPrevMonth: prevbsmonthdays,
         };
     },
     getAdDateByBsDate: function (bsYear, bsMonth, bsDate) {
@@ -207,6 +232,21 @@ export const calendarFunctions = Object.seal({
         var adDate = new Date(calendarData.minAdDateEqBsDate.ad.year, calendarData.minAdDateEqBsDate.ad.month, calendarData.minAdDateEqBsDate.ad.date - 1);
         adDate.setDate(adDate.getDate() + daysNumFromMinBsYear);
         return adDate;
+    },
+    getAdDateObjectByBsDate: function (bsYear, bsMonth, bsDate) {
+        validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
+        validationFunctions.validateBsYear(bsYear);
+        validationFunctions.validateBsMonth(bsMonth);
+        validationFunctions.validateBsDate(bsDate);
+        var daysNumFromMinBsYear = calendarFunctions.getTotalDaysNumFromMinBsYear(bsYear, bsMonth, bsDate);
+        var adDate = new Date(calendarData.minAdDateEqBsDate.ad.year, calendarData.minAdDateEqBsDate.ad.month, calendarData.minAdDateEqBsDate.ad.date - 1);
+        adDate.setDate(adDate.getDate() + daysNumFromMinBsYear);
+
+        return {
+            adYear:adDate.getFullYear(),
+            adMonth:adDate.getMonth(),
+            adDate:adDate.getDate()
+        };
     },
     getTotalDaysNumFromMinBsYear: function (bsYear, bsMonth, bsDate) {
         validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
@@ -310,6 +350,10 @@ export const calendarFunctions = Object.seal({
 
         return null;
     },
+    getADMonthDays: function (adYear, adMonth) {
+        let date = moment().year(adYear).month(adMonth);
+        return date.daysInMonth()
+    },
     getBsDateByAdDate: function (adYear, adMonth, adDate) {
         validationFunctions.validateRequiredParameters({ "adYear": adYear, "adMonth": adMonth, "adDate": adDate });
         validationFunctions.validateAdYear(adYear);
@@ -363,27 +407,27 @@ export const calendarFunctions = Object.seal({
         var bsDate = calendarFunctions.getBsDateByAdDate(adYear, adMonth, adDate);
         return bsDate.bsMonth;
     },
-    bsDateFormat: function (dateFormatPattern, bsYear, bsMonth, bsDate) {
-        validationFunctions.validateRequiredParameters({
-            "dateFormatPattern": dateFormatPattern,
-            "bsYear": bsYear,
-            "bsMonth": bsMonth,
-            "bsDate": bsDate
-        });
-        validationFunctions.validateBsYear(bsYear);
-        validationFunctions.validateBsMonth(bsMonth);
-        validationFunctions.validateBsDate(bsDate);
+    // bsDateFormat: function (dateFormatPattern, bsYear, bsMonth, bsDate) {
+    //     validationFunctions.validateRequiredParameters({
+    //         "dateFormatPattern": dateFormatPattern,
+    //         "bsYear": bsYear,
+    //         "bsMonth": bsMonth,
+    //         "bsDate": bsDate
+    //     });
+    //     validationFunctions.validateBsYear(bsYear);
+    //     validationFunctions.validateBsMonth(bsMonth);
+    //     validationFunctions.validateBsDate(bsDate);
 
-        var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
-        var weekDay = eqAdDate.getDay() + 1;
-        var formattedDate = dateFormatPattern;
-        formattedDate = formattedDate.replace(/%d/g, calendarFunctions.getNepaliNumber(bsDate));
-        formattedDate = formattedDate.replace(/%y/g, calendarFunctions.getNepaliNumber(bsYear));
-        formattedDate = formattedDate.replace(/%m/g, calendarFunctions.getNepaliNumber(bsMonth));
-        formattedDate = formattedDate.replace(/%M/g, calendarData.bsMonths[bsMonth - 1]);
-        formattedDate = formattedDate.replace(/%D/g, calendarData.bsDays[weekDay - 1]);
-        return formattedDate;
-    },
+    //     var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
+    //     var weekDay = eqAdDate.getDay() + 1;
+    //     var formattedDate = dateFormatPattern;
+    //     formattedDate = formattedDate.replace(/%d/g, calendarFunctions.getNepaliNumber(bsDate));
+    //     formattedDate = formattedDate.replace(/%y/g, calendarFunctions.getNepaliNumber(bsYear));
+    //     formattedDate = formattedDate.replace(/%m/g, calendarFunctions.getNepaliNumber(bsMonth));
+    //     formattedDate = formattedDate.replace(/%M/g, calendarData.bsMonths[bsMonth - 1]);
+    //     formattedDate = formattedDate.replace(/%D/g, calendarData.bsDays[weekDay - 1]);
+    //     return formattedDate;
+    // },
     parseFormattedBsDate: function (dateFormat, dateFormattedText) {
         validationFunctions.validateRequiredParameters({
             "dateFormat": dateFormat,
