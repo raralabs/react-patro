@@ -7,5 +7,7 @@
 - [ ] Select date for next or previous month
 - [x] Dropdown for year select
 - [ ] Implement calendar in date picker
-- [ ] AD/BS switcher
+- [x] AD/BS switcher
 - [ ] AD/BS accept both value (AD as primary)
+- [ ] AD/BS sends both value
+- [ ] Implement date format usage
