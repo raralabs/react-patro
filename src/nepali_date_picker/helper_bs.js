@@ -199,7 +199,7 @@ export const calendarFunctions = Object.seal({
         var prevbsmonthdays = calendarFunctions.getBsMonthDays(prevbsyear, prevbsmonth);
         return {
             adYear: moment_date.year(),
-            adMonth: moment_date.month() + 1,
+            adMonth: moment_date.month(),
             adDay: moment_date.date(),
             adDate: eqAdDate,
             adMonthsDay: moment_date.daysInMonth(),
