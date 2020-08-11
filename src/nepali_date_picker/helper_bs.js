@@ -51,11 +51,15 @@ export const calendarData = {
 };
 
 export const validationFunctions = {
-    validateRequiredParameters: function (requiredParameters) {
+    validateRequiredParameters: function (requiredParameters = {}) {
+        Object.keys(requiredParameters).map((key) => {
+            var value = requiredParameters[key];
+            if (typeof value === "undefined" || value === null) {
+                throw new ReferenceError("Missing required parameters: " + Object.keys(requiredParameters).join(", "));
+            }
+        })
         // $.each(requiredParameters, function (key, value) {
-        //     if (typeof value === "undefined" || value === null) {
-        //         throw new ReferenceError("Missing required parameters: " + Object.keys(requiredParameters).join(", "));
-        //     }
+
         // });
     },
     validateBsYear: function (bsYear) {
@@ -93,6 +97,7 @@ export const validationFunctions = {
             throw new RangeError("Parameter bsDate value should be in range of 1 to 32");
         }
     },
+    // adDate range is from 1-12 
     validateAdDate: function (adDate) {
         if (typeof adDate !== "number" || adDate === null) {
             throw new TypeError("Invalid parameter adDate value");
@@ -126,6 +131,13 @@ export const calendarFunctions = Object.seal({
         * @param {Number} number
         * @returns {String} nepaliNumber
    */
+    changeDateToString: function (date, dateType = "AD", dateFormat) {
+
+    },
+    changeDatetToObject: function (dateString, dateType = "AD", dateFormat) {
+
+    },
+   
     getNepaliNumber: function (number) {
         if (typeof number === "undefined") {
             throw new Error("Parameter number is required");
@@ -165,7 +177,7 @@ export const calendarFunctions = Object.seal({
         return number;
     },
 
-    getBsMonthInfoByBsDate: function (bsYear, bsMonth, bsDate, dateFormatPattern) {
+    getBsMonthInfoByBsDate: function (bsYear, bsMonth, bsDate) {
         validationFunctions.validateRequiredParameters({ "bsYear": bsYear, "bsMonth": bsMonth, "bsDate": bsDate });
         validationFunctions.validateBsYear(bsYear);
         validationFunctions.validateBsMonth(bsMonth);
@@ -193,21 +205,21 @@ export const calendarFunctions = Object.seal({
 
         var prevbsmonth = bsMonth - 1 !== 0 ? bsMonth - 1 : 12;
         var prevbsyear = prevbsmonth == 12 ? bsYear - 1 : bsYear;
-        var nextbsmonth=bsMonth==12?1:bsMonth+1;
-        var nextbsyear=nextbsmonth==1?bsYear+1:bsYear;
+        var nextbsmonth = bsMonth == 12 ? 1 : bsMonth + 1;
+        var nextbsyear = nextbsmonth == 1 ? bsYear + 1 : bsYear;
 
         var prevbsmonthdays = calendarFunctions.getBsMonthDays(prevbsyear, prevbsmonth);
         return {
             adYear: moment_date.year(),
-            adMonth: moment_date.month()+1,
+            adMonth: moment_date.month() + 1,
             adDay: moment_date.date(),
             adDate: eqAdDate,
             adMonthsDay: moment_date.daysInMonth(),
             adStartingDayOfWeek: adInitialDateForMonth.day() == 0 ? 7 : adInitialDateForMonth.day(),
             adPrevMonth: moment_date.month() - 1 != -1 ? moment_date.month() : 12,
             adPrevYear: moment_date.month() == 11 ? moment_date.year() - 1 : moment_date.year(),
-            adNextMonth:moment_date.add('month',2).month(),
-            adNextYear:moment_date.add('month',1).year(),
+            adNextMonth: moment_date.add('month', 1).month()+1,
+            adNextYear: moment_date.add('month', 1).year(),
             adDaysInPrevMonth: moment_date.subtract('month', 1).daysInMonth(),
 
             bsYear: bsYear,
@@ -215,11 +227,11 @@ export const calendarFunctions = Object.seal({
             bsDay: bsDate,//day of month
             bsMonthFirstAdDate: bsMonthFirstAdDate,
             bsMonthDays: bsMonthDays,
-            bsStartingDayOfWeek: eqAdDate.getDay()-1,
+            bsStartingDayOfWeek: bsMonthFirstAdDate.getDay(),
             bsPrevMonth: prevbsmonth,
             bsPrevYear: prevbsyear,
-            bsNextMonth:nextbsmonth,
-            bsNextYear:nextbsyear,
+            bsNextMonth: nextbsmonth,
+            bsNextYear: nextbsyear,
             bsDaysInPrevMonth: prevbsmonthdays,
         };
     },
@@ -243,9 +255,9 @@ export const calendarFunctions = Object.seal({
         adDate.setDate(adDate.getDate() + daysNumFromMinBsYear);
 
         return {
-            adYear:adDate.getFullYear(),
-            adMonth:adDate.getMonth()+1,
-            adDate:adDate.getDate()
+            adYear: adDate.getFullYear(),
+            adMonth: adDate.getMonth() + 1,
+            adDate: adDate.getDate()
         };
     },
     getTotalDaysNumFromMinBsYear: function (bsYear, bsMonth, bsDate) {

@@ -10,14 +10,25 @@
     cursor: pointer !important;
 }
 
+.rl-nepali-datepicker-icon{
+    width: 16px;
+    filter: invert(59%) sepia(19%) saturate(232%) hue-rotate(179deg) brightness(93%) contrast(86%)
+}
 .rl-nepali-datepicker-wrapper {
     position: relative;
-    width: fit-content;
+    /* width: fit-content; */
   
 }
 
 .rl-nepali-datepicker-input {
-
+   
+}
+.popovercalendar .ant-popover-inner-content{
+    padding: 0px;
+}
+.today-btn{
+    color: var(--cl-primary);
+    font-weight: 600;
 }
 .rl-nepali-datepicker-content{
     position: absolute;
