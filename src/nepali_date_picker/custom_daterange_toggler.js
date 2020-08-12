@@ -53,7 +53,7 @@ class TogglerContent extends Component {
                         dateTo={selected_date_2}
                         onChange={(dt1,dt2)=>{
                             this.setState({
-                                isCustomClicked:false
+                                // isCustomClicked:false
                             })
                             typeof this.props.onChange==='function'&&this.props.onChange(dt1,dt2)
                         }} />
@@ -124,7 +124,7 @@ class CustomDateRangeToggler extends Component {
                                 this.setState({
                                     selected_date_1:dt1,
                                     selected_date_2:dt2,
-                                    selectorVisible:false
+                                    // selectorVisible:false
                                 })
                             }}
                         />}>

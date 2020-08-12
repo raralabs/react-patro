@@ -87,7 +87,11 @@ class NepaliCalendarRange extends Component {
                     showToday={false} />
                <NepaliCalendarForRange
                     selected_date_1={this.state.selected_date_1}
-                    initialDate={this.state.selected_date_2==null?this.state.selected_date_1:this.state.selected_date_2}
+                    initialDate={this.state.selected_date_2==null?
+                        moment(this.state.selected_date_1,"DD-MM-YYYY").isValid()?
+                        moment(this.state.selected_date_1,"DD-MM-YYYY").add('month',1).format("DD-MM-YYYY"):
+                        moment().add('month',1).format("DD-MM-YYYY")
+                        :this.state.selected_date_2}
                     // disableDate={(d)=>{
                     //     return this.state.selected_date_1&&d<moment(this.state.selected_date_1,"DD-MM-YYYY")
                     // }}
@@ -99,6 +103,19 @@ class NepaliCalendarRange extends Component {
                     showToday={false} />
             </div></>
         )
+    }
+
+    componentDidMount(){
+        if(moment(this.props.dateFrom,"DD-MM-YYYY").isValid()){
+            this.setState({
+                selected_date_1:this.props.dateFrom
+            })
+        }
+        if(moment(this.props.dateTo,"DD-MM-YYYY").isValid()){
+            this.setState({
+                selected_date_2:this.props.dateTo
+            })
+        }
     }
 
     componentDidUpdate(prevProps) {

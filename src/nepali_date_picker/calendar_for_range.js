@@ -380,7 +380,7 @@ class NepaliCalendarForRange extends Component {
     componentDidUpdate(prevProps) {
         console.log("did update",prevProps)
         if (this.props.initialDate != prevProps.initialDate) {
-            // this.renderCurrentMonth()
+            this.renderCurrentMonth()
         }
         if (this.props.selected_date_1 != prevProps.selected_date_1 || this.props.selected_date_2 != prevProps.selected_date_2) {
             this.assignSelectedDates()

@@ -196,6 +196,8 @@ export const calendarFunctions = Object.seal({
         bsDate = (bsDate > bsMonthDays) ? bsMonthDays : bsDate;
         var eqAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, bsDate);
         let moment_date = moment(eqAdDate);
+        let next_moment_date=moment(eqAdDate).add('month',1);
+        let prev_moment_date=moment(eqAdDate).subtract('month',1);
 
         var adInitialDateForMonth = moment_date.clone().startOf('month');
 
@@ -209,6 +211,8 @@ export const calendarFunctions = Object.seal({
         var nextbsyear = nextbsmonth == 1 ? bsYear + 1 : bsYear;
 
         var prevbsmonthdays = calendarFunctions.getBsMonthDays(prevbsyear, prevbsmonth);
+        console.log("check for feb",prev_moment_date.toDate(),prev_moment_date.daysInMonth())
+        // console.log("check for feb",moment_date.toDate(),moment_date.subtract('month',1).toDate(),moment_date.subtract('month',1).daysInMonth())
         return {
             adYear: moment_date.year(),
             adMonth: moment_date.month() + 1,
@@ -218,9 +222,9 @@ export const calendarFunctions = Object.seal({
             adStartingDayOfWeek: adInitialDateForMonth.day() == 0 ? 7 : adInitialDateForMonth.day(),
             adPrevMonth: moment_date.month() - 1 != -1 ? moment_date.month() : 12,
             adPrevYear: moment_date.month() == 11 ? moment_date.year() - 1 : moment_date.year(),
-            adNextMonth: moment_date.add('month', 1).month()+1,
-            adNextYear: moment_date.add('month', 1).year(),
-            adDaysInPrevMonth: moment_date.subtract('month', 1).daysInMonth(),
+            adNextMonth: next_moment_date.month()+1,
+            adNextYear: next_moment_date.year(),
+            adDaysInPrevMonth: prev_moment_date.daysInMonth(),
 
             bsYear: bsYear,
             bsMonth: bsMonth,
