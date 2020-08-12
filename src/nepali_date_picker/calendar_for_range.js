@@ -6,7 +6,7 @@ import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { get_ad_bs_listener, getCalendarType } from './ad_bs_date_render';
 
-class NepaliCalendar extends Component {
+class NepaliCalendarForRange extends Component {
     static propTypes = {
         value: "2076-01-12",
         closeOnDateSelect: true,
@@ -495,9 +495,9 @@ class NepaliCalendar extends Component {
                                             isSelected = true
                                         }
 
-                                        if (todayDateAD.day == ad_date.day && todayDateAD.month == ad_date.month && todayDateAD.year == ad_date.year) {
-                                            isToday = true
-                                        }
+                                        // if (todayDateAD.day == ad_date.day && todayDateAD.month == ad_date.month && todayDateAD.year == ad_date.year) {
+                                        //     isToday = true
+                                        // }
 
                                         if (typeof this.props.disableDate === 'function') {
                                             isDisabled = this.props.disableDate(moment().date(ad_date.day).month(ad_date.month - 1).year(ad_date.year))
@@ -586,8 +586,8 @@ class NepaliCalendar extends Component {
 
 
 }
-NepaliCalendar.defaultProps={
+NepaliCalendarForRange.defaultProps={
     showToday:true
 }
 
-export default NepaliCalendar
+export default NepaliCalendarForRange

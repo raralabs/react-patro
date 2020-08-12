@@ -100,7 +100,7 @@
 }
 
 .rl-picker-cell {
-    border-radius: 2px;
+    /* border-radius: 2px; */
     padding: 2px;
     cursor: pointer;
 }
@@ -133,23 +133,28 @@
    font-size: 7px;
 }
 
-.rl-picker-cell:hover .rl-picker-cell-inner {
+.rl-picker-cell:not(.disabled):hover .rl-picker-cell-inner {
     background-color: var(--cl-primary2);
 }
 
-.rl-picker-cell.active .rl-picker-cell-inner {
+.rl-picker-cell:not(.disabled).active .rl-picker-cell-inner {
     background-color: var(--cl-primary);
     color: white;
 }
 
-.rl-picker-cell.today .rl-picker-cell-inner {
+.rl-picker-cell:not(.disabled).today .rl-picker-cell-inner {
     border-color: var(--cl-primary);
     border: 1px solid;
 }
 
-.rl-picker-cell.other-month .rl-picker-cell-inner {
+.rl-picker-cell:not(.disabled).other-month .rl-picker-cell-inner {
     color: rgba(0, 0, 0, .4);
     /* background-color:var(--cl-secondary) ; */
+}
+.rl-picker-cell.disabled{
+    color: var(--cl-secondary);
+    cursor: not-allowed;
+    background-color: #ddd;
 }
 
 /* INLINE DROPDOWN CSS START*/
@@ -200,3 +205,10 @@
     color: white;
 }
 /* INLINE DROPDOWN CSS END */
+
+
+.rl-range-calendar{
+    display: flex;
+    flex-wrap: nowrap;
+    width: fit-content;
+}

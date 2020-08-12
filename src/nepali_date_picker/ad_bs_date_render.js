@@ -5,7 +5,7 @@ import { calendarFunctions } from './helper_bs';
 
 var ad_bs_listener = {};
 
-var calendarType="AD";
+var calendarType="BS";
 
 var ad_bs_sub_pub = Object.seal({
     key: 0,
