@@ -104,7 +104,7 @@ class NepaliCalendarForRange extends Component {
 
 
     getPreviousBSMonthData = (currentMonthData) => {
-        console.log("gettinng", currentMonthData)
+        // console.log("gettinng", currentMonthData)
         var datePickerData = currentMonthData;
         var prevMonth = (datePickerData.month - 1 > 0) ? datePickerData.month - 1 : 12;
         var prevYear = (prevMonth !== 12) ? datePickerData.year : datePickerData.year - 1;
@@ -112,7 +112,7 @@ class NepaliCalendarForRange extends Component {
             return null;
         }
         let monthData = calendarFunctions.getBsMonthInfoByBsDate(prevYear, prevMonth, 1);
-        console.log(monthData)
+        // console.log(monthData)
         return monthData
     }
     getNextBSMonthData = () => {
@@ -126,7 +126,7 @@ class NepaliCalendarForRange extends Component {
         if (nextYear < calendarData.minBsYear || nextYear > calendarData.maxBsYear) {
             return null;
         }
-        console.log("setting next for", nextYear, nextMonth, nextDate)
+        // console.log("setting next for", nextYear, nextMonth, nextDate)
 
         this.setCalendarBSData(nextYear, nextMonth, nextDate)
     }
@@ -171,7 +171,7 @@ class NepaliCalendarForRange extends Component {
             month: null,
             year: null
         }
-        console.log("rendering for",initialDate,this.props.calendarFor)
+        // console.log("rendering for",initialDate,this.props.calendarFor)
 
         var currentDate = new Date();
         var todayDate = new Date();
@@ -189,7 +189,7 @@ class NepaliCalendarForRange extends Component {
         var currentBsDate = calendarFunctions.getBsDateByAdDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
         var todayBsDate = calendarFunctions.getBsDateByAdDate(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
 
-        console.log("current DAta", currentDate, currentBsDate)
+        // console.log("current DAta", currentDate, currentBsDate)
 
         var bsYear = currentBsDate.bsYear;
         var bsMonth = currentBsDate.bsMonth;
@@ -211,7 +211,7 @@ class NepaliCalendarForRange extends Component {
         this.setCalendarBSData(bsYear, bsMonth, bsDay)
     }
     renderBSYear = (bsYear) => {
-        console.log("rendering  for", bsYear)
+        // console.log("rendering  for", bsYear)
         let calendarDataBS = this.state.calendarDataBS;
         var prevMonth = (calendarDataBS.month);
         var prevYear = bsYear;
@@ -296,7 +296,7 @@ class NepaliCalendarForRange extends Component {
 
         }
 
-        console.log("changed data",{selected_data_1,selected_data_2})
+        // console.log("changed data",{selected_data_1,selected_data_2})
         this.setState({
             selected_data_1: selected_data_1,
             selected_data_2: selected_data_2
@@ -309,7 +309,7 @@ class NepaliCalendarForRange extends Component {
 
 
     onSelectBS = (bsYear, bsMonth, bsDay) => {
-        console.log("onSelectBS", bsYear, bsMonth, bsDay)
+        // console.log("onSelectBS", bsYear, bsMonth, bsDay)
         this.setState({
             selected_data: {
                 day: bsDay,
@@ -367,7 +367,7 @@ class NepaliCalendarForRange extends Component {
             })
         })
 
-        console.log("AD DATE FOR", calendarFunctions.getAdDateObjectByBsDate(2077, 4, 22))
+        // console.log("AD DATE FOR", calendarFunctions.getAdDateObjectByBsDate(2077, 4, 22))
         // this.calender_picker.addEventListener('focusout',this.onFocusedOut)
 
     }
@@ -378,7 +378,7 @@ class NepaliCalendarForRange extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log("did update",prevProps)
+        // console.log("did update",prevProps)
         if (this.props.initialDate != prevProps.initialDate) {
             this.renderCurrentMonth()
         }
@@ -409,7 +409,7 @@ class NepaliCalendarForRange extends Component {
         let _prevMonthDays = is_AD ? calendarRenderingData.adPrevMonthDays : calendarRenderingData.bsPrevMonthDays
 
 
-        console.log("date for", { calendarType, _month, _year, _startingDayOfWeek, _totalDaysInMonth, _dayValue, _prevMonth, _prevYear, _prevMonthDays })
+        // console.log("date for", { calendarType, _month, _year, _startingDayOfWeek, _totalDaysInMonth, _dayValue, _prevMonth, _prevYear, _prevMonthDays })
 
         const { showAnother = true } = this.props;
 
@@ -495,7 +495,7 @@ class NepaliCalendarForRange extends Component {
                                     {Array(7).fill("").map((it2, index2) => {
 
                                         let cell_date = (index1 * 7) + index2 - _startingDayOfWeek + 1;
-                                        console.log("cell date", cell_date)
+                                        // console.log("cell date", cell_date)
                                         let isCurrentMonth = true;
                                         let main_date = {
                                             day: cell_date,
@@ -594,7 +594,7 @@ class NepaliCalendarForRange extends Component {
                                                     // next month date selected
                                                     this.renderNextBSMonth()
                                                 }
-                                                console.log("clicked value is")
+                                                // console.log("clicked value is")
                                             }}
                                             className={`rl-picker-cell 
                                         

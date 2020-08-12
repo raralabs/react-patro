@@ -162,16 +162,18 @@ class NepaliRangeInputPicker extends Component {
                                     if (calendarType == "AD") {
                                         let new_date = moment().date(_day).month(_month - 1).year(_year);
                                         _new_selected_date = new_date.format("DD-MM-YYYY");
-                                        this.onDateSelect(adDateStringToObject(_new_selected_date))
+                                        this.onDateSelect(adDateStringToObject(_new_selected_date),selected_date_2?false:true)
                                     } else {
                                         let respectiveADObject = calendarFunctions.getAdDateObjectByBsDate(_year, _month, _day);
                                         let new_date = moment().date(respectiveADObject.adDate).month(respectiveADObject.adMonth - 1).year(respectiveADObject.adYear);
                                         _new_selected_date = new_date.format("DD-MM-YYYY");
-                                        this.onDateSelect(adDateStringToObject(_new_selected_date))
+                                        this.onDateSelect(adDateStringToObject(_new_selected_date),selected_date_2?false:true)
                                     }
 
                                     this.left_inp.blur();
+                                    if(selected_date_2==null){
                                     this.right_inp.focus()
+                                    }
                                     this.setState({
                                         temp_value1: "",
                                         // selected_date: _new_selected_date
@@ -184,10 +186,11 @@ class NepaliRangeInputPicker extends Component {
                         <Input
                             className="input-split"
                             style={{
-                                width: 50,
+                                width: 26,
                                 borderLeft: 0,
                                 borderRight: 0,
                                 pointerEvents: 'none',
+                                padding:0
                             }}
                             placeholder="~"
                             disabled
@@ -255,7 +258,13 @@ class NepaliRangeInputPicker extends Component {
                             suffix={<Popover overlayClassName='popovercalendar'
                                 visible={calendarVisible}
                                 onVisibleChange={(visible) => {
+                                    if(selected_date_1&&selected_date_2==null){
+                                        this.setState({
+                                            selected_date_2:selected_date_1
+                                        })
+                                    }
                                     this.setState({ calendarVisible: visible })
+
                                 }}
                                 trigger='click' placement='bottomRight'
                                 content={<div className='rl-range-calendar'>
@@ -273,8 +282,11 @@ class NepaliRangeInputPicker extends Component {
                                         showToday={false} />
                                     <NepaliCalendarForRange
                                         selected_date_1={this.state.selected_date_1}
-                                        initialDate={this.state.selected_date_2 == null ? this.state.selected_date_1 : this.state.selected_date_2}
-                                        // disableDate={(d)=>{
+                                        initialDate={this.state.selected_date_2==null?
+                                            moment(this.state.selected_date_1,"DD-MM-YYYY").isValid()?
+                                            moment(this.state.selected_date_1,"DD-MM-YYYY").add('month',1).format("DD-MM-YYYY"):
+                                            moment().add('month',1).format("DD-MM-YYYY")
+                                            :this.state.selected_date_2}                                        // disableDate={(d)=>{
                                         //     return this.state.selected_date_1&&d<moment(this.state.selected_date_1,"DD-MM-YYYY")
                                         // }}
                                         selected_date_2={this.state.selected_date_2}
@@ -284,10 +296,11 @@ class NepaliRangeInputPicker extends Component {
                                         calendarFor={2}
                                         showToday={false} />
                                 </div>}>
-                                <img alt='calendar' onClick={() => {
+                                <img  alt='calendar' onClick={() => {
                                     this.setState({
                                         calendarVisible: true
                                     })
+                                    this.right_inp.blur()
                                 }} className='rl-nepali-datepicker-icon hand-cursor' src={CalendarIcon} />
                             </Popover>}
                         />

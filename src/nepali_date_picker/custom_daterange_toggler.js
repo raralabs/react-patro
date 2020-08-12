@@ -102,7 +102,8 @@ class CustomDateRangeToggler extends Component {
             {dateTo:moment().format("DD-MM-YYYY"),dateFrom:moment().subtract('day',29).format("DD-MM-YYYY"),label:"Last 30"},
             {dateTo:moment().format("DD-MM-YYYY"),dateFrom:moment().subtract('day',59).format("DD-MM-YYYY"),label:"Last 60"},
             {dateTo:moment().format("DD-MM-YYYY"),dateFrom:moment().subtract('day',179).format("DD-MM-YYYY"),label:"Last 180"},
-            {dateTo:moment().format("DD-MM-YYYY"),dateFrom:moment().subtract('day',359).format("DD-MM-YYYY"),label:"Last 360"}
+            {dateTo:moment().format("DD-MM-YYYY"),dateFrom:moment().subtract('day',359).format("DD-MM-YYYY"),label:"Last 360"},
+            {dateTo:moment().endOf('year').format("DD-MM-YYYY"),dateFrom:moment().startOf('year').format("DD-MM-YYYY"),label:'This year'}
         ]
         return (
             <div className='rl-daterange-toggler'>
@@ -144,8 +145,9 @@ class CustomDateRangeToggler extends Component {
                             if(isNaN(diff_days)){
                                 return;
                             }
+                            diff_days=Math.abs(diff_days)
                             this.setState({
-                                selected_date_2:selected_date_1,
+                                selected_date_2:dt_fr.subtract('day',1).format("DD-MM-YYYY"),
                                 selected_date_1:dt_fr.subtract('day',diff_days).format("DD-MM-YYYY")
                             })
                         }
@@ -153,7 +155,7 @@ class CustomDateRangeToggler extends Component {
                         &#10094;
                 </div>
                     <div className='label-body'>
-                        {rendering_val_1||"DD-MM-YYYY"} - {rendering_val_2||"DD-MM-YYYY"}
+                        {rendering_val_1||"DD-MM-YYYY"} ~ {rendering_val_2||"DD-MM-YYYY"}
                 </div>
                     <div className='switch right-switch hand-cursor' onClick={()=>{
                         if(!is_disabled_right){
@@ -165,8 +167,9 @@ class CustomDateRangeToggler extends Component {
                             if(isNaN(diff_days)){
                                 return;
                             }
+                            diff_days=Math.abs(diff_days)
                             this.setState({
-                                selected_date_1:selected_date_2,
+                                selected_date_1:dt_to.add('day',1).format("DD-MM-YYYY"),
                                 selected_date_2:dt_to.add('day',diff_days).format("DD-MM-YYYY")
                             })
                         }

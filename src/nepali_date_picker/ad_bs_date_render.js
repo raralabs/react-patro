@@ -11,7 +11,7 @@ var ad_bs_sub_pub = Object.seal({
     key: 0,
     subscribers: {},
     subscribe: function (subscriber) {
-        console.log("subscribing for", this.key)
+
         this.subscribers[this.key] = subscriber;
         return this.key++;
     },
@@ -28,7 +28,7 @@ var ad_bs_sub_pub = Object.seal({
         }
     },
     unsubscribe: function (key) {
-        console.log("unsubscribing", key)
+
         delete this.subscribers[key];
     },
 });
@@ -58,7 +58,7 @@ const AD_BS_RENDERER = ({ adDate, adDateFormat = "DD-MM-YYYY" }) => {
         let _k = ad_bs_listener.ad_bs.subscribe((dateType) => {
             setCalendarType(dateType || "AD")
         })
-        console.log("subscrr", _k)
+        // console.log("subscrr", _k)
         new_key = _k
         // _setKey(_k)
         // ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
@@ -67,7 +67,7 @@ const AD_BS_RENDERER = ({ adDate, adDateFormat = "DD-MM-YYYY" }) => {
 
     useEffect(() => {
         return function cleanup() {
-            console.log("key is", new_key, calendarType)
+            // console.log("key is", new_key, calendarType)
             ad_bs_listener.ad_bs.unsubscribe(new_key)
             // ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
         };
@@ -89,7 +89,7 @@ const padDateMonth = (val) => {
 }
 
 const dateObjectToString = (dt) => {
-    return `${dt.day}-${dt.month}-${dt.year}`
+    return `${padDateMonth(dt.day)}-${padDateMonth(dt.month)}-${dt.year}`
 }
 const adDateStringToObject=(ad_string,_format="DD-MM-YYYY")=>{
         let dtObj=moment(ad_string,_format);

@@ -73,7 +73,7 @@ class NepaliDatePicker extends Component {
 
     render() {
         const { selected_date, calendarType, focused, temp_value, calendarVisible } = this.state
-        console.log("today data", this.ad_extras, this.bs_extras, selected_date, calendarType)
+        // console.log("today data", this.ad_extras, this.bs_extras, selected_date, calendarType)
 
         let rendering_value = selected_date;
         if (focused) {
@@ -88,7 +88,7 @@ class NepaliDatePicker extends Component {
         // let selected_ad_date=moment(selected_date,"YYYY-MM-DD");
 
         // let val=<AD_BS_RENDERER adDate={selected_date}/>
-        console.log("cal", rendering_value)
+        // console.log("cal", rendering_value)
         return (
             <div id={this.random_id} className='rl-nepali-datepicker-wrapper'>
                 <Input

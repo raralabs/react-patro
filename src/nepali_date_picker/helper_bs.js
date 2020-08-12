@@ -189,7 +189,7 @@ export const calendarFunctions = Object.seal({
 
         var bsMonthFirstAdDate = calendarFunctions.getAdDateByBsDate(bsYear, bsMonth, 1);
 
-        console.log("ad date", adDate)
+        // console.log("ad date", adDate)
 
 
         var bsMonthDays = calendarFunctions.getBsMonthDays(bsYear, bsMonth);
@@ -201,9 +201,9 @@ export const calendarFunctions = Object.seal({
 
         var adInitialDateForMonth = moment_date.clone().startOf('month');
 
-        console.log("first ad date for month", adInitialDateForMonth.format('lll'))
+        // console.log("first ad date for month", adInitialDateForMonth.format('lll'))
         // var formattedDate = calendarFunctions.bsDateFormat(dateFormatPattern, bsYear, bsMonth, bsDate);
-        console.log("ad date", eqAdDate, bsDate)
+        // console.log("ad date", eqAdDate, bsDate)
 
         var prevbsmonth = bsMonth - 1 !== 0 ? bsMonth - 1 : 12;
         var prevbsyear = prevbsmonth == 12 ? bsYear - 1 : bsYear;
@@ -211,7 +211,7 @@ export const calendarFunctions = Object.seal({
         var nextbsyear = nextbsmonth == 1 ? bsYear + 1 : bsYear;
 
         var prevbsmonthdays = calendarFunctions.getBsMonthDays(prevbsyear, prevbsmonth);
-        console.log("check for feb",prev_moment_date.toDate(),prev_moment_date.daysInMonth())
+        // console.log("check for feb",prev_moment_date.toDate(),prev_moment_date.daysInMonth())
         // console.log("check for feb",moment_date.toDate(),moment_date.subtract('month',1).toDate(),moment_date.subtract('month',1).daysInMonth())
         return {
             adYear: moment_date.year(),
