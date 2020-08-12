@@ -19,8 +19,8 @@ class NepaliRangeInputPicker extends Component {
         super(props)
 
         this.state = {
-            selected_date_1: '4-9-2020',
-            selected_date_2: '8-10-2020',
+            selected_date_1:null ,
+            selected_date_2: null,
             focused1: false,
             focused2: false,
             temp_value1: "",
@@ -85,6 +85,7 @@ class NepaliRangeInputPicker extends Component {
                     selected_date_1: dateObjectToString(ad_date),
                     selected_date_2: null
                 })
+                this.right_inp.focus()
 
             }
     }
@@ -227,6 +228,7 @@ class NepaliRangeInputPicker extends Component {
                                         _day, _month, _year, calendarType
                                     })
                                     let _new_selected_date = ""
+                                    this.right_inp.blur();
                                     if (calendarType == "AD") {
                                         let new_date = moment().date(_day).month(_month - 1).year(_year);
                                         _new_selected_date = new_date.format("DD-MM-YYYY");
@@ -238,7 +240,7 @@ class NepaliRangeInputPicker extends Component {
                                         this.onDateSelect(adDateStringToObject(_new_selected_date),false)
                                     }
 
-                                    this.right_inp.blur();
+                                    
                                     this.setState({
                                         temp_value2: "",
                                         // selected_date: _new_selected_date

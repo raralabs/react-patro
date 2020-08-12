@@ -230,3 +230,48 @@
   .rl-nepali-rangepicker-wrapper .input-right:focus {
     border-left-width: 1px;
   }
+
+
+  .rl-daterange-toggler{
+    display: flex;
+    flex-wrap: nowrap;
+    width: fit-content;
+    /* background-color: var(--cl-success); */
+  }
+
+  .rl-daterange-toggler .rl-daterange-toggler-content{
+    display: flex;
+    flex-wrap: nowrap;
+    width: fit-content;
+    margin-left: 8px;
+  }
+  .rl-daterange-toggler .rl-daterange-toggler-content .label-body{
+      margin-left: 12px;
+      margin-right: 12px;
+  }
+  .rl-daterange-toggler .rl-daterange-toggler-content .switch{
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: var(--cl-primary2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+  .rl-daterange-toggler .selector-main{
+      display: flex;
+  }
+  .rl-daterange-toggler .down-arrow{
+    font-size: 110%;
+    line-height: 0.9rem;
+    margin-left: 8px;
+  }
+
+  .selector-content-wrapper .selector-content{
+      display: flex;
+      flex-direction: column;
+  }
+  .selector-content-wrapper{
+      display: flex;
+  }

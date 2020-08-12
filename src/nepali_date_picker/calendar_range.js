@@ -13,8 +13,8 @@ class NepaliCalendarRange extends Component {
         super(props)
 
         this.state = {
-            selected_date_1: '4-9-2020',
-            selected_date_2: '8-10-2020'
+            selected_date_1: null,
+            selected_date_2: null
         }
     }
 
@@ -49,6 +49,8 @@ class NepaliCalendarRange extends Component {
                     new_dt_group.selected_date_2=this.state.selected_date_1
                 }
 
+                typeof this.props.onChange==='function'&&this.props.onChange(new_dt_group.selected_date_1,new_dt_group.selected_date_2)
+
                 this.setState({
                     ...new_dt_group
                 })
@@ -70,7 +72,6 @@ class NepaliCalendarRange extends Component {
 
 
         return (<>
-            <div><pre>{JSON.stringify(this.state, null, 5)}</pre></div>
             <div className='rl-range-calendar'>
                 <NepaliCalendarForRange
                     selected_date_1={this.state.selected_date_1}

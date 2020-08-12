@@ -8,6 +8,7 @@ import { getCalendarType, get_ad_bs_listener } from './nepali_date_picker/ad_bs_
 import { Switch, Space } from 'antd';
 // import 'antd/dist/antd.css';
 import NepaliRangeInputPicker from './nepali_date_picker/range_input_picker';
+import CustomDateRangeToggler from './nepali_date_picker/custom_daterange_toggler';
 
 class App extends React.Component {
   constructor(props) {
@@ -55,6 +56,8 @@ class App extends React.Component {
         //   }
         // }} 
         />
+        <CustomDateRangeToggler  />
+        
         <NepaliRangeInputPicker />
 
         <NepaliCalendarRange />
