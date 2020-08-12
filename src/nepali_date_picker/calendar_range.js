@@ -101,6 +101,18 @@ class NepaliCalendarRange extends Component {
         )
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.dateFrom != prevProps.dateFrom) {
+            this.setState({
+                selected_date_1: this.props.dateFrom
+            })
+        }
+        if (this.props.dateTo != prevProps.dateTo) {
+            this.setState({
+                selected_date_2: this.props.dateTo
+            })
+        }
+    }
 
 
 

@@ -12,14 +12,15 @@ class TogglerContent extends Component {
 
         this.state = {
             selected_key: null,
-            isCustom: false
+            isCustomClicked: false
         }
 
 
     }
 
     render() {
-        let isCustom = this.state.isCustom;
+        let isCustomClicked = this.state.isCustomClicked;
+        let isCustom=false;
         let showCustom = this.props.showCustom;
         let options=this.props.options;
         let selected_date_1=this.props.selected_date_1;
@@ -29,22 +30,31 @@ class TogglerContent extends Component {
             <div className='selector-content-wrapper'>
                 <div className='selector-content'>
                     {options.map((it)=>{
-                        return <Button onClick={()=>{
+                        let is_selected=it.dateFrom==selected_date_1&&it.dateTo==selected_date_2&&selected_date_1&&selected_date_2;
+                        return <Button type={is_selected?'primary':''} onClick={()=>{
                             typeof this.props.onChange==='function'&&this.props.onChange(it.dateFrom,it.dateTo)
                             this.setState({
-                                isCustom:false
+                                isCustomClicked:false
                             })
                         }}>{it.label}</Button>
                     })}
-                    {showCustom && <Button onClick={() => {
-                        this.setState({ isCustom: true })
+                    {showCustom && <Button 
+                    type={isCustom?'primary':''}
+                    onClick={() => {
+                        this.setState({ isCustomClicked: true })
                     }}>Custom</Button>
                     }
 
                 </div>
-                {isCustom &&
+                {(isCustomClicked||isCustom) &&
                     <div className='custom-range-selector-content'>
-                        <NepaliCalendarRange onChange={(dt1,dt2)=>{
+                        <NepaliCalendarRange 
+                        dateFrom={selected_date_1}
+                        dateTo={selected_date_2}
+                        onChange={(dt1,dt2)=>{
+                            this.setState({
+                                isCustomClicked:false
+                            })
                             typeof this.props.onChange==='function'&&this.props.onChange(dt1,dt2)
                         }} />
                     </div>
