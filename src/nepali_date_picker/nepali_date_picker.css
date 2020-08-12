@@ -133,6 +133,10 @@
    font-size: 7px;
 }
 
+.rl-picker-cell:not(.disabled).in-range {
+    background-color:var(--cl-primary2);
+}
+
 .rl-picker-cell:not(.disabled):hover .rl-picker-cell-inner {
     background-color: var(--cl-primary2);
 }

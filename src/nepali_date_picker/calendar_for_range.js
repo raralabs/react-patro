@@ -4,7 +4,7 @@ import './nepali_date_picker.css'
 import { calendarData, calendarFunctions } from './helper_bs';
 import moment from 'moment';
 import ReactDOM from 'react-dom';
-import { get_ad_bs_listener, getCalendarType } from './ad_bs_date_render';
+import { get_ad_bs_listener, getCalendarType, adDateStringToObject, adDateObjectToMoment } from './ad_bs_date_render';
 
 class NepaliCalendarForRange extends Component {
     static propTypes = {
@@ -26,6 +26,16 @@ class NepaliCalendarForRange extends Component {
 
             // always in ad
             selected_data: {
+                day: null,
+                month: null,
+                year: null
+            },
+            selected_data_1: {
+                day: null,
+                month: null,
+                year: null
+            },
+            selected_data_2: {
                 day: null,
                 month: null,
                 year: null
@@ -156,20 +166,24 @@ class NepaliCalendarForRange extends Component {
     renderCurrentMonth = () => {
 
         let initialDate = this.props.initialDate;
-        var currentDate = new Date();
-        var todayDate = new Date();
         let selected_data = {
             day: null,
             month: null,
             year: null
         }
+        console.log("rendering for",initialDate,this.props.calendarFor)
+
+        var currentDate = new Date();
+        var todayDate = new Date();
+
         if (initialDate && moment(initialDate, "DD-MM-YYYY").isValid()) {
             currentDate = moment(initialDate, "DD-MM-YYYY").toDate()
-            selected_data = {
-                day: currentDate.getDate(),
-                month: currentDate.getMonth() + 1,
-                year: currentDate.getFullYear()
-            }
+            
+            // selected_data = {
+            //     day: currentDate.getDate(),
+            //     month: currentDate.getMonth() + 1,
+            //     year: currentDate.getFullYear()
+            // }
 
         }
         var currentBsDate = calendarFunctions.getBsDateByAdDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
@@ -259,6 +273,39 @@ class NepaliCalendarForRange extends Component {
         return type == "BS" ? calendarData.bsMonths[month - 1] : calendarData.adMonth[month - 1]
     }
 
+    assignSelectedDates = () => {
+        let selected_date_1 = this.props.selected_date_1;
+        let selected_date_2 = this.props.selected_date_2;
+        let selected_data_1 = {
+            day: null, month: null, year: null
+        }
+        let selected_data_2 = {
+            day: null, month: null, year: null
+        }
+        if (selected_date_1 && moment(selected_date_1, "DD-MM-YYYY").isValid()) {
+            // has valid first date selected
+            let _dt = adDateStringToObject(selected_date_1);
+            selected_data_1 = _dt
+        }
+
+        // for right side calendar
+        if (selected_date_2 && moment(selected_date_2, "DD-MM-YYYY").isValid()) {
+            // has valid second date selected
+            let _dt = adDateStringToObject(selected_date_2);
+            selected_data_2 = _dt
+
+        }
+
+        console.log("changed data",{selected_data_1,selected_data_2})
+        this.setState({
+            selected_data_1: selected_data_1,
+            selected_data_2: selected_data_2
+        })
+
+
+        // for unknown
+    }
+
 
 
     onSelectBS = (bsYear, bsMonth, bsDay) => {
@@ -309,6 +356,7 @@ class NepaliCalendarForRange extends Component {
 
     componentDidMount() {
         this.renderCurrentMonth();
+        this.assignSelectedDates()
 
 
         let ctx = this;
@@ -330,8 +378,12 @@ class NepaliCalendarForRange extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        console.log("did update",prevProps)
         if (this.props.initialDate != prevProps.initialDate) {
-            this.renderCurrentMonth()
+            // this.renderCurrentMonth()
+        }
+        if (this.props.selected_date_1 != prevProps.selected_date_1 || this.props.selected_date_2 != prevProps.selected_date_2) {
+            this.assignSelectedDates()
         }
     }
 
@@ -340,7 +392,7 @@ class NepaliCalendarForRange extends Component {
 
 
     render() {
-        const { calendarDataBS, calendarRenderingData, calendarType, selected_data, todayDateAD, todayDateBS } = this.state;
+        const { calendarDataBS, calendarRenderingData, calendarType, selected_data_1, selected_data_2, todayDateAD, todayDateBS } = this.state;
         let is_AD = calendarType == "AD";
         let shouldPressOK = this.props.shouldPressOK;
 
@@ -487,12 +539,27 @@ class NepaliCalendarForRange extends Component {
                                         let isSelected = false;
                                         let isToday = false;
                                         let isDisabled = false;
+                                        let isInRange=false;
 
                                         // console.log("checking for", ad_date, selected_data)
-                                        if (selected_data.day && ad_date.day == selected_data.day &&
-                                            ad_date.year == selected_data.year &&
-                                            ad_date.month == selected_data.month && isCurrentMonth) {
+                                        if ((selected_data_1.day && ad_date.day == selected_data_1.day &&
+                                            ad_date.year == selected_data_1.year &&
+                                            ad_date.month == selected_data_1.month) ||
+                                            (selected_data_2.day && ad_date.day == selected_data_2.day &&
+                                                ad_date.year == selected_data_2.year &&
+                                                ad_date.month == selected_data_2.month)
+                                            && isCurrentMonth) {
                                             isSelected = true
+                                        }
+
+                                        if(selected_data_1.day!=null&&selected_data_2.day!=null){
+                                            // both date selected, so calculate range
+                                            let _c_m=adDateObjectToMoment(ad_date);
+                                            let _l_m=adDateObjectToMoment(selected_data_1);
+                                            let _r_m=adDateObjectToMoment(selected_data_2);
+                                            if(_c_m<_r_m&&_c_m>_l_m){
+                                                isInRange=true
+                                            }
                                         }
 
                                         // if (todayDateAD.day == ad_date.day && todayDateAD.month == ad_date.month && todayDateAD.year == ad_date.year) {
@@ -517,7 +584,7 @@ class NepaliCalendarForRange extends Component {
                                                     // this.setState({
                                                     //     selected_data: ad_date
                                                     // })
-                                                    { shouldPressOK && this.onChangeDate(ad_date) }
+                                                    !shouldPressOK && this.onChangeDate(ad_date)
                                                     // this.onSelectBS(_calendarData.year, _calendarData.month, calendarDate)
 
                                                 } else if (index1 == 0) {
@@ -535,6 +602,7 @@ class NepaliCalendarForRange extends Component {
                                         ${isSelected ? 'active' : ''}
                                         ${!isCurrentMonth ? 'other-month' : ''}
                                         ${isDisabled ? 'disabled' : ''}
+                                        ${isInRange ? 'in-range' : ''}
                                         `
 
                                             }>
@@ -558,24 +626,24 @@ class NepaliCalendarForRange extends Component {
                             })}
                         </tbody>
                     </table>
-                    {this.props.showToday&&
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        padding: 8,
-                        paddingBottom: 0
-                    }}>
-                        <div className='today-btn hand-cursor' onClick={() => {
+                    {this.props.showToday &&
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            padding: 8,
+                            paddingBottom: 0
+                        }}>
+                            <div className='today-btn hand-cursor' onClick={() => {
 
-                            this.setCalendarBSData(todayDateBS.year, todayDateBS.month, todayDateBS.day);
-                            this.onChangeDate(todayDateAD)
-                        }}>Today</div>
+                                this.setCalendarBSData(todayDateBS.year, todayDateBS.month, todayDateBS.day);
+                                this.onChangeDate(todayDateAD)
+                            }}>Today</div>
 
-                        {/* <button onClick={() => {
+                            {/* <button onClick={() => {
                             this.toggleCalendarType()
                         }}>TYPE : {calendarType}</button> */}
-                    </div>
+                        </div>
                     }
                 </div>
             </div>
@@ -586,8 +654,8 @@ class NepaliCalendarForRange extends Component {
 
 
 }
-NepaliCalendarForRange.defaultProps={
-    showToday:true
+NepaliCalendarForRange.defaultProps = {
+    showToday: true
 }
 
 export default NepaliCalendarForRange
