@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Popover } from 'antd';
-import { dateObjectToString, adDateObjectToMoment, getCalendarType, padDateMonth, adDateStringToObject } from './ad_bs_date_render';
+import { dateObjectToString, adDateObjectToMoment, getCalendarType, padDateMonth, adDateStringToObject, get_ad_bs_listener } from './ad_bs_date_render';
 import moment from 'moment';
 import { calendarFunctions, calendarData } from './helper_bs';
 import CalendarIcon from './assets/calendar.svg';
@@ -46,8 +46,8 @@ class NepaliRangeInputPicker extends Component {
     }
 
 
-    onDateSelect = (ad_date) => {
-        if (this.state.selected_date_2 && this.state.selected_date_1) {
+    onDateSelect = (ad_date,shouldReset=true) => {
+        if (this.state.selected_date_2 && this.state.selected_date_1&&shouldReset) {
             // Both date selected, so set to date 1 
             this.setState({
                 selected_date_1: dateObjectToString(ad_date),
@@ -230,12 +230,12 @@ class NepaliRangeInputPicker extends Component {
                                     if (calendarType == "AD") {
                                         let new_date = moment().date(_day).month(_month - 1).year(_year);
                                         _new_selected_date = new_date.format("DD-MM-YYYY");
-                                        this.onDateSelect(adDateStringToObject(_new_selected_date))
+                                        this.onDateSelect(adDateStringToObject(_new_selected_date),false)
                                     } else {
                                         let respectiveADObject = calendarFunctions.getAdDateObjectByBsDate(_year, _month, _day);
                                         let new_date = moment().date(respectiveADObject.adDate).month(respectiveADObject.adMonth - 1).year(respectiveADObject.adYear);
                                         _new_selected_date = new_date.format("DD-MM-YYYY");
-                                        this.onDateSelect(adDateStringToObject(_new_selected_date))
+                                        this.onDateSelect(adDateStringToObject(_new_selected_date),false)
                                     }
 
                                     this.right_inp.blur();
@@ -293,6 +293,34 @@ class NepaliRangeInputPicker extends Component {
                 </div>
             </>
         );
+    }
+
+    componentDidMount() {
+        let ctx = this;
+        let ad_bs_app = get_ad_bs_listener();
+        this.ad_bs_sub_key = ad_bs_app.ad_bs.subscribe((dateType) => {
+            ctx.setState({
+                calendarType: dateType || "AD"
+            })
+        })
+    }
+
+    componentWillUnmount() {
+        let ad_bs_app = get_ad_bs_listener();
+        ad_bs_app.ad_bs.unsubscribe(this.ad_bs_sub_key)
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.dateFrom != prevProps.dateFrom) {
+            this.setState({
+                selected_date_1: this.props.dateFrom
+            })
+        }
+        if (this.props.dateTo != prevProps.dateTo) {
+            this.setState({
+                selected_date_2: this.props.dateTo
+            })
+        }
     }
 }
 NepaliRangeInputPicker.defaultProps = {
