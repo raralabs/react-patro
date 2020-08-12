@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import 'antd/lib/input/style/css'
+import 'antd/lib/popover/style/css'
 import './nepali_date_picker.css'
 import NepaliCalendar from './calendar.js'
 import { calendarFunctions, calendarData } from './helper_bs.js'
 import { Input, Popover } from 'antd';
-import 'antd/lib/input/style/css'
-import 'antd/lib/popover/style/css'
+
 import moment from 'moment';
 import { getCalendarType, get_ad_bs_listener, padDateMonth } from './ad_bs_date_render'
 import CalendarIcon from './assets/calendar.svg';
 
 
 /**
- * Represents a book.
  * @constructor
  * @augments {Component<Props, State>}
 

@@ -5,7 +5,9 @@ import { NepaliDatePicker } from './nepali_date_picker/index.js'
 import moment from 'moment';
 import NepaliCalendarRange from './nepali_date_picker/calendar_range';
 import { getCalendarType, get_ad_bs_listener } from './nepali_date_picker/ad_bs_date_render';
-import { Switch } from 'antd';
+import { Switch, Space } from 'antd';
+// import 'antd/dist/antd.css';
+import NepaliRangeInputPicker from './nepali_date_picker/range_input_picker';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,7 +21,10 @@ class App extends React.Component {
   render() {
 
     return (
-      <div >
+      <Space direction='vertical' size={40}  style={{
+        width:'100%',
+        padding:80
+      }}>
         <Switch checked={this.state.checked}
           unCheckedChildren="AD"
           checkedChildren="BS"
@@ -37,8 +42,6 @@ class App extends React.Component {
               checked: checked
             })
           }}></Switch>
-        <br></br>
-        <br></br>
         <NepaliDatePicker
           value={this.state.date}
           onChange={(val) => {
@@ -52,13 +55,13 @@ class App extends React.Component {
         //   }
         // }} 
         />
-        <br></br>
+        <NepaliRangeInputPicker />
+
         <NepaliCalendarRange />
-        <br></br>
         {/* <NepaliDatePicker /> */}
 
 
-      </div>
+      </Space>
     );
   }
 }

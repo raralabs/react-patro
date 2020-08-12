@@ -216,3 +216,17 @@
     flex-wrap: nowrap;
     width: fit-content;
 }
+
+
+.rl-nepali-rangepicker-wrapper .input-split {
+    background-color: #fff;
+  }
+  
+  .rl-nepali-rangepicker-wrapper .input-right {
+    border-left-width: 0;
+  }
+  
+  .rl-nepali-rangepicker-wrapper .input-right:hover,
+  .rl-nepali-rangepicker-wrapper .input-right:focus {
+    border-left-width: 1px;
+  }
