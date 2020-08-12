@@ -12,6 +12,7 @@
 - [ ] AD/BS sends both value
 - [ ] Implement date format usage
 
+# [Demo](https://ad-bs-datepicker.firebaseapp.com/)
 
 # React AD BS Date picker
 
