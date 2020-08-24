@@ -10,6 +10,7 @@ import { Input, Popover } from 'antd';
 import moment from 'moment';
 import { getCalendarType, get_ad_bs_listener, padDateMonth } from './ad_bs_date_render'
 import CalendarIcon from './assets/calendar.svg';
+import CrossIcon from './assets/cross_icon'
 
 
 /**
@@ -91,6 +92,13 @@ class NepaliDatePicker extends Component {
         // console.log("cal", rendering_value)
         return (
             <div id={this.random_id} className='rl-nepali-datepicker-wrapper'>
+                <CrossIcon 
+                visible={selected_date}
+                onClick={() => {
+                    console.log("clearing date")
+                    typeof this.props.onChange === 'function' && this.props.onChange(null)
+
+                }} />
                 <Input
                     style={{
                         width: '100%'
@@ -271,4 +279,4 @@ class NepaliDateRangePicker extends Component {
     }
 }
 
-export { NepaliDatePicker,NepaliDateRangePicker }
+export { NepaliDatePicker, NepaliDateRangePicker }

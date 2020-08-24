@@ -337,6 +337,31 @@ class NepaliCalendar extends Component {
 
 
 
+    _referenceRenderer=(referenceDate,ranges=[])=>{
+        let _options=[];
+        ranges.map((day_diff=0)=>{
+            let _refDate=moment(referenceDate,"DD-MM-YYYY").isValid()?moment(referenceDate,"DD-MM-YYYY"):moment();
+            if(isNaN(day_diff)){
+                day_diff=0;
+            }
+            let new_date=_refDate.add('day',day_diff);
+            let ad_date={
+                year:new_date.get('year'),
+                month:new_date.get('month')+1,
+                day:new_date.get('D')
+            }
+            console.log("new date is",new_date.toISOString(),ad_date)
+
+        _options.push(<div className='reference-item' onClick={()=>{
+            this.onChangeDate({
+                year:new_date.get('year'),
+                month:new_date.get('month')+1,
+                day:new_date.get('date')
+            }) 
+        }}>{day_diff==0?(this.props.zeroDayName||"Today"):`Within ${day_diff} Days`}</div>)
+        })
+        return _options
+    }
 
 
     render() {
@@ -383,6 +408,7 @@ class NepaliCalendar extends Component {
 
 
         return (
+            <div className='rl-nepali-date-panel-wrapper'>
             <div className='rl-nepali-date-panel'>
                 <div className="month-header">
                     <div className='left-actions'>
@@ -578,6 +604,9 @@ class NepaliCalendar extends Component {
                     </div>
                     }
                 </div>
+            </div>
+            {this.props.withReference&&<div className='rl-nepali-date-referenc-list'>
+                {this._referenceRenderer(this.props.reference_date,this.props.rangeReference)}</div>}
             </div>
         )
     }

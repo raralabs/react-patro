@@ -10,27 +10,28 @@
     cursor: pointer !important;
 }
 
-.rl-nepali-datepicker-icon{
+.rl-nepali-datepicker-icon {
     width: 16px;
     filter: invert(59%) sepia(19%) saturate(232%) hue-rotate(179deg) brightness(93%) contrast(86%)
 }
+
 .rl-nepali-datepicker-wrapper {
     position: relative;
     /* width: fit-content; */
-  
 }
 
-.rl-nepali-datepicker-input {
-   
-}
-.popovercalendar .ant-popover-inner-content{
+.rl-nepali-datepicker-input {}
+
+.popovercalendar .ant-popover-inner-content {
     padding: 0px;
 }
-.today-btn{
+
+.today-btn {
     color: var(--cl-primary);
     font-weight: 600;
 }
-.rl-nepali-datepicker-content{
+
+.rl-nepali-datepicker-content {
     position: absolute;
     z-index: 4;
     box-shadow: 0px 4px 10px rgba(19, 31, 54, 0.25);
@@ -38,13 +39,39 @@
     top: 24px;
     right: 0px;
 }
+
 .rl-nepali-datepicker-wrapper ul {
     list-style-type: none;
+}
+
+.rl-nepali-date-panel-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.rl-nepali-date-referenc-list {
+    background-color: white;
+    width: 120px;
+    padding-top: 20px;
+    font-weight: normal;
+    font-size: 12.8px;
+    line-height: 15px;
+    /* identical to box height */
+    /* Theme_Blue */
+    color: var(--cl-primary);
+    overflow-y: scroll;
+    padding-left: 10px;
+}
+.reference-item{
+    margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .rl-nepali-date-panel {
     width: 320px;
     z-index: 4;
+    background-color: white;
 }
 
 .rl-nepali-date-body {
@@ -90,7 +117,8 @@
 .rl-nepali-date-content {
     width: 100%;
 }
-.rl-nepali-date-content thead th{
+
+.rl-nepali-date-content thead th {
     font-size: 12px;
 }
 
@@ -123,18 +151,19 @@
     justify-content: center;
 }
 
-.rl-picker-cell .rl-picker-cell-inner .BS{
+.rl-picker-cell .rl-picker-cell-inner .BS {
     font-size: 14px;
 }
-.rl-picker-cell .rl-picker-cell-inner .AD{
-   position: absolute;
-   right: 2px;
-   bottom: 0px;
-   font-size: 7px;
+
+.rl-picker-cell .rl-picker-cell-inner .AD {
+    position: absolute;
+    right: 2px;
+    bottom: 0px;
+    font-size: 7px;
 }
 
 .rl-picker-cell:not(.disabled).in-range {
-    background-color:var(--cl-primary2);
+    background-color: var(--cl-primary2);
 }
 
 .rl-picker-cell:not(.disabled):hover .rl-picker-cell-inner {
@@ -155,7 +184,8 @@
     color: rgba(0, 0, 0, .4);
     /* background-color:var(--cl-secondary) ; */
 }
-.rl-picker-cell.disabled{
+
+.rl-picker-cell.disabled {
     color: var(--cl-secondary);
     cursor: not-allowed;
     background-color: #ddd;
@@ -173,14 +203,21 @@
     text-align: left;
 }
 
-.inline-dropdown:focus { pointer-events:none; }
-.inline-dropdown:focus .inline-dropdown-container{ opacity:1; visibility:visible; }
+.inline-dropdown:focus {
+    pointer-events: none;
+}
+
+.inline-dropdown:focus .inline-dropdown-container {
+    opacity: 1;
+    visibility: visible;
+}
+
 .inline-dropdown-container {
     width: auto;
-    margin:3px 0 0 0;
+    margin: 3px 0 0 0;
     padding: 10px;
-    border-radius:3px;
-    border-radius:3px;
+    border-radius: 3px;
+    border-radius: 3px;
     pointer-events: auto;
     position: absolute;
     z-index: 5;
@@ -194,86 +231,108 @@
     border-radius: 4px;
     color: black;
 }
-.inline-dropdown-container  .inline-dropdown-item{
+
+.inline-dropdown-container .inline-dropdown-item {
     cursor: pointer;
     padding-left: 8px;
     padding-right: 8px;
 }
 
-.inline-dropdown-container  .inline-dropdown-item:hover{
+.inline-dropdown-container .inline-dropdown-item:hover {
     background-color: var(--cl-primary2);
 }
 
-.inline-dropdown-container  .inline-dropdown-item.selected{
+.inline-dropdown-container .inline-dropdown-item.selected {
     background-color: var(--cl-primary);
     color: white;
 }
+
 /* INLINE DROPDOWN CSS END */
 
-
-.rl-range-calendar{
+.rl-range-calendar {
     display: flex;
     flex-wrap: nowrap;
     width: fit-content;
 }
 
-
 .rl-nepali-rangepicker-wrapper .input-split {
     background-color: #fff;
-  }
-  
-  .rl-nepali-rangepicker-wrapper .input-right {
+}
+
+.rl-nepali-rangepicker-wrapper .input-right {
     border-left-width: 0;
-  }
-  
-  .rl-nepali-rangepicker-wrapper .input-right:hover,
-  .rl-nepali-rangepicker-wrapper .input-right:focus {
+}
+
+.rl-nepali-rangepicker-wrapper .input-right:hover, .rl-nepali-rangepicker-wrapper .input-right:focus {
     border-left-width: 1px;
-  }
+}
 
-
-  .rl-daterange-toggler{
+.rl-daterange-toggler {
     display: flex;
     flex-wrap: nowrap;
     width: fit-content;
     /* background-color: var(--cl-success); */
-  }
+}
 
-  .rl-daterange-toggler .rl-daterange-toggler-content{
+.rl-daterange-toggler .rl-daterange-toggler-content {
     display: flex;
     flex-wrap: nowrap;
     width: fit-content;
     margin-left: 8px;
-  }
-  .rl-daterange-toggler .rl-daterange-toggler-content .label-body{
-      margin-left: 12px;
-      margin-right: 12px;
-  }
-  .rl-daterange-toggler .rl-daterange-toggler-content .switch{
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background-color: var(--cl-primary2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-  }
+}
 
-  .rl-daterange-toggler .selector-main{
-      display: flex;
-  }
-  .rl-daterange-toggler .down-arrow{
+.rl-daterange-toggler .rl-daterange-toggler-content .label-body {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.rl-daterange-toggler .rl-daterange-toggler-content .switch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--cl-primary2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rl-daterange-toggler .selector-main {
+    display: flex;
+}
+
+.rl-daterange-toggler .down-arrow {
     font-size: 110%;
     line-height: 0.9rem;
     margin-left: 8px;
-  }
+}
 
-  .selector-content-wrapper .selector-content{
-      display: flex;
-      flex-direction: column;
-  }
-  .selector-content-wrapper{
-      display: flex;
-  }
+.selector-content-wrapper .selector-content {
+    display: flex;
+    flex-direction: column;
+}
 
- 
+.selector-content-wrapper {
+    display: flex;
+}
+
+.cross-icon {
+    position: absolute;
+    right: 32px;
+    top: 10px;
+    z-index: 1;
+    width: 14px;
+    background: var(--cl-secondary);
+    height: 14px;
+    font-size: 10px;
+    line-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    opacity: 0;
+}
+
+.rl-nepali-datepicker-wrapper:hover .cross-icon {
+    opacity: 1;
+}

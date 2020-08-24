@@ -7,17 +7,7 @@ import ReactDOM from 'react-dom';
 import { get_ad_bs_listener, getCalendarType, adDateStringToObject, adDateObjectToMoment } from './ad_bs_date_render';
 
 class NepaliCalendarForRange extends Component {
-    static propTypes = {
-        value: "2076-01-12",
-        closeOnDateSelect: true,
-        dateFormat: "DD/MM/YYYY",
-        initialDateType: "BS",
-        defaultDate: "",
-        minDate: null,
-        maxDate: null,
-        yearStart: calendarData.minBsYear,
-        yearEnd: calendarData.maxBsYear
-    }
+ 
 
     constructor(props) {
         super(props)

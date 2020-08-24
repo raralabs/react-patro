@@ -85,6 +85,7 @@ class NepaliRangeInputPicker extends Component {
                     selected_date_1: dateObjectToString(ad_date),
                     selected_date_2: null
                 })
+                console.log("focusing right")
                 this.right_inp.focus()
 
             }
@@ -116,7 +117,11 @@ class NepaliRangeInputPicker extends Component {
 
         return (
             <>
-                <div>{JSON.stringify(this.state)}</div>
+                <div style={{
+                    whiteSpace:'nowrap',
+                    textOverflow:'ellipsis',
+                    overflow:'hidden'
+                }}>{JSON.stringify(this.state)}</div>
                 <div className='rl-nepali-rangepicker-wrapper'>
                     <Input.Group compact style={{
                         display: 'flex'
@@ -144,8 +149,11 @@ class NepaliRangeInputPicker extends Component {
                                 })
                             }}
                             onKeyDown={(e) => {
+                                
                                 console.log("key down", e.key)
+                               
                                 if (e.key == 'Enter' || e.key == 'Tab') {
+                                    e.preventDefault()
                                     let _temp_value = this.state.temp_value1;
 
                                     // _temp_value.split("-");
