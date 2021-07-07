@@ -1,449 +1,501 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import './nepali_date_picker.css'
-import { calendarData, calendarFunctions } from './helper_bs';
-import moment from 'moment';
-import ReactDOM from 'react-dom';
-import { get_ad_bs_listener, getCalendarType, adDateStringToObject, adDateObjectToMoment } from './ad_bs_date_render';
+import React, { Component } from "react";
+import "./nepali_date_picker.css";
+import { calendarData, calendarFunctions } from "./helper_bs";
+import moment from "moment";
+import {
+  get_ad_bs_listener,
+  getCalendarType,
+  adDateStringToObject,
+  adDateObjectToMoment,
+} from "./ad_bs_date_render";
 
 class NepaliCalendarForRange extends Component {
- 
+  constructor(props) {
+    super(props);
 
-    constructor(props) {
-        super(props)
+    this.state = {
+      // always in ad
+      selected_data: {
+        day: null,
+        month: null,
+        year: null,
+      },
+      selected_data_1: {
+        day: null,
+        month: null,
+        year: null,
+      },
+      selected_data_2: {
+        day: null,
+        month: null,
+        year: null,
+      },
+      calendarRenderingData: {
+        adMonth: null,
+        adYear: null,
+        adStartingDayOfWeek: null,
+        adTotalDaysInMonth: null,
+        adDayValue: null,
+        adPrevMonth: null,
+        adPrevYear: null,
+        adPrevMonthDays: null,
+        adNextMonth: null,
+        adNextYear: null,
 
-        this.state = {
+        bsMonth: null,
+        bsYear: null,
+        bsStartingDayOfWeek: null,
+        bsTotalDaysInMonth: null,
+        bsDayValue: null,
+        bsPrevMonth: null,
+        bsPrevYear: null,
+        bsPrevMonthDays: null,
+        bsNextMonth: null,
+        bsNextYear: null,
 
-            // always in ad
-            selected_data: {
-                day: null,
-                month: null,
-                year: null
-            },
-            selected_data_1: {
-                day: null,
-                month: null,
-                year: null
-            },
-            selected_data_2: {
-                day: null,
-                month: null,
-                year: null
-            },
-            calendarRenderingData: {
-                adMonth: null,
-                adYear: null,
-                adStartingDayOfWeek: null,
-                adTotalDaysInMonth: null,
-                adDayValue: null,
-                adPrevMonth: null,
-                adPrevYear: null,
-                adPrevMonthDays: null,
-                adNextMonth: null,
-                adNextYear: null,
+        bsMonthFirstAdDate: null,
+      },
+      todayDate: {
+        day: null,
+        month: null,
+        year: null,
+      },
 
+      calendarDataBS: {
+        date: null,
+        month: null,
+        year: null,
+        daysInMonth: 0,
+        weekDay: 0,
+        dayValue: null,
+      },
 
-                bsMonth: null,
-                bsYear: null,
-                bsStartingDayOfWeek: null,
-                bsTotalDaysInMonth: null,
-                bsDayValue: null,
-                bsPrevMonth: null,
-                bsPrevYear: null,
-                bsPrevMonthDays: null,
-                bsNextMonth: null,
-                bsNextYear: null,
+      todayDateAD: {
+        day: null,
+        month: null,
+        year: null,
+      },
+      todayDateBS: {
+        day: null,
+        month: null,
+        year: null,
+      },
 
-                bsMonthFirstAdDate: null
-
-            },
-            todayDate: {
-                day: null,
-                month: null,
-                year: null
-            },
-
-            calendarDataBS: {
-                date: null,
-                month: null,
-                year: null,
-                daysInMonth: 0,
-                weekDay: 0,
-                dayValue: null
-            },
-
-            todayDateAD: {
-                day: null,
-                month: null,
-                year: null,
-            },
-            todayDateBS: {
-                day: null,
-                month: null,
-                year: null,
-            },
-
-            calendarType: this.props.calendarType || getCalendarType(),
-            isLoaded: false
-
-        };
-
-
+      calendarType: this.props.calendarType || getCalendarType(),
+      isLoaded: false,
     };
+  }
 
-
-
-    getPreviousBSMonthData = (currentMonthData) => {
-        // console.log("gettinng", currentMonthData)
-        var datePickerData = currentMonthData;
-        var prevMonth = (datePickerData.month - 1 > 0) ? datePickerData.month - 1 : 12;
-        var prevYear = (prevMonth !== 12) ? datePickerData.year : datePickerData.year - 1;
-        if (prevYear < calendarData.minBsYear || prevYear > calendarData.maxBsYear) {
-            return null;
-        }
-        let monthData = calendarFunctions.getBsMonthInfoByBsDate(prevYear, prevMonth, 1);
-        // console.log(monthData)
-        return monthData
+  getPreviousBSMonthData = (currentMonthData) => {
+    // console.log("gettinng", currentMonthData)
+    var datePickerData = currentMonthData;
+    var prevMonth =
+      datePickerData.month - 1 > 0 ? datePickerData.month - 1 : 12;
+    var prevYear =
+      prevMonth !== 12 ? datePickerData.year : datePickerData.year - 1;
+    if (
+      prevYear < calendarData.minBsYear ||
+      prevYear > calendarData.maxBsYear
+    ) {
+      return null;
     }
-    getNextBSMonthData = () => {
-
+    let monthData = calendarFunctions.getBsMonthInfoByBsDate(
+      prevYear,
+      prevMonth,
+      1
+    );
+    // console.log(monthData)
+    return monthData;
+  };
+  getNextBSMonthData = () => {};
+  renderNextBSMonth = () => {
+    let calendarDataBS = this.state.calendarDataBS;
+    var nextMonth =
+      calendarDataBS.month + 1 <= 12 ? calendarDataBS.month + 1 : 1;
+    var nextYear =
+      nextMonth !== 1 ? calendarDataBS.year : calendarDataBS.year + 1;
+    var nextDate = calendarDataBS.dayValue;
+    if (
+      nextYear < calendarData.minBsYear ||
+      nextYear > calendarData.maxBsYear
+    ) {
+      return null;
     }
-    renderNextBSMonth = () => {
-        let calendarDataBS = this.state.calendarDataBS;
-        var nextMonth = (calendarDataBS.month + 1 <= 12) ? calendarDataBS.month + 1 : 1;
-        var nextYear = (nextMonth !== 1) ? calendarDataBS.year : calendarDataBS.year + 1;
-        var nextDate = calendarDataBS.dayValue;
-        if (nextYear < calendarData.minBsYear || nextYear > calendarData.maxBsYear) {
-            return null;
-        }
-        // console.log("setting next for", nextYear, nextMonth, nextDate)
+    // console.log("setting next for", nextYear, nextMonth, nextDate)
 
-        this.setCalendarBSData(nextYear, nextMonth, nextDate)
+    this.setCalendarBSData(nextYear, nextMonth, nextDate);
+  };
+
+  onChangeDate = (ad_date) => {
+    // let initialDateType = this.props.initialDateType || "BS";
+    let bs_dt = calendarFunctions.getBsDateByAdDate(
+      ad_date.year,
+      ad_date.month,
+      ad_date.day
+    );
+    let bs_date = {
+      day: bs_dt.bsDate,
+      month: bs_dt.bsMonth,
+      year: bs_dt.bsYear,
+    };
+    typeof this.props.onSelect === "function" &&
+      this.props.onSelect(ad_date, bs_date);
+  };
+
+  renderPreviousBSMonth = () => {
+    let calendarDataBS = this.state.calendarDataBS;
+    var prevMonth =
+      calendarDataBS.month - 1 > 0 ? calendarDataBS.month - 1 : 12;
+    var prevYear =
+      prevMonth !== 12 ? calendarDataBS.year : calendarDataBS.year - 1;
+    var prevDate = calendarDataBS.dayValue;
+    if (
+      prevYear < calendarData.minBsYear ||
+      prevYear > calendarData.maxBsYear
+    ) {
+      return null;
+    }
+    this.setCalendarBSData(prevYear, prevMonth, prevDate);
+  };
+
+  renderADCalendarFor = (adYear, adMonth) => {};
+
+  renderBSCalendarFor = (bsYear, bsMonth) => {};
+
+  renderCurrentMonth = () => {
+    let initialDate = this.props.initialDate;
+    let selected_data = {
+      day: null,
+      month: null,
+      year: null,
+    };
+    // console.log("rendering for",initialDate,this.props.calendarFor)
+
+    var currentDate = new Date();
+    var todayDate = new Date();
+
+    if (initialDate && moment(initialDate, "DD-MM-YYYY").isValid()) {
+      currentDate = moment(initialDate, "DD-MM-YYYY").toDate();
+
+      // selected_data = {
+      //     day: currentDate.getDate(),
+      //     month: currentDate.getMonth() + 1,
+      //     year: currentDate.getFullYear()
+      // }
+    }
+    var currentBsDate = calendarFunctions.getBsDateByAdDate(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      currentDate.getDate()
+    );
+    var todayBsDate = calendarFunctions.getBsDateByAdDate(
+      todayDate.getFullYear(),
+      todayDate.getMonth() + 1,
+      todayDate.getDate()
+    );
+
+    // console.log("current DAta", currentDate, currentBsDate)
+
+    var bsYear = currentBsDate.bsYear;
+    var bsMonth = currentBsDate.bsMonth;
+    var bsDay = currentBsDate.bsDate;
+    this.setState({
+      todayDateAD: {
+        day: todayDate.getDate(),
+        month: todayDate.getMonth() + 1,
+        year: todayDate.getFullYear(),
+      },
+      todayDateBS: {
+        day: todayBsDate.bsDate,
+        month: todayBsDate.bsMonth,
+        year: todayBsDate.bsYear,
+      },
+      selected_data,
+    });
+    this.setCalendarBSData(bsYear, bsMonth, bsDay);
+  };
+  renderBSYear = (bsYear) => {
+    // console.log("rendering  for", bsYear)
+    let calendarDataBS = this.state.calendarDataBS;
+    var prevMonth = calendarDataBS.month;
+    var prevYear = bsYear;
+    var prevDate = calendarDataBS.dayValue;
+    if (
+      prevYear < calendarData.minBsYear ||
+      prevYear > calendarData.maxBsYear
+    ) {
+      return null;
+    }
+    this.setCalendarBSData(prevYear, prevMonth, prevDate);
+  };
+
+  setCalendarBSData = (bsYear, bsMonth, bsDay) => {
+    // bsYear=2074;
+    // bsMonth=2;
+    // bsDay=31;
+    let _data = calendarFunctions.getBsMonthInfoByBsDate(
+      bsYear,
+      bsMonth,
+      bsDay
+    );
+    console.log("nep data", _data);
+    this.setState({
+      calendarRenderingData: {
+        adMonth: _data.adMonth,
+        adYear: _data.adYear,
+        adStartingDayOfWeek: _data.adStartingDayOfWeek,
+        adTotalDaysInMonth: _data.adMonthsDay,
+        adDayValue: _data.adDay,
+        adPrevMonth: _data.adPrevMonth,
+        adPrevYear: _data.adPrevYear,
+        adPrevMonthDays: _data.adDaysInPrevMonth,
+        adNextMonth: _data.adNextMonth,
+        adNextYear: _data.adNextYear,
+
+        bsMonth: _data.bsMonth,
+        bsYear: _data.bsYear,
+        bsStartingDayOfWeek: _data.bsStartingDayOfWeek,
+        bsTotalDaysInMonth: _data.bsMonthDays,
+        bsDayValue: _data.bsDay,
+        bsPrevMonth: _data.bsPrevMonth,
+        bsPrevYear: _data.bsPrevYear,
+        bsPrevMonthDays: _data.bsDaysInPrevMonth,
+        bsNextMonth: _data.bsNextMonth,
+        bsNextYear: _data.bsNextYear,
+
+        bsMonthFirstAdDate: _data.bsMonthFirstAdDate,
+      },
+      calendarDataBS: {
+        date: _data.adDate,
+        month: _data.bsMonth,
+        year: _data.bsYear,
+        daysInMonth: _data.bsMonthDays,
+        weekDay: _data.weekDay,
+        dayValue: bsDay,
+        bsMonthFirstAdDate: _data.bsMonthFirstAdDate,
+      },
+      isLoaded: true,
+    });
+  };
+
+  getMonthValue = (month, type = "BS") => {
+    return type === "BS"
+      ? calendarData.bsMonths[month - 1]
+      : calendarData.adMonth[month - 1];
+  };
+
+  assignSelectedDates = () => {
+    let selected_date_1 = this.props.selected_date_1;
+    let selected_date_2 = this.props.selected_date_2;
+    let selected_data_1 = {
+      day: null,
+      month: null,
+      year: null,
+    };
+    let selected_data_2 = {
+      day: null,
+      month: null,
+      year: null,
+    };
+    if (selected_date_1 && moment(selected_date_1, "DD-MM-YYYY").isValid()) {
+      // has valid first date selected
+      let _dt = adDateStringToObject(selected_date_1);
+      selected_data_1 = _dt;
     }
 
-    onChangeDate = (ad_date) => {
-        let initialDateType = this.props.initialDateType || "BS";
-        let bs_dt = calendarFunctions.getBsDateByAdDate(ad_date.year, ad_date.month, ad_date.day);
-        let bs_date = {
-            day: bs_dt.bsDate,
-            month: bs_dt.bsMonth,
-            year: bs_dt.bsYear
-        }
-        typeof this.props.onSelect === 'function' && this.props.onSelect(ad_date, bs_date)
-
+    // for right side calendar
+    if (selected_date_2 && moment(selected_date_2, "DD-MM-YYYY").isValid()) {
+      // has valid second date selected
+      let _dt = adDateStringToObject(selected_date_2);
+      selected_data_2 = _dt;
     }
 
-    renderPreviousBSMonth = () => {
-        let calendarDataBS = this.state.calendarDataBS;
-        var prevMonth = (calendarDataBS.month - 1 > 0) ? calendarDataBS.month - 1 : 12;
-        var prevYear = (prevMonth !== 12) ? calendarDataBS.year : calendarDataBS.year - 1;
-        var prevDate = calendarDataBS.dayValue;
-        if (prevYear < calendarData.minBsYear || prevYear > calendarData.maxBsYear) {
-            return null;
-        }
-        this.setCalendarBSData(prevYear, prevMonth, prevDate)
+    // console.log("changed data",{selected_data_1,selected_data_2})
+    this.setState({
+      selected_data_1: selected_data_1,
+      selected_data_2: selected_data_2,
+    });
 
-    }
+    // for unknown
+  };
 
-    renderADCalendarFor = (adYear, adMonth) => {
+  onSelectBS = (bsYear, bsMonth, bsDay) => {
+    // console.log("onSelectBS", bsYear, bsMonth, bsDay)
+    this.setState({
+      selected_data: {
+        day: bsDay,
+        month: bsMonth,
+        year: bsYear,
+      },
+    });
+  };
 
-    }
+  toggleCalendarType = () => {
+    let calendarType = this.state.calendarType;
+    // let selected_data = this.state.selected_data;
+    // if (selected_data.day) {
+    //     // selected  day, so render for given day  of  month
+    //     let bs_d_obj = calendarFunctions.getBsDateByAdDate(selected_data.year, selected_data.month, selected_data.day);
+    //     console.log("rendering  for", bs_d_obj)
+    //     // this.setCalendarBSData(bs_d_obj.bsYear, bs_d_obj.bsMonth, bs_d_obj.bsDate);
+    // };
 
-    renderBSCalendarFor = (bsYear, bsMonth) => {
-
-    }
-
-    renderCurrentMonth = () => {
-
-        let initialDate = this.props.initialDate;
-        let selected_data = {
-            day: null,
-            month: null,
-            year: null
-        }
-        // console.log("rendering for",initialDate,this.props.calendarFor)
-
-        var currentDate = new Date();
-        var todayDate = new Date();
-
-        if (initialDate && moment(initialDate, "DD-MM-YYYY").isValid()) {
-            currentDate = moment(initialDate, "DD-MM-YYYY").toDate()
-            
-            // selected_data = {
-            //     day: currentDate.getDate(),
-            //     month: currentDate.getMonth() + 1,
-            //     year: currentDate.getFullYear()
-            // }
-
-        }
-        var currentBsDate = calendarFunctions.getBsDateByAdDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
-        var todayBsDate = calendarFunctions.getBsDateByAdDate(todayDate.getFullYear(), todayDate.getMonth() + 1, todayDate.getDate());
-
-        // console.log("current DAta", currentDate, currentBsDate)
-
-        var bsYear = currentBsDate.bsYear;
-        var bsMonth = currentBsDate.bsMonth;
-        var bsDay = currentBsDate.bsDate;
+    switch (calendarType) {
+      case "AD":
         this.setState({
-            todayDateAD: {
-                day: todayDate.getDate(),
-                month: todayDate.getMonth() + 1,
-                year: todayDate.getFullYear()
-            },
-            todayDateBS: {
-                day: todayBsDate.bsDate,
-                month: todayBsDate.bsMonth,
-                year: todayBsDate.bsYear
-            },
-            selected_data
-
-        })
-        this.setCalendarBSData(bsYear, bsMonth, bsDay)
-    }
-    renderBSYear = (bsYear) => {
-        // console.log("rendering  for", bsYear)
-        let calendarDataBS = this.state.calendarDataBS;
-        var prevMonth = (calendarDataBS.month);
-        var prevYear = bsYear;
-        var prevDate = calendarDataBS.dayValue;
-        if (prevYear < calendarData.minBsYear || prevYear > calendarData.maxBsYear) {
-            return null;
-        }
-        this.setCalendarBSData(prevYear, prevMonth, prevDate)
-    }
-
-    setCalendarBSData = (bsYear, bsMonth, bsDay) => {
-        // bsYear=2074;
-        // bsMonth=2;
-        // bsDay=31;
-        let _data = calendarFunctions.getBsMonthInfoByBsDate(bsYear, bsMonth, bsDay);
-        console.log("nep data", _data)
+          calendarType: "BS",
+        });
+        break;
+      // initially in AD,switch all information and selected temp data to BS
+      case "BS":
         this.setState({
-            calendarRenderingData: {
-                adMonth: _data.adMonth,
-                adYear: _data.adYear,
-                adStartingDayOfWeek: _data.adStartingDayOfWeek,
-                adTotalDaysInMonth: _data.adMonthsDay,
-                adDayValue: _data.adDay,
-                adPrevMonth: _data.adPrevMonth,
-                adPrevYear: _data.adPrevYear,
-                adPrevMonthDays: _data.adDaysInPrevMonth,
-                adNextMonth: _data.adNextMonth,
-                adNextYear: _data.adNextYear,
-
-
-                bsMonth: _data.bsMonth,
-                bsYear: _data.bsYear,
-                bsStartingDayOfWeek: _data.bsStartingDayOfWeek,
-                bsTotalDaysInMonth: _data.bsMonthDays,
-                bsDayValue: _data.bsDay,
-                bsPrevMonth: _data.bsPrevMonth,
-                bsPrevYear: _data.bsPrevYear,
-                bsPrevMonthDays: _data.bsDaysInPrevMonth,
-                bsNextMonth: _data.bsNextMonth,
-                bsNextYear: _data.bsNextYear,
-
-                bsMonthFirstAdDate: _data.bsMonthFirstAdDate
-            },
-            calendarDataBS: {
-                date: _data.adDate,
-                month: _data.bsMonth,
-                year: _data.bsYear,
-                daysInMonth: _data.bsMonthDays,
-                weekDay: _data.weekDay,
-                dayValue: bsDay,
-                bsMonthFirstAdDate: _data.bsMonthFirstAdDate
-            },
-            isLoaded: true
-        })
+          calendarType: "AD",
+        });
+        // initially in BS,switch all information and selected temp data to AD
+        break;
+      default:
+        break;
     }
+  };
 
+  componentDidMount() {
+    this.renderCurrentMonth();
+    this.assignSelectedDates();
 
-    getMonthValue = (month, type = "BS") => {
-        return type == "BS" ? calendarData.bsMonths[month - 1] : calendarData.adMonth[month - 1]
+    let ctx = this;
+    let ad_bs_app = get_ad_bs_listener();
+    this.ad_bs_sub_key = ad_bs_app.ad_bs.subscribe((dateType) => {
+      ctx.setState({
+        calendarType: dateType || "AD",
+      });
+    });
+
+    // console.log("AD DATE FOR", calendarFunctions.getAdDateObjectByBsDate(2077, 4, 22))
+    // this.calender_picker.addEventListener('focusout',this.onFocusedOut)
+  }
+
+  componentWillUnmount() {
+    let ad_bs_app = get_ad_bs_listener();
+    ad_bs_app.ad_bs.unsubscribe(this.ad_bs_sub_key);
+  }
+
+  componentDidUpdate(prevProps) {
+    // console.log("did update",prevProps)
+    if (this.props.initialDate !== prevProps.initialDate) {
+      this.renderCurrentMonth();
     }
-
-    assignSelectedDates = () => {
-        let selected_date_1 = this.props.selected_date_1;
-        let selected_date_2 = this.props.selected_date_2;
-        let selected_data_1 = {
-            day: null, month: null, year: null
-        }
-        let selected_data_2 = {
-            day: null, month: null, year: null
-        }
-        if (selected_date_1 && moment(selected_date_1, "DD-MM-YYYY").isValid()) {
-            // has valid first date selected
-            let _dt = adDateStringToObject(selected_date_1);
-            selected_data_1 = _dt
-        }
-
-        // for right side calendar
-        if (selected_date_2 && moment(selected_date_2, "DD-MM-YYYY").isValid()) {
-            // has valid second date selected
-            let _dt = adDateStringToObject(selected_date_2);
-            selected_data_2 = _dt
-
-        }
-
-        // console.log("changed data",{selected_data_1,selected_data_2})
-        this.setState({
-            selected_data_1: selected_data_1,
-            selected_data_2: selected_data_2
-        })
-
-
-        // for unknown
+    if (
+      this.props.selected_date_1 !== prevProps.selected_date_1 ||
+      this.props.selected_date_2 !== prevProps.selected_date_2
+    ) {
+      this.assignSelectedDates();
     }
+  }
 
+  render() {
+    const {
+      calendarDataBS,
+      calendarRenderingData,
+      calendarType,
+      selected_data_1,
+      selected_data_2,
+      todayDateAD,
+      todayDateBS,
+    } = this.state;
+    let is_AD = calendarType === "AD";
+    let shouldPressOK = this.props.shouldPressOK;
 
+    let _month = is_AD
+      ? calendarRenderingData.adMonth
+      : calendarRenderingData.bsMonth;
+    let _year = is_AD
+      ? calendarRenderingData.adYear
+      : calendarRenderingData.bsYear;
+    let _startingDayOfWeek = is_AD
+      ? calendarRenderingData.adStartingDayOfWeek
+      : calendarRenderingData.bsStartingDayOfWeek;
+    let _totalDaysInMonth = is_AD
+      ? calendarRenderingData.adTotalDaysInMonth
+      : calendarRenderingData.bsTotalDaysInMonth;
+    // let _dayValue = is_AD ? calendarRenderingData.adDayValue : calendarRenderingData.bsDayValue;
+    let _prevMonth = is_AD
+      ? calendarRenderingData.adPrevMonth
+      : calendarRenderingData.bsPrevMonth;
+    let _prevYear = is_AD
+      ? calendarRenderingData.adPrevYear
+      : calendarRenderingData.bsPrevYear;
+    let _nextMonth = is_AD
+      ? calendarRenderingData.adNextMonth
+      : calendarRenderingData.bsNextMonth;
+    let _nextYear = is_AD
+      ? calendarRenderingData.adNextYear
+      : calendarRenderingData.bsNextYear;
 
-    onSelectBS = (bsYear, bsMonth, bsDay) => {
-        // console.log("onSelectBS", bsYear, bsMonth, bsDay)
-        this.setState({
-            selected_data: {
-                day: bsDay,
-                month: bsMonth,
-                year: bsYear
-            },
-        })
+    let _prevMonthDays = is_AD
+      ? calendarRenderingData.adPrevMonthDays
+      : calendarRenderingData.bsPrevMonthDays;
+
+    // console.log("date for", { calendarType, _month, _year, _startingDayOfWeek, _totalDaysInMonth, _dayValue, _prevMonth, _prevYear, _prevMonthDays })
+
+    // const { showAnother = true } = this.props;
+
+    // showAnother enables to show another date in cell
+    // TODO to be implemented
+
+    if (!this.state.isLoaded) {
+      return <div></div>;
     }
+    let _calendarData = calendarDataBS;
 
-    toggleCalendarType = () => {
-        let calendarType = this.state.calendarType;
-        // let selected_data = this.state.selected_data;
-        // if (selected_data.day) {
-        //     // selected  day, so render for given day  of  month
-        //     let bs_d_obj = calendarFunctions.getBsDateByAdDate(selected_data.year, selected_data.month, selected_data.day);
-        //     console.log("rendering  for", bs_d_obj)
-        //     // this.setCalendarBSData(bs_d_obj.bsYear, bs_d_obj.bsMonth, bs_d_obj.bsDate);
-        // };
+    let days_array =
+      calendarType === "BS" ? calendarData.bsDays : calendarData.adDays;
 
-        switch (calendarType) {
-            case "AD":
-                this.setState({
-                    calendarType: "BS"
-                });
-                break;
-            // initially in AD,switch all information and selected temp data to BS
-            case "BS":
-                this.setState({
-                    calendarType: "AD"
-                })
-                // initially in BS,switch all information and selected temp data to AD
-                break;
-            default:
-                break;
-        }
+    // var preMonth = (_calendarData.month - 1 !== 0) ? _calendarData.month - 1 : 12;
+    // var preYear = preMonth === 12 ? _calendarData.year - 1 : _calendarData.year;
+    // var preMonthDays = preYear >= calendarData.minBsYear ? calendarFunctions.getBsMonthDays(preYear, preMonth) : 30;
 
+    // console.log("selected data", selected_data)
 
+    return (
+      <div className="rl-nepali-date-panel">
+        <div className="month-header">
+          <div className="left-actions">
+            <div
+              title="Previous Year"
+              onClick={() => {
+                this.renderBSYear(_calendarData.year - 1);
+              }}
+              className="prev-year hand-cursor"
+            >
+              &#10094;&#10094;
+            </div>
+            <div
+              title="Previous Month"
+              onClick={() => {
+                this.renderPreviousBSMonth();
+              }}
+              className="prev-month hand-cursor"
+            >
+              &#10094;
+            </div>
+          </div>
+          <div className="month-header-content">
+            {this.getMonthValue(_month, calendarType)} &nbsp;
+            <div
+              key={`${_calendarData.year}--`}
+              tabIndex={0}
+              className="inline-dropdown"
+            >
+              {is_AD ? (
+                <div className="value">{_year || 0}</div>
+              ) : (
+                <div className="value">
+                  {calendarFunctions.getNepaliNumber(_year || 0)}
+                </div>
+              )}
 
-
-    }
-
-
-
-
-    componentDidMount() {
-        this.renderCurrentMonth();
-        this.assignSelectedDates()
-
-
-        let ctx = this;
-        let ad_bs_app = get_ad_bs_listener();
-        this.ad_bs_sub_key = ad_bs_app.ad_bs.subscribe((dateType) => {
-            ctx.setState({
-                calendarType: dateType || "AD"
-            })
-        })
-
-        // console.log("AD DATE FOR", calendarFunctions.getAdDateObjectByBsDate(2077, 4, 22))
-        // this.calender_picker.addEventListener('focusout',this.onFocusedOut)
-
-    }
-
-    componentWillUnmount() {
-        let ad_bs_app = get_ad_bs_listener();
-        ad_bs_app.ad_bs.unsubscribe(this.ad_bs_sub_key)
-    }
-
-    componentDidUpdate(prevProps) {
-        // console.log("did update",prevProps)
-        if (this.props.initialDate != prevProps.initialDate) {
-            this.renderCurrentMonth()
-        }
-        if (this.props.selected_date_1 != prevProps.selected_date_1 || this.props.selected_date_2 != prevProps.selected_date_2) {
-            this.assignSelectedDates()
-        }
-    }
-
-
-
-
-
-    render() {
-        const { calendarDataBS, calendarRenderingData, calendarType, selected_data_1, selected_data_2, todayDateAD, todayDateBS } = this.state;
-        let is_AD = calendarType == "AD";
-        let shouldPressOK = this.props.shouldPressOK;
-
-        let _month = is_AD ? calendarRenderingData.adMonth : calendarRenderingData.bsMonth;
-        let _year = is_AD ? calendarRenderingData.adYear : calendarRenderingData.bsYear;
-        let _startingDayOfWeek = is_AD ? calendarRenderingData.adStartingDayOfWeek : calendarRenderingData.bsStartingDayOfWeek;
-        let _totalDaysInMonth = is_AD ? calendarRenderingData.adTotalDaysInMonth : calendarRenderingData.bsTotalDaysInMonth;
-        let _dayValue = is_AD ? calendarRenderingData.adDayValue : calendarRenderingData.bsDayValue;
-        let _prevMonth = is_AD ? calendarRenderingData.adPrevMonth : calendarRenderingData.bsPrevMonth;
-        let _prevYear = is_AD ? calendarRenderingData.adPrevYear : calendarRenderingData.bsPrevYear;
-        let _nextMonth = is_AD ? calendarRenderingData.adNextMonth : calendarRenderingData.bsNextMonth;
-        let _nextYear = is_AD ? calendarRenderingData.adNextYear : calendarRenderingData.bsNextYear;
-
-        let _prevMonthDays = is_AD ? calendarRenderingData.adPrevMonthDays : calendarRenderingData.bsPrevMonthDays
-
-
-        // console.log("date for", { calendarType, _month, _year, _startingDayOfWeek, _totalDaysInMonth, _dayValue, _prevMonth, _prevYear, _prevMonthDays })
-
-        const { showAnother = true } = this.props;
-
-        // showAnother enables to show another date in cell 
-        // TODO to be implemented
-
-
-        if (!this.state.isLoaded) {
-            return <div></div>
-        }
-        let _calendarData = calendarDataBS;
-
-        let days_array = calendarType == "BS" ? calendarData.bsDays : calendarData.adDays;
-
-
-        var preMonth = (_calendarData.month - 1 !== 0) ? _calendarData.month - 1 : 12;
-        var preYear = preMonth === 12 ? _calendarData.year - 1 : _calendarData.year;
-        var preMonthDays = preYear >= calendarData.minBsYear ? calendarFunctions.getBsMonthDays(preYear, preMonth) : 30;
-
-
-        // console.log("selected data", selected_data)
-
-
-
-        return (
-            <div className='rl-nepali-date-panel'>
-                <div className="month-header">
-                    <div className='left-actions'>
-                        <div title="Previous Year"
-                            onClick={() => {
-                                this.renderBSYear(_calendarData.year - 1)
-                            }}
-                            className='prev-year hand-cursor'>&#10094;&#10094;</div>
-                        <div title="Previous Month" onClick={() => {
-                            this.renderPreviousBSMonth()
-                        }} className='prev-month hand-cursor'>&#10094;</div>
-                    </div>
-                    <div className='month-header-content'>
-                        {this.getMonthValue(_month, calendarType)} &nbsp;
-                        <div key={`${_calendarData.year}--`} tabIndex={0} className='inline-dropdown'>
-                            {is_AD ? <div className='value'>{(_year || 0)}</div> : <div className='value'>{calendarFunctions.getNepaliNumber(_year || 0)}</div>}
-
-                            {/* <div className='value'>{calendarFunctions.getNepaliNumber(_calendarData.year || 0)}</div> */}
-                            {/* <div className='inline-dropdown-container'>
+              {/* <div className='value'>{calendarFunctions.getNepaliNumber(_calendarData.year || 0)}</div> */}
+              {/* <div className='inline-dropdown-container'>
                                 {Array(20).fill("").map((val, _selection_index) => {
                                     let yr = _calendarData.year || 0;
                                     let max_yr_to_show = yr + 5;
@@ -455,197 +507,248 @@ class NepaliCalendarForRange extends Component {
                                     }} className={`inline-dropdown-item ${yr_item == _calendarData.year ? 'selected' : ''}`}>{calendarFunctions.getNepaliNumber(yr_item)}</div> : null
                                 })}
                             </div> */}
-                        </div>
+            </div>
+          </div>
+          <div className="right-actions">
+            <div
+              title="Next Month"
+              onClick={() => {
+                this.renderNextBSMonth();
+              }}
+              className="next-month hand-cursor"
+            >
+              &#10095;
+            </div>
+            <div
+              onClick={() => {
+                this.renderBSYear(_calendarData.year + 1);
+              }}
+              title="Next Year"
+              className="next-year hand-cursor"
+            >
+              &#10095;&#10095;
+            </div>
+          </div>
+        </div>
+        <div className="rl-nepali-date-body">
+          <table className="rl-nepali-date-content">
+            <thead>
+              <tr>
+                {days_array.map((val, ind) => {
+                  return <th key={`${ind}-m`}>{val}</th>;
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {Array(6)
+                .fill("")
+                .map((it1, index1) => {
+                  return (
+                    <tr>
+                      {Array(7)
+                        .fill("")
+                        .map((it2, index2) => {
+                          let cell_date =
+                            index1 * 7 + index2 - _startingDayOfWeek + 1;
+                          // console.log("cell date", cell_date)
+                          let isCurrentMonth = true;
+                          let main_date = {
+                            day: cell_date,
+                            month: _month,
+                            year: _year,
+                          };
 
+                          if (cell_date <= 0) {
+                            cell_date = _prevMonthDays + cell_date;
+                            isCurrentMonth = false;
+                            main_date = {
+                              day: cell_date,
+                              month: _prevMonth,
+                              year: _prevYear,
+                            };
+                          } else if (cell_date > _totalDaysInMonth) {
+                            cell_date = cell_date - _totalDaysInMonth;
+                            isCurrentMonth = false;
+                            main_date = {
+                              day: cell_date,
+                              month: _nextMonth,
+                              year: _nextYear,
+                            };
+                          }
+                          let next_date_obj = is_AD
+                            ? calendarFunctions.getBsDateByAdDate(
+                                main_date.year,
+                                main_date.month,
+                                main_date.day
+                              )
+                            : calendarFunctions.getAdDateObjectByBsDate(
+                                main_date.year,
+                                main_date.month,
+                                main_date.day
+                              );
+                          let sub_main_date = {
+                            day: is_AD
+                              ? next_date_obj.bsDate
+                              : next_date_obj.adDate,
+                            month: is_AD
+                              ? next_date_obj.bsMonth
+                              : next_date_obj.adMonth,
+                            year: is_AD
+                              ? next_date_obj.bsYear
+                              : next_date_obj.adYear,
+                          };
 
+                          let ad_date = is_AD ? main_date : sub_main_date;
 
-                    </div>
-                    <div className='right-actions'>
-                        <div title="Next Month" onClick={() => {
-                            this.renderNextBSMonth()
-                        }} className='next-month hand-cursor'>&#10095;</div>
-                        <div onClick={() => {
-                            this.renderBSYear(_calendarData.year + 1)
-                        }} title="Next Year" className='next-year hand-cursor'>&#10095;&#10095;</div>
-                    </div>
+                          let isSelected = false;
+                          let isToday = false;
+                          let isDisabled = false;
+                          let isInRange = false;
 
-                </div>
-                <div className='rl-nepali-date-body'>
-                    <table className='rl-nepali-date-content'>
-                        <thead>
-                            <tr>
-                                {days_array.map((val, ind) => {
-                                    return <th key={`${ind}-m`}>{val}</th>
-                                })}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Array(6).fill("").map((it1, index1) => {
-                                return <tr>
-                                    {Array(7).fill("").map((it2, index2) => {
+                          // console.log("checking for", ad_date, selected_data)
+                          if (
+                            (selected_data_1.day &&
+                              ad_date.day === selected_data_1.day &&
+                              ad_date.year === selected_data_1.year &&
+                              ad_date.month === selected_data_1.month) ||
+                            (selected_data_2.day &&
+                              ad_date.day === selected_data_2.day &&
+                              ad_date.year === selected_data_2.year &&
+                              ad_date.month === selected_data_2.month &&
+                              isCurrentMonth)
+                          ) {
+                            isSelected = true;
+                          }
 
-                                        let cell_date = (index1 * 7) + index2 - _startingDayOfWeek + 1;
-                                        // console.log("cell date", cell_date)
-                                        let isCurrentMonth = true;
-                                        let main_date = {
-                                            day: cell_date,
-                                            month: _month,
-                                            year: _year
-                                        }
+                          if (
+                            selected_data_1.day != null &&
+                            selected_data_2.day != null
+                          ) {
+                            // both date selected, so calculate range
+                            let _c_m = adDateObjectToMoment(ad_date);
+                            let _l_m = adDateObjectToMoment(selected_data_1);
+                            let _r_m = adDateObjectToMoment(selected_data_2);
+                            if (_c_m < _r_m && _c_m > _l_m) {
+                              isInRange = true;
+                            }
+                          }
 
+                          // if (todayDateAD.day == ad_date.day && todayDateAD.month == ad_date.month && todayDateAD.year == ad_date.year) {
+                          //     isToday = true
+                          // }
 
-                                        if (cell_date <= 0) {
-                                            cell_date = _prevMonthDays + cell_date;
-                                            isCurrentMonth = false;
-                                            main_date = {
-                                                day: cell_date,
-                                                month: _prevMonth,
-                                                year: _prevYear
-                                            }
-                                        } else if (cell_date > _totalDaysInMonth) {
-                                            cell_date = cell_date - _totalDaysInMonth;
-                                            isCurrentMonth = false;
-                                            main_date = {
-                                                day: cell_date,
-                                                month: _nextMonth,
-                                                year: _nextYear
-                                            }
-                                        }
-                                        let next_date_obj = is_AD ?
-                                            calendarFunctions.getBsDateByAdDate(main_date.year, main_date.month, main_date.day) :
-                                            calendarFunctions.getAdDateObjectByBsDate(main_date.year, main_date.month, main_date.day)
-                                            ;
+                          if (typeof this.props.disableDate === "function") {
+                            isDisabled = this.props.disableDate(
+                              moment()
+                                .date(ad_date.day)
+                                .month(ad_date.month - 1)
+                                .year(ad_date.year)
+                            );
+                          }
 
-                                        let sub_main_date = {
-                                            day: is_AD ? next_date_obj.bsDate : next_date_obj.adDate,
-                                            month: is_AD ? next_date_obj.bsMonth : next_date_obj.adMonth,
-                                            year: is_AD ? next_date_obj.bsYear : next_date_obj.adYear
-                                        };
-
-                                        let ad_date = is_AD ? main_date : sub_main_date;
-
-
-
-                                        let isSelected = false;
-                                        let isToday = false;
-                                        let isDisabled = false;
-                                        let isInRange=false;
-
-                                        // console.log("checking for", ad_date, selected_data)
-                                        if ((selected_data_1.day && ad_date.day == selected_data_1.day &&
-                                            ad_date.year == selected_data_1.year &&
-                                            ad_date.month == selected_data_1.month) ||
-                                            (selected_data_2.day && ad_date.day == selected_data_2.day &&
-                                                ad_date.year == selected_data_2.year &&
-                                                ad_date.month == selected_data_2.month)
-                                            && isCurrentMonth) {
-                                            isSelected = true
-                                        }
-
-                                        if(selected_data_1.day!=null&&selected_data_2.day!=null){
-                                            // both date selected, so calculate range
-                                            let _c_m=adDateObjectToMoment(ad_date);
-                                            let _l_m=adDateObjectToMoment(selected_data_1);
-                                            let _r_m=adDateObjectToMoment(selected_data_2);
-                                            if(_c_m<_r_m&&_c_m>_l_m){
-                                                isInRange=true
-                                            }
-                                        }
-
-                                        // if (todayDateAD.day == ad_date.day && todayDateAD.month == ad_date.month && todayDateAD.year == ad_date.year) {
-                                        //     isToday = true
-                                        // }
-
-                                        if (typeof this.props.disableDate === 'function') {
-                                            isDisabled = this.props.disableDate(moment().date(ad_date.day).month(ad_date.month - 1).year(ad_date.year))
-                                        }
-
-
-
-
-                                        return <td
-                                            title={`${main_date.day}-${main_date.month}-${main_date.year}`}
-                                            onClick={(e) => {
-                                                if (isDisabled) {
-                                                    console.log("date disabled")
-                                                    return;
-                                                }
-                                                if (isCurrentMonth) {
-                                                    // this.setState({
-                                                    //     selected_data: ad_date
-                                                    // })
-                                                    !shouldPressOK && this.onChangeDate(ad_date)
-                                                    // this.onSelectBS(_calendarData.year, _calendarData.month, calendarDate)
-
-                                                } else if (index1 == 0) {
-                                                    // previous month date selected
-                                                    this.renderPreviousBSMonth()
-                                                } else {
-                                                    // next month date selected
-                                                    this.renderNextBSMonth()
-                                                }
-                                                // console.log("clicked value is")
-                                            }}
-                                            className={`rl-picker-cell 
+                          return (
+                            <td
+                              title={`${main_date.day}-${main_date.month}-${main_date.year}`}
+                              onClick={(e) => {
+                                if (isDisabled) {
+                                  console.log("date disabled");
+                                  return;
+                                }
+                                if (isCurrentMonth) {
+                                  // this.setState({
+                                  //     selected_data: ad_date
+                                  // })
+                                  !shouldPressOK && this.onChangeDate(ad_date);
+                                  // this.onSelectBS(_calendarData.year, _calendarData.month, calendarDate)
+                                } else if (index1 === 0) {
+                                  // previous month date selected
+                                  this.renderPreviousBSMonth();
+                                } else {
+                                  // next month date selected
+                                  this.renderNextBSMonth();
+                                }
+                                // console.log("clicked value is")
+                              }}
+                              className={`rl-picker-cell 
                                         
-                                        ${isToday ? 'today' : ''}
-                                        ${isSelected ? 'active' : ''}
-                                        ${!isCurrentMonth ? 'other-month' : ''}
-                                        ${isDisabled ? 'disabled' : ''}
-                                        ${isInRange ? 'in-range' : ''}
-                                        `
+                                        ${isToday ? "today" : ""}
+                                        ${isSelected ? "active" : ""}
+                                        ${!isCurrentMonth ? "other-month" : ""}
+                                        ${isDisabled ? "disabled" : ""}
+                                        ${isInRange ? "in-range" : ""}
+                                        `}
+                            >
+                              <div className={`rl-picker-cell-inner `}>
+                                {is_AD ? (
+                                  <>
+                                    <div className="BS">{cell_date || 0}</div>
+                                    {this.props.showExtra && (
+                                      <div className="AD">
+                                        {calendarFunctions.getNepaliNumber(
+                                          sub_main_date.day
+                                        )}
+                                      </div>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="BS">
+                                      {calendarFunctions.getNepaliNumber(
+                                        cell_date || 0
+                                      )}
+                                    </div>
+                                    {this.props.showExtra && (
+                                      <div className="AD">
+                                        {sub_main_date.day}
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+                            </td>
+                          );
+                        })}
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+          {this.props.showToday && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                padding: 8,
+                paddingBottom: 0,
+              }}
+            >
+              <div
+                className="today-btn hand-cursor"
+                onClick={() => {
+                  this.setCalendarBSData(
+                    todayDateBS.year,
+                    todayDateBS.month,
+                    todayDateBS.day
+                  );
+                  this.onChangeDate(todayDateAD);
+                }}
+              >
+                Today
+              </div>
 
-                                            }>
-                                            <div className={`rl-picker-cell-inner `}>
-                                                {is_AD ? <>
-                                                    <div className="BS">{(cell_date || 0)}</div>
-                                                    {this.props.showExtra &&
-                                                        <div className="AD">{calendarFunctions.getNepaliNumber(sub_main_date.day)}</div>
-                                                    }
-                                                </> : <>
-                                                        <div className="BS">{calendarFunctions.getNepaliNumber(cell_date || 0)}</div>
-                                                        {this.props.showExtra &&
-                                                            <div className="AD">{sub_main_date.day}</div>
-                                                        }
-                                                    </>}
-
-                                            </div>
-                                        </td>
-                                    })}
-                                </tr>
-                            })}
-                        </tbody>
-                    </table>
-                    {this.props.showToday &&
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            padding: 8,
-                            paddingBottom: 0
-                        }}>
-                            <div className='today-btn hand-cursor' onClick={() => {
-
-                                this.setCalendarBSData(todayDateBS.year, todayDateBS.month, todayDateBS.day);
-                                this.onChangeDate(todayDateAD)
-                            }}>Today</div>
-
-                            {/* <button onClick={() => {
+              {/* <button onClick={() => {
                             this.toggleCalendarType()
                         }}>TYPE : {calendarType}</button> */}
-                        </div>
-                    }
-                </div>
             </div>
-        )
-    }
-
-
-
-
+          )}
+        </div>
+      </div>
+    );
+  }
 }
 NepaliCalendarForRange.defaultProps = {
-    showToday: true
-}
+  showToday: true,
+};
 
-export default NepaliCalendarForRange
+export default NepaliCalendarForRange;

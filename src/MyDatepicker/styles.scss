@@ -1,0 +1,136 @@
+.calendar {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  &__date {
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+  }
+  .label {
+    font-size: 0.875rem;
+    line-height: 1;
+    vertical-align: top;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__clear-icon {
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    outline: 0;
+    padding: 0px 6px 0px 0px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    &::after {
+      cursor: pointer;
+      background-color: #2fcc69;
+      color: #fff;
+      border-radius: 50%;
+      height: 16px;
+      width: 16px;
+      padding: 2px;
+      font-size: 12px;
+      line-height: 1;
+      text-align: center;
+      display: table-cell;
+      vertical-align: middle;
+      content: "\00d7";
+    }
+  }
+
+  &__tooltip {
+    z-index: 999;
+  }
+  &-picker {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #aeaeae;
+    border-radius: 0.3rem;
+    display: inline-block;
+    position: relative;
+    &-header {
+      text-align: center;
+      background-color: #f0f0f0;
+      border-bottom: 1px solid #aeaeae;
+      border-top-left-radius: 0.3rem;
+      border-top-right-radius: 0.3rem;
+      padding-top: 8px;
+      position: relative;
+    }
+    &-title {
+      margin-top: 0;
+      color: #000;
+      font-weight: bold;
+      font-size: 0.944rem;
+    }
+  }
+}
+#container {
+  position: relative;
+  height: 300px;
+
+  border-radius: 10px;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  border: 2px dashed #ff6b81;
+}
+
+#container::before,
+#container::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 600px;
+}
+
+#tooltip {
+  display: inline-block;
+  font-weight: bold;
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+#arrow,
+#arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+  border: 1px solid #aeaeae;
+}
+
+#arrow {
+  visibility: hidden;
+}
+
+#arrow::before {
+  visibility: visible;
+  content: "";
+  transform: rotate(45deg);
+}
+
+#tooltip[data-popper-placement^="top"] > #arrow {
+  bottom: -4px;
+}
+
+#tooltip[data-popper-placement^="bottom"] > #arrow {
+  top: -4px;
+}
+
+#tooltip[data-popper-placement^="left"] > #arrow {
+  right: -4px;
+}
+
+#tooltip[data-popper-placement^="right"] > #arrow {
+  left: -4px;
+}
