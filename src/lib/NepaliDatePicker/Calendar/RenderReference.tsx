@@ -16,14 +16,6 @@ const RenderReference: React.FC<RenderReferenceProps> = ({
 }) => {
   const _referenceRenderer = (referenceDate: string, ranges: number[] = []) => {
     const options = ranges.map((day_diff = 0) => {
-      // let _refDate = moment(referenceDate, "DD-MM-YYYY").isValid()
-      //   ? moment(referenceDate, "DD-MM-YYYY")
-      //   : moment();
-      // if (isNaN(day_diff)) {
-      //   day_diff = 0;
-      // }
-      // let new_date = _refDate.add("day", day_diff);
-
       return (
         <div
           className="reference-item"

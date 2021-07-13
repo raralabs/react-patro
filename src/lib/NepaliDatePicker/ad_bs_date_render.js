@@ -1,10 +1,10 @@
-import moment from "moment";
+//TODO remove this entirely
 
-var ad_bs_listener = {};
+const ad_bs_listener = {};
 
-var calendarType = "AD";
+let calendarType = "AD";
 
-var ad_bs_sub_pub = Object.seal({
+let ad_bs_sub_pub = Object.seal({
   key: 0,
   subscribers: {},
   subscribe: function (subscriber) {
@@ -41,31 +41,4 @@ function setCalendarType(val) {
   calendarType = val;
 }
 
-const padDateMonth = (val) => {
-  return `${val}`.padStart(2, "0");
-};
-
-const dateObjectToString = (dt) => {
-  return `${padDateMonth(dt.day)}-${padDateMonth(dt.month)}-${dt.year}`;
-};
-const adDateStringToObject = (ad_string, _format = "DD-MM-YYYY") => {
-  let dtObj = moment(ad_string, _format);
-  return {
-    day: dtObj.date(),
-    month: dtObj.month() + 1,
-    year: dtObj.year(),
-  };
-};
-const adDateObjectToMoment = (dt) => {
-  return moment(dateObjectToString(dt), "DD-MM-YYYY");
-};
-
-export {
-  get_ad_bs_listener,
-  getCalendarType,
-  setCalendarType,
-  padDateMonth,
-  dateObjectToString,
-  adDateStringToObject,
-  adDateObjectToMoment,
-};
+export { get_ad_bs_listener, getCalendarType, setCalendarType };

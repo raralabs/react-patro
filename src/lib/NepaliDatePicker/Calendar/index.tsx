@@ -1,161 +1,107 @@
-import React, { useState } from "react";
-import { calendarData, calendarFunctions } from "../helper_bs";
+import React, { useState, useEffect } from "react";
 
 import Header from "./Header";
-import RenderReference from "./RenderReference"; //TODO What is this???
-import DateRenderer from "./DateRenderer";
+// import DateRender from "./DateRender";
+import RangeRender from "./RangeRender";
 import useInitialState from "./useInitialState";
 
-import { getMonthOffset, getTodaysDate } from "./util";
-import { useCalendarType } from "../hooks";
-import { dateFormatter, getDateFromObject } from "../date-fns";
+import { getMonthOffset, getTodaysDate, checkDatePropsValidity } from "./util";
 
-import {
-  CalendarType,
-  DateType,
-  ShowDropdownType,
-  ShowYearDropdownType,
-} from "./types";
+import { dateFormatter, getDateFromObject, getDateObj } from "../date-fns";
+
+import { DateRange, NepaliCalendarProps, IDateObject } from "./types";
+
+import { ad2bs, getWeekNames } from "../CalendarData";
 
 import "../nepali_date_picker.css";
 
-export interface NepaliCalendarProps {
-  showToday?: boolean;
-  zeroDayName?: string;
-  initialDate?: string;
-  dateFormat: string;
-  value?: string | Date;
-  showMonthDropdown?: ShowDropdownType;
-  showYearDropdown?: ShowYearDropdownType;
-  onSelect: (
-    formatteddate: string,
-    adDate: DateType,
-    bsDate: DateType,
-    date: Date
-  ) => void;
-  shouldPressOK?: boolean;
-  disableDate?: () => void;
-  showExtra?: boolean;
-  withReference?: boolean;
-  reference_date?: string;
-  rangeReference?: number[];
-  calendarType: CalendarType;
-}
+type WarningProps = {
+  value: string | null | undefined;
+  defaultValue: string | null | undefined;
+};
+const useWarning = ({ value, defaultValue }: WarningProps) => {
+  useEffect(() => {
+    if (value && defaultValue) {
+      console.warn("If value is provided defaultValue is ignored.");
+    }
+  }, [value, defaultValue]);
+};
+
 const NepaliCalendar = (props: NepaliCalendarProps) => {
   const {
-    showToday = true,
-    zeroDayName,
-    initialDate = "07-07-2021",
-    dateFormat = "dd-mm-yyyy", // TODO
-    // value,
+    // showToday = true,
+    defaultValue,
+    dateFormat = "yyyy-mm-dd", // TODO
+    value,
     onSelect,
-    shouldPressOK,
-    disableDate,
-    showExtra,
-    withReference,
-    reference_date,
-    rangeReference,
+    shouldPressOK = true,
+    showExtra = true,
     showMonthDropdown = false,
     showYearDropdown = false,
-    calendarType: calendarTypeFromProps,
+    calendarType,
+    disableDate,
+    disablePast,
+    disableFuture,
+    maxDate,
+    minDate,
+    range,
   } = props;
 
-  const { selectedData: initSelectedData, state: initState } = useInitialState(
-    initialDate,
+  const { data: initSelectedData } = useInitialState(
+    value ?? defaultValue,
     dateFormat
   );
-  //always in ad
-  const [selectedData, setSelectedData] = useState<DateType>(initSelectedData);
 
-  const calendarType = useCalendarType(calendarTypeFromProps);
-
-  const [state, setState] = useState(initState);
-
-  const setCalendarBSData = (
-    bsYear: number,
-    bsMonth: number,
-    bsDay: number
-  ) => {
-    const _data = calendarFunctions.getBsMonthInfoByBsDate(
-      bsYear,
-      bsMonth,
-      bsDay
+  useWarning({ value, defaultValue });
+  useEffect(() => {
+    checkDatePropsValidity(
+      { maxDate, defaultValue, minDate, value },
+      dateFormat
     );
+  }, [dateFormat, defaultValue, maxDate, minDate, value]);
 
-    //TODO
-    setState((state: any) => ({
-      ...state,
-      calendarRenderingData: {
-        adMonth: _data.adMonth,
-        adYear: _data.adYear,
-        adStartingDayOfWeek: _data.adStartingDayOfWeek,
-        adTotalDaysInMonth: _data.adMonthsDay,
-        adDayValue: _data.adDay,
-        adPrevMonth: _data.adPrevMonth,
-        adPrevYear: _data.adPrevYear,
-        adPrevMonthDays: _data.adDaysInPrevMonth,
-        adNextMonth: _data.adNextMonth,
-        adNextYear: _data.adNextYear,
+  //always in ad
+  const [selectedData, setSelectedData] =
+    useState<IDateObject>(initSelectedData);
 
-        bsMonth: _data.bsMonth,
-        bsYear: _data.bsYear,
-        bsStartingDayOfWeek: _data.bsStartingDayOfWeek,
-        bsTotalDaysInMonth: _data.bsMonthDays,
-        bsDayValue: _data.bsDay,
-        bsPrevMonth: _data.bsPrevMonth,
-        bsPrevYear: _data.bsPrevYear,
-        bsPrevMonthDays: _data.bsDaysInPrevMonth,
-        bsNextMonth: _data.bsNextMonth,
-        bsNextYear: _data.bsNextYear,
+  const [calendarData, setCalendarData] =
+    useState<IDateObject>(initSelectedData);
 
-        bsMonthFirstAdDate: _data.bsMonthFirstAdDate,
-      },
-      calendarDataBS: {
-        date: _data.adDate,
-        month: _data.bsMonth,
-        year: _data.bsYear,
-        daysInMonth: _data.bsMonthDays,
-        // weekDay: _data.weekDay,
-        dayValue: bsDay,
-        bsMonthFirstAdDate: _data.bsMonthFirstAdDate,
-      },
-      isLoaded: true,
-    }));
-  };
+  useEffect(() => {
+    if (value) {
+      const newDate = getDateObj(value, dateFormat);
+      if (newDate) setSelectedData(newDate);
+    }
+  }, [value, dateFormat]);
 
   const changeMonth = (offset: number) => {
-    const calendarDataBS = state.calendarDataBS;
-    const data = getMonthOffset(calendarDataBS, offset);
+    const data = getMonthOffset(calendarData, offset);
     if (data) {
       const { year, month, date } = data;
 
-      console.log("calendarMonth", year, month, date);
-      setCalendarBSData(year, month, date);
+      setCalendarData({ year, month, date: date });
     }
   };
 
-  const onChangeDate = (adDate: DateType) => {
-    const bs_dt = calendarFunctions.getBsDateByAdDate(
-      adDate.year,
-      adDate.month,
-      adDate.day
-    );
+  const onChangeDate = (adDate: IDateObject) => {
+    const bs = ad2bs(adDate.year, adDate.month, adDate.date);
+
     const bsDate = {
-      day: bs_dt.bsDate,
-      month: bs_dt.bsMonth,
-      year: bs_dt.bsYear,
+      date: bs.date,
+      month: bs.month,
+      year: bs.year,
     };
 
     const date = getDateFromObject(adDate);
     const formattedDate = dateFormatter(date, dateFormat);
-    setSelectedData({ ...adDate });
+    if (!value) setSelectedData({ ...adDate });
     typeof onSelect === "function" &&
       onSelect(formattedDate, adDate, bsDate, date); //TODO
   };
 
+  //TODO range check
   const changeYear = (offset: number) => {
-    const calendarDataBS = state.calendarDataBS;
-    const prevMonth = calendarDataBS.month;
+    const month = calendarData.month;
 
     const offsetValue = Number(offset);
     if (isNaN(offsetValue)) {
@@ -163,37 +109,22 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
         `Expected type of offset for change year function is number instead received ${typeof offset}`
       );
     }
-    const prevYear = calendarDataBS.year + offsetValue;
+    const year = calendarData.year + offsetValue;
 
-    const prevDate = calendarDataBS.dayValue;
-    //TODO check date range
-    // if (
-    //   prevYear < calendarDataBS.minBsYear ||
-    //   prevYear > calendarDataBS.maxBsYear
-    // ) {
-    //   return null;
-    // }
-    setCalendarBSData(prevYear, prevMonth, prevDate);
+    const date = calendarData.date;
+    setCalendarData({ year, month, date });
   };
 
-  const { calendarRenderingData } = state;
   const isAD = calendarType === "AD";
 
-  const _month = isAD
-    ? calendarRenderingData.adMonth
-    : calendarRenderingData.bsMonth;
-  const _year = isAD
-    ? calendarRenderingData.adYear
-    : calendarRenderingData.bsYear;
+  const allDays =
+    calendarType === "BS"
+      ? getWeekNames("np", "short")
+      : getWeekNames("en", "short");
 
-  const { ad: todayDateAD, bs: todayDateBS } = getTodaysDate();
-
-  if (!state.isLoaded) {
-    return <div></div>;
-  }
-
-  const days_array =
-    calendarType === "BS" ? calendarData.bsDays : calendarData.adDays;
+  const dateRange: DateRange | null = range
+    ? { from: range?.from, to: range?.to, format: range?.format ?? dateFormat }
+    : null;
 
   return (
     <div className="rl-nepali-date-panel-wrapper">
@@ -201,9 +132,10 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
         <Header
           changeYear={changeYear}
           changeMonth={changeMonth}
-          month={_month}
-          year={_year}
+          month={calendarData.month}
+          year={calendarData.year}
           isAD={isAD}
+          showExtra={showExtra}
           showMonthDropdown={showMonthDropdown}
           showYearDropdown={showYearDropdown}
         />
@@ -211,35 +143,34 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
           <table className="rl-nepali-date-content">
             <thead>
               <tr>
-                {days_array.map((val, ind) => {
-                  return <th key={`${ind}-m`}>{val}</th>;
-                })}
+                {allDays &&
+                  allDays.map((val, ind) => {
+                    return <th key={`${ind}-m`}>{val}</th>;
+                  })}
               </tr>
             </thead>
             <tbody>
-              {Array(6)
-                .fill("")
-                .map((it1, index) => {
-                  return (
-                    <tr key={index}>
-                      <DateRenderer
-                        week={index}
-                        calendarRenderingData={calendarRenderingData}
-                        selectedData={selectedData}
-                        isAD={isAD}
-                        showExtra={showExtra}
-                        disableDate={disableDate}
-                        shouldPressOK={shouldPressOK}
-                        onChangeDate={onChangeDate}
-                        changeMonth={changeMonth}
-                      />
-                    </tr>
-                  );
-                })}
+              <RangeRender
+                year={calendarData.year}
+                month={calendarData.month}
+                selectedData={selectedData}
+                isAD={isAD}
+                showExtra={showExtra}
+                shouldPressOK={shouldPressOK}
+                onChangeDate={onChangeDate}
+                changeMonth={changeMonth}
+                range={dateRange}
+                disableDate={disableDate}
+                disablePast={disablePast}
+                disableFuture={disableFuture}
+                maxDate={maxDate}
+                minDate={minDate}
+                dateFormat={dateFormat}
+              />
             </tbody>
           </table>
 
-          {showToday && (
+          {/* {showToday && (
             <div
               style={{
                 display: "flex",
@@ -255,7 +186,7 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
                   setCalendarBSData(
                     todayDateBS.year,
                     todayDateBS.month,
-                    todayDateBS.day
+                    todayDateBS.date
                   );
                   onChangeDate(todayDateAD);
                 }}
@@ -263,17 +194,9 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
                 Today
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
-      {withReference && (
-        <RenderReference
-          referenceDate={reference_date ?? ""}
-          rangeReference={rangeReference ?? []}
-          zeroDayName={zeroDayName ?? " "}
-          onChangeDate={onChangeDate}
-        />
-      )}
     </div>
   );
 };

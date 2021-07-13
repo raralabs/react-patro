@@ -49,6 +49,7 @@
 }
 
 .rl-nepali-datepicker-input {
+  width: 100%;
 }
 
 .popovercalendar .ant-popover-inner-content {
@@ -352,12 +353,8 @@
 
 .cross-icon {
   position: absolute;
-  right: 32px;
-  top: 10px;
   z-index: 1;
-  width: 14px;
   background: var(--cl-secondary);
-  height: 14px;
   font-size: 10px;
   line-height: 100%;
   display: flex;
@@ -366,8 +363,15 @@
   border-radius: 50%;
   color: white;
   opacity: 0;
+  width: 10px;
+  height: 10px;
+  top: 5px;
+  right: 5px;
+  padding: 0px;
+  margin: 0px;
+  font-size: 12px;
+  padding: 2px;
 }
-
-.rl-nepali-datepicker-wrapper:hover .cross-icon {
+.cross-icon {
   opacity: 1;
 }

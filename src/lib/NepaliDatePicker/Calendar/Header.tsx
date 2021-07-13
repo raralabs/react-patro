@@ -1,7 +1,14 @@
 import React from "react";
-import { np, calendar_data } from "../data";
-import { calendarData, calendarFunctions } from "../helper_bs";
 import { ShowDropdownType, ShowYearDropdownType } from "./types";
+import {
+  ad2bs,
+  getAdRangeForBsCalendar,
+  getBsRangeForAdCalendar,
+  getMonthNames,
+  getNepaliNumber,
+  getValidYears,
+} from "../CalendarData";
+import { getTotalDaysInAdMonth } from "../date-fns";
 
 type OffsetChange = (a: number) => void;
 
@@ -13,6 +20,7 @@ type HeaderProps = {
   isAD: boolean;
   showMonthDropdown: ShowDropdownType;
   showYearDropdown: ShowYearDropdownType;
+  showExtra: boolean;
 };
 
 const Header = ({
@@ -23,21 +31,28 @@ const Header = ({
   isAD,
   showMonthDropdown,
   showYearDropdown,
+  showExtra,
 }: HeaderProps) => {
   // because month from props is received in readable format 1= Baishakh
   // but the component manipulates in array format 0= Baisakh
   const monthIndex = month - 1;
 
-  const currentMonthName = isAD
-    ? calendarData.adMonth[monthIndex]
-    : calendarData.bsMonths[monthIndex];
+  const allNepaliMonth = getMonthNames("np", "full");
+  const allEnglishMonth = getMonthNames("en", "full");
 
-  const currentYear = isAD
-    ? year
-    : calendarFunctions.getNepaliNumber(year ?? 0);
+  const allMonth = isAD ? allEnglishMonth : allNepaliMonth;
 
-  const fullMonthName = np.monthName.full;
-  const allYears = Object.keys(calendar_data);
+  const currentMonthName = allMonth ? allMonth[monthIndex] : "";
+
+  const currentYear = isAD ? year : getNepaliNumber(year ?? 0);
+
+  const allYears = isAD ? getValidYears("en", "AD") : getValidYears("en", "BS");
+
+  const alternateCalendarTypeRange = isAD
+    ? getBsRangeForAdCalendar(year, month)
+    : getAdRangeForBsCalendar(year, month);
+
+  const { from, to } = alternateCalendarTypeRange;
 
   return (
     <div>
@@ -59,49 +74,72 @@ const Header = ({
           </div>
         </div>
 
-        <div className="month-header-content">
-          {!showMonthDropdown ? (
-            <span>{currentMonthName} &nbsp;</span>
-          ) : (
-            <select
-              className="rl-nepali-calendar__month-select"
-              value={monthIndex}
-              onChange={(e) => {
-                const { value } = e.currentTarget;
-                const offset = +value - monthIndex;
-                changeMonth(offset);
-              }}
-            >
-              {fullMonthName.map((m, i) => (
-                <option value={i} key={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          )}
-
-          <div key={`${year}--`} tabIndex={0} className="inline-dropdown">
-            <div className="value"></div>
-            {!showYearDropdown ? (
-              <span>{currentYear || 0} &nbsp;</span>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div className="month-header-content">
+            {!showMonthDropdown ? (
+              <span>{currentMonthName} &nbsp;</span>
             ) : (
               <select
                 className="rl-nepali-calendar__month-select"
-                value={year}
+                value={monthIndex}
                 onChange={(e) => {
                   const { value } = e.currentTarget;
-                  const offset = +value - year;
-                  changeYear(offset);
+                  const offset = +value - monthIndex;
+                  changeMonth(offset);
                 }}
               >
-                {allYears.map((m, i) => (
-                  <option value={m} key={m}>
-                    {m}
-                  </option>
-                ))}
+                {allMonth &&
+                  allMonth.map((m, i) => (
+                    <option value={i} key={m}>
+                      {m}
+                    </option>
+                  ))}
               </select>
             )}
+
+            <div key={`${year}--`} tabIndex={0} className="inline-dropdown">
+              <div className="value"></div>
+              {!showYearDropdown ? (
+                <span>{currentYear || 0} &nbsp;</span>
+              ) : (
+                <select
+                  className="rl-nepali-calendar__month-select"
+                  value={year}
+                  onChange={(e) => {
+                    const { value } = e.currentTarget;
+                    console.log("value", value);
+                    const offset = +value - year;
+
+                    console.log("offset", offset);
+                    changeYear(offset);
+                  }}
+                >
+                  {allYears.map((m, i) => (
+                    <option value={m} key={m}>
+                      {isAD ? m : getNepaliNumber(m)}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
           </div>
+          {showExtra && (
+            <div className="flex">
+              <span style={{ fontSize: 12 }}>
+                {from.monthName}/{to.monthName} -
+              </span>
+              <div
+                key={`${year}--`}
+                tabIndex={0}
+                className="inline-dropdown"
+                style={{ fontSize: 12 }}
+              >
+                <div className="value"></div>
+                {from.year}
+                {from.year !== to.year ? `/${String(to.year).slice(-2)}` : ""}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="right-actions">
