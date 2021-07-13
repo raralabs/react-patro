@@ -3,29 +3,16 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 // import DateRender from "./DateRender";
 import RangeRender from "./RangeRender";
-import useInitialState from "./useInitialState";
+import useSelectedData from "./useSelectedData";
 
 import { getMonthOffset, getTodaysDate, checkDatePropsValidity } from "./util";
 
-import { dateFormatter, getDateFromObject, getDateObj } from "../date-fns";
+import { dateFormatter, getDateFromObject } from "../date-fns";
+import { getWeekNames, formatBsDate } from "../CalendarData";
 
 import { DateRange, NepaliCalendarProps, IDateObject } from "./types";
 
-import { ad2bs, getWeekNames } from "../CalendarData";
-
 import "../nepali_date_picker.css";
-
-type WarningProps = {
-  value: string | null | undefined;
-  defaultValue: string | null | undefined;
-};
-const useWarning = ({ value, defaultValue }: WarningProps) => {
-  useEffect(() => {
-    if (value && defaultValue) {
-      console.warn("If value is provided defaultValue is ignored.");
-    }
-  }, [value, defaultValue]);
-};
 
 const NepaliCalendar = (props: NepaliCalendarProps) => {
   const {
@@ -47,12 +34,12 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
     range,
   } = props;
 
-  const { data: initSelectedData } = useInitialState(
-    value ?? defaultValue,
-    dateFormat
-  );
+  useEffect(() => {
+    if (value && defaultValue) {
+      console.warn("If value is provided defaultValue is ignored.");
+    }
+  }, [value, defaultValue]);
 
-  useWarning({ value, defaultValue });
   useEffect(() => {
     checkDatePropsValidity(
       { maxDate, defaultValue, minDate, value },
@@ -60,19 +47,23 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
     );
   }, [dateFormat, defaultValue, maxDate, minDate, value]);
 
-  //always in ad
-  const [selectedData, setSelectedData] =
-    useState<IDateObject>(initSelectedData);
+  // //always in ad
+  // const [selectedData, setSelectedData] =
+  //   useState<IDateObject>(initSelectedData);
 
-  const [calendarData, setCalendarData] =
-    useState<IDateObject>(initSelectedData);
+  const isAD = calendarType === "AD";
+  const { selectedData, setSelectedData } = useSelectedData(
+    dateFormat,
+    isAD,
+    value,
+    defaultValue
+  );
 
-  useEffect(() => {
-    if (value) {
-      const newDate = getDateObj(value, dateFormat);
-      if (newDate) setSelectedData(newDate);
-    }
-  }, [value, dateFormat]);
+  const [calendarData, setCalendarData] = useState<IDateObject>({
+    date: selectedData.date,
+    month: selectedData.month,
+    year: selectedData.year,
+  });
 
   const changeMonth = (offset: number) => {
     const data = getMonthOffset(calendarData, offset);
@@ -83,17 +74,12 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
     }
   };
 
-  const onChangeDate = (adDate: IDateObject) => {
-    const bs = ad2bs(adDate.year, adDate.month, adDate.date);
-
-    const bsDate = {
-      date: bs.date,
-      month: bs.month,
-      year: bs.year,
-    };
-
+  const onChangeDate = (adDate: IDateObject, bsDate: IDateObject) => {
     const date = getDateFromObject(adDate);
-    const formattedDate = dateFormatter(date, dateFormat);
+    const formattedDate = isAD
+      ? dateFormatter(date, dateFormat)
+      : formatBsDate(bsDate, dateFormat);
+
     if (!value) setSelectedData({ ...adDate });
     typeof onSelect === "function" &&
       onSelect(formattedDate, adDate, bsDate, date); //TODO
@@ -114,8 +100,6 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
     const date = calendarData.date;
     setCalendarData({ year, month, date });
   };
-
-  const isAD = calendarType === "AD";
 
   const allDays =
     calendarType === "BS"

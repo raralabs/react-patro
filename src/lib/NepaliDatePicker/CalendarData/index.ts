@@ -2,7 +2,15 @@ import { isInBetween } from "../Calendar/util";
 import { getTotalDaysInAdMonth } from "../date-fns";
 // import { calculateDate } from "../date-fns";
 import { DateType, CalendarType } from "./../Calendar/types.d";
+import parser from "./parser";
+import format from "./format";
+
 import * as BSdata from "./data";
+
+const parseBsDate = parser;
+const formatBsDate = format;
+
+export { formatBsDate, parseBsDate };
 
 const dataType = ["np", "rm", "en"];
 const lengthType = ["full", "short", "min"];

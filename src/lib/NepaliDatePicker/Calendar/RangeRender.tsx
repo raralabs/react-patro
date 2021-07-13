@@ -13,7 +13,7 @@ interface DateRendererProps extends DisableProps {
   isAD: boolean;
   selectedData: IDateObject;
   shouldPressOK: boolean;
-  onChangeDate: (adDate: IDateObject) => void;
+  onChangeDate: (adDate: IDateObject, bsDate: IDateObject) => void;
   showExtra: boolean;
   changeMonth: (n: number) => void;
   range?: DateRange | null;
@@ -65,9 +65,9 @@ const DateRenderer = (props: DateRendererProps) => {
                 d.isCurrentMonth && checkIsSelected(selectedData, d.adDate);
               const isInRange = range ? checkIsInRange(d.adDate, range) : false;
 
-              const isRangeBoundary = range
-                ? checkIsRangeBoundary(d.adDate, range)
-                : false;
+              //   const isRangeBoundary = range
+              //     ? checkIsRangeBoundary(d.adDate, range)
+              //     : false;
               return (
                 <td
                   key={i}
@@ -84,11 +84,11 @@ const DateRenderer = (props: DateRendererProps) => {
                       }
                     }
                     if (shouldPressOK) {
-                      onChangeDate(d.adDate);
+                      onChangeDate(d.adDate, d.bsDate);
                     }
                   }}
                   className={`rl-picker-cell ${d.isToday ? "today" : ""} ${
-                    isRangeBoundary ? "active" : ""
+                    isSelected ? "active" : ""
                   } ${!d.isCurrentMonth ? "other-month" : ""} ${
                     isDisabled ? "disabled" : ""
                   }  ${isInRange ? "in-range" : ""}`}

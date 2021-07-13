@@ -30,7 +30,13 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
 
   return (
     <div className="rl-range-calendar">
-      <NepaliCalendarForRange
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div>Last 15 days</div>
+        <div>Last 25 days</div>
+        <div>Last 35 days</div>
+        <div>Last 45 days</div>
+      </div>
+      {/* <NepaliCalendarForRange
         range={{ from: selectedDateFrom, to: selectedDateTo }}
         defaultValue={selectedDateFrom}
         onSelect={(hello, adDate) => {
@@ -39,7 +45,7 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
         dateFormat={dateFormat}
         calendarType={calendarType}
         showToday={false}
-      />
+      /> */}
       <NepaliCalendarForRange
         range={{ from: selectedDateFrom, to: selectedDateTo }}
         defaultValue={
