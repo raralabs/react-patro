@@ -16,11 +16,11 @@ import {
   parseDate,
   getDateObj,
 } from "../date-fns";
-import { NepaliCalendarProps } from "../Calendar/types";
+import { INepaliCalendar } from "../Calendar/types";
 
 const random_id = `rl-nepali-${Math.random()}`;
 
-interface DatePickerProps extends NepaliCalendarProps {
+interface DatePickerProps extends INepaliCalendar {
   size: "small" | "large"; // TODO,
   onChange: (formattedDate: string) => void; //,TODO
   isClearable: boolean;

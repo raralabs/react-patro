@@ -10,11 +10,11 @@ import { getMonthOffset, getTodaysDate, checkDatePropsValidity } from "./util";
 import { dateFormatter, getDateFromObject } from "../date-fns";
 import { getWeekNames, formatBsDate } from "../CalendarData";
 
-import { DateRange, NepaliCalendarProps, IDateObject } from "./types";
+import { DateRange, INepaliCalendar, IDateObject } from "./types";
 
 import "../nepali_date_picker.css";
 
-const NepaliCalendar = (props: NepaliCalendarProps) => {
+const NepaliCalendar = (props: INepaliCalendar) => {
   const {
     // showToday = true,
     defaultValue,
@@ -43,16 +43,14 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
   useEffect(() => {
     checkDatePropsValidity(
       { maxDate, defaultValue, minDate, value },
-      dateFormat
+      dateFormat,
+      calendarType
     );
-  }, [dateFormat, defaultValue, maxDate, minDate, value]);
-
-  // //always in ad
-  // const [selectedData, setSelectedData] =
-  //   useState<IDateObject>(initSelectedData);
+  }, [dateFormat, defaultValue, maxDate, minDate, value, calendarType]);
 
   const isAD = calendarType === "AD";
-  const { selectedData, setSelectedData } = useSelectedData(
+  // //always in ad
+  const [selectedData, setSelectedData] = useSelectedData(
     dateFormat,
     isAD,
     value,
@@ -66,7 +64,7 @@ const NepaliCalendar = (props: NepaliCalendarProps) => {
   });
 
   const changeMonth = (offset: number) => {
-    const data = getMonthOffset(calendarData, offset);
+    const data = getMonthOffset(calendarData, offset, calendarType);
     if (data) {
       const { year, month, date } = data;
 

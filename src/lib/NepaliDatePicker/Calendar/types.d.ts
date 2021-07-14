@@ -26,6 +26,24 @@ export type DateRange = {
   format?: string;
 };
 
+export type onSelectProps = (
+  formattedDate: string,
+  adDate: IDateObject,
+  bsDate: IDateObject,
+  dateString: Date
+) => void;
+
+export interface IDateObject {
+  year: number;
+  month: number;
+  date: number;
+}
+export interface IDateOffset {
+  year?: number;
+  month?: number;
+  date?: number;
+}
+
 export type DisableProps = {
   disableDate?: (
     formattedDate: string,
@@ -39,20 +57,10 @@ export type DisableProps = {
   minDate?: string;
 };
 
-export type onSelectProps = (
-  formattedDate: string,
-  adDate: IDateObject,
-  bsDate: IDateObject,
-  dateString: Date
-) => void;
-
-export interface IDateObject {
-  year: number;
-  month: number;
-  date: number;
-}
-
-export interface NepaliCalendarProps extends DisableProps {
+export type RangeProps = {
+  range?: DateRange;
+};
+export interface INepaliCalendar extends DisableProps, RangeProps {
   showToday?: boolean;
   zeroDayName?: string;
   defaultValue?: string | null;
@@ -67,5 +75,4 @@ export interface NepaliCalendarProps extends DisableProps {
   reference_date?: string;
   rangeReference?: number[];
   calendarType: CalendarType;
-  range?: DateRange;
 }

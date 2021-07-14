@@ -65,9 +65,9 @@ const DateRenderer = (props: DateRendererProps) => {
                 d.isCurrentMonth && checkIsSelected(selectedData, d.adDate);
               const isInRange = range ? checkIsInRange(d.adDate, range) : false;
 
-              //   const isRangeBoundary = range
-              //     ? checkIsRangeBoundary(d.adDate, range)
-              //     : false;
+              const isRangeBoundary = range
+                ? checkIsRangeBoundary(d.adDate, range)
+                : false;
               return (
                 <td
                   key={i}
@@ -88,7 +88,7 @@ const DateRenderer = (props: DateRendererProps) => {
                     }
                   }}
                   className={`rl-picker-cell ${d.isToday ? "today" : ""} ${
-                    isSelected ? "active" : ""
+                    isRangeBoundary || isSelected ? "active" : ""
                   } ${!d.isCurrentMonth ? "other-month" : ""} ${
                     isDisabled ? "disabled" : ""
                   }  ${isInRange ? "in-range" : ""}`}

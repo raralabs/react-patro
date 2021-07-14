@@ -107,10 +107,8 @@ const Header = ({
                   value={year}
                   onChange={(e) => {
                     const { value } = e.currentTarget;
-                    console.log("value", value);
                     const offset = +value - year;
 
-                    console.log("offset", offset);
                     changeYear(offset);
                   }}
                 >
@@ -124,17 +122,16 @@ const Header = ({
             </div>
           </div>
           {showExtra && (
-            <div className="flex">
-              <span style={{ fontSize: 12 }}>
+            <div className="flex" style={{ justifyContent: "center" }}>
+              <div style={{ fontSize: 12 }}>
                 {from.monthName}/{to.monthName} -
-              </span>
+              </div>
               <div
                 key={`${year}--`}
                 tabIndex={0}
                 className="inline-dropdown"
                 style={{ fontSize: 12 }}
               >
-                <div className="value"></div>
                 {from.year}
                 {from.year !== to.year ? `/${String(to.year).slice(-2)}` : ""}
               </div>

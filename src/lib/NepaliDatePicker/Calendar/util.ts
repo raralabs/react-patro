@@ -1,5 +1,10 @@
-import { ad2bs, bs2ad, isInValidAdRange } from "./../CalendarData/index";
-import { DateRange, IDateObject } from "./types.d";
+import {
+  ad2bs,
+  bs2ad,
+  isInValidRange,
+  parseBsDate,
+} from "./../CalendarData/index";
+import { CalendarType, DateRange, IDateObject } from "./types.d";
 import {
   parseDate,
   getDateFromObject,
@@ -7,7 +12,6 @@ import {
   dateFormatter,
 } from "../date-fns";
 import { DisableProps } from "./types";
-import { isEqual } from "date-fns";
 
 type ADBSDateType = {
   ad: IDateObject;
@@ -154,8 +158,9 @@ export function checkIsBsDisabled(
   return false;
 }
 //TODO may be generic???
+// inclusive of first and last date;
 export function isInBetween(data: any, first: any, last: any): boolean {
-  if (data > first && data < last && first < last) {
+  if (data >= first && data <= last && first < last) {
     return true;
   } else return false;
 }
@@ -225,10 +230,11 @@ export function checkIsRangeBoundary(
   return false;
 }
 
-//TODO check
+//TODO check change its name
 const getMonthOffset = (
   dateObj: { year: number; month: number; date: number },
-  offset: number
+  offset: number,
+  calendarType: CalendarType
 ): IDateObject => {
   const { year, month, date } = dateObj;
   const offsetValue = Number(offset);
@@ -247,7 +253,11 @@ const getMonthOffset = (
   const nextDate = date;
 
   //TODO only specified for BS. so causes issue for AD,
-  isInValidAdRange({ year: nextYear }, "BS", true);
+  isInValidRange(
+    { year: nextYear, month: nextMonth, date: nextDate },
+    calendarType,
+    true
+  );
 
   return { year: nextYear, month: nextMonth, date: nextDate };
 };
@@ -291,7 +301,8 @@ type AllDateProps = {
 
 export const checkDatePropsValidity = (
   allDateProps: AllDateProps,
-  dateFormat: string
+  dateFormat: string,
+  calendarType: CalendarType
 ) => {
   type AllDateString = keyof typeof allDateProps;
   const checker: AllDateString[] = [
@@ -312,6 +323,9 @@ export const checkDatePropsValidity = (
       if (!isDateValid(value, dateFormat)) {
         throwTypeError(value, prop, dateFormat);
         return;
+      } else {
+        const dateObj = parseBsDate(value, dateFormat);
+        isInValidRange(dateObj, calendarType, true);
       }
     }
   });

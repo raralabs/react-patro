@@ -9,9 +9,15 @@ import NepaliCalendarRange from "./lib/NepaliDatePicker/Range";
 import PreLabeledRange from "./lib/NepaliDatePicker/Range/PreLabeled";
 
 import "./App.css";
-import { ad2bs, bs2ad } from "./lib/NepaliDatePicker/CalendarData";
+import {
+  ad2bs,
+  bs2ad,
+  isBsDateValid,
+  isInValidRange,
+} from "./lib/NepaliDatePicker/CalendarData";
 import parseDate from "./lib/NepaliDatePicker/CalendarData/parser";
 import format from "./lib/NepaliDatePicker/CalendarData/format";
+import { isAdDateValid } from "./lib/NepaliDatePicker/CalendarData/validator";
 
 const App = () => {
   const [date, setDate] = useState("");
@@ -29,11 +35,24 @@ const App = () => {
     to: "",
   });
 
+  const [definedRangeSelector, setDefinedRangeSelector] = useState({
+    from: "",
+    to: "",
+  });
+
+  //converter
   window.ad2bs = ad2bs;
   window.bs2ad = bs2ad;
 
+  // formater and parser
   window.parse = parseDate;
   window.format = format;
+
+  ////Range VAlidator
+  window.isBsDateValid = isBsDateValid;
+  window.isAdDateValid = isAdDateValid;
+  window.isInValidRange = isInValidRange;
+
   return (
     <div style={{ background: "tomato", padding: 40, color: "white" }}>
       <div style={{ maxWidth: 960, margin: "0px auto" }}>
@@ -93,7 +112,22 @@ const App = () => {
           </div>
         </div>
         {/* <CustomDateRangeToggler /> */}
-        <PreLabeledRange />
+        <h1>Defined Range Selector</h1>
+        <p>
+          Base Date: 2021-09-14 Selected Range: {definedRangeSelector.from} -{" "}
+          {definedRangeSelector.to}
+        </p>
+        <div style={{ marginBottom: 200 }}>
+          <PreLabeledRange
+            from={definedRangeSelector.from}
+            to={definedRangeSelector.to}
+            dateFormat="yyyy-mm-dd"
+            calendarType="AD"
+            onChange={(dateFrom, dateTo) => {
+              setDefinedRangeSelector({ from: dateFrom, to: dateTo });
+            }}
+          />
+        </div>
         <h1>Ad Date Range</h1>
         <p>
           Selected Range: {selectedDateRange.from} - {selectedDateRange.to}

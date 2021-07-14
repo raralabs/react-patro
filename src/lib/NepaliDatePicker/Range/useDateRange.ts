@@ -7,10 +7,9 @@ import {
   getDateFromObject,
 } from "../date-fns";
 
-type DateString = string | null;
 type SelectedDateRange = {
-  from: DateString;
-  to: DateString;
+  from: string | null;
+  to: string | null;
 };
 type RangeType = "from" | "to";
 
@@ -73,7 +72,7 @@ const useDateRange = (dateFrom: string, dateTo: string, dateFormat: string) => {
     [dateFormat]
   );
 
-  return { selectedDate, onDateSelect };
+  return { selectedDate, onDateSelect, setSelectedDate };
 };
 
 export default useDateRange;

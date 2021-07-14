@@ -3,6 +3,7 @@ import { DateType } from "../Calendar/types";
 import isMatch from "date-fns/isMatch";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
+import { isDateValidWithFormat } from "../CalendarData/validator";
 
 //Since this lib will presumably require only year, month and date
 // converting all small to Capital M as the date-fns require month to be "M"
@@ -124,36 +125,11 @@ export const changeDateFromOneFormatToAnother = (
   return newDate;
 };
 
-export function calculateDate<T extends string | Date>(
-  dateOffset: DateType,
-  dateStr: T,
-  dateFormat?: string
-): T extends string ? string : Date {
-  //TODO make common
-  // if Date String is provided
-  if (dateStr instanceof Date) {
-    const date = new Date(dateStr);
-    const newDate = new Date(
-      date.getFullYear() + +(dateOffset?.year ?? 0),
-      date.getMonth() + +(dateOffset?.month ?? 0),
-      date.getDate() + +(dateOffset?.day ?? 0)
-    );
-    return newDate as any;
-  } else if (dateFormat && isDateValid(dateStr, dateFormat)) {
-    // if Date format is provided
-    const date = parseDate(dateStr, dateFormat);
-    const newDate = new Date(
-      date.getFullYear() + +(dateOffset?.year ?? 0),
-      date.getMonth() + +(dateOffset?.month ?? 0),
-      date.getDate() + +(dateOffset?.day ?? 0)
-    );
-    return newDate as any;
-  } else {
-    throw new Error(
-      `Provided Date Format or Date String do not match. Got dateFormat=${dateFormat} && dateString=${dateStr}`
-    );
-  }
-}
+type DateOffset = {
+  year?: number;
+  month?: number;
+  date?: number;
+};
 
 export function getTotalDaysInAdMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate();

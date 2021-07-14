@@ -5,6 +5,7 @@ import { isDateValid, parseDate } from "../date-fns";
 import { getDateObj } from "../date-fns";
 import { parseBsDate, bs2ad } from "../CalendarData";
 
+//Regardless of isAD value the data should always contain Ad data by converting bs Data to ad if isAD = false
 const useSelectedData = (
   dateFormat: string,
   isAD: boolean,
@@ -47,7 +48,7 @@ const useSelectedData = (
     }
   }, [value, dateFormat, isAD]);
 
-  return { selectedData: data, setSelectedData: setData };
+  return [data, setData] as const;
 };
 
 export default useSelectedData;

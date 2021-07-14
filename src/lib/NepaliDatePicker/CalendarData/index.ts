@@ -1,14 +1,17 @@
 import { isInBetween } from "../Calendar/util";
 import { getTotalDaysInAdMonth } from "../date-fns";
-// import { calculateDate } from "../date-fns";
-import { DateType, CalendarType } from "./../Calendar/types.d";
+
+import { CalendarType } from "./../Calendar/types.d";
 import parser from "./parser";
 import format from "./format";
+import { isInValidRange, isMonthValid, isBsDateValid } from "./validator";
 
 import * as BSdata from "./data";
 
 const parseBsDate = parser;
 const formatBsDate = format;
+
+export { isInValidRange, isMonthValid, isBsDateValid };
 
 export { formatBsDate, parseBsDate };
 
@@ -111,37 +114,6 @@ export const getNepaliNumber = (n: number | string) => {
     nep += BSdata.npNumsArray[str[i] as any];
   }
   return nep;
-};
-
-export const isInValidAdRange = (
-  dateObj: DateType,
-  calendarType: CalendarType,
-  throwError?: boolean
-): boolean => {
-  const { year } = dateObj;
-  if (calendarType === "BS") {
-    if (isInBetween(year, BSdata.minBsYear, BSdata.maxBsYear)) {
-      return true;
-    } else {
-      if (throwError) {
-        throw new RangeError(
-          `Year ${BSdata.minBsYear} BS - ${BSdata.maxBsYear} BS is only supported. instead got ${year} in getMonthOffset function`
-        );
-      }
-      return false;
-    }
-  } else {
-    if (isInBetween(year, BSdata.minAdYear, BSdata.maxAdYear)) {
-      return true;
-    } else {
-      if (throwError) {
-        throw new RangeError(
-          `Year ${BSdata.minAdYear} AD - ${BSdata.maxAdYear} Ad is only supported. instead got ${year} in getMonthOffset function`
-        );
-      }
-      return false;
-    }
-  }
 };
 
 //TODO
@@ -282,7 +254,7 @@ export const getTotalDaysInBsMonth = (year: number, month: number): number => {
       return BSdata.calendar_data[year as EachBSYear][monthIndex];
     } else
       throw new RangeError(
-        `Expeceted first paramater as year within range 1978-2092 and second parameter as month within range 0-12. But got year as ${year} and month as ${month} in getNumberOfDaysInMonth function`
+        `Expeceted first paramater as year within range ${BSdata.minBsYear}-${BSdata.maxBsYear} and second parameter as month within range 0-12. But got year as ${year} and month as ${month} in getNumberOfDaysInMonth function`
       );
   } catch (err) {
     throw new Error("Error");

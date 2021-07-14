@@ -84,7 +84,6 @@ const useCalendarData = (year: number, month: number, isAD: boolean) => {
             month: mainDate.month,
             year: mainDate.year,
           },
-
           isToday,
           isCurrentMonth,
           render: { main: renderMainDate, sub: renderSubDate },

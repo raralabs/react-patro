@@ -192,9 +192,11 @@ export const lang = ["np", "rm", "en"],
     8: "८",
     9: "९",
   },
-  minBsYear = 1970,
+  minBsYear = 1978,
   maxBsYear = 2100, //TODO
-  minAdYear = 1913,
+  minAdYear = 1921,
+  minAdMonth = 3,
+  minAdDate = 13,
   maxAdYear = 2043, //TODo
   daysInYear = 365,
   minMonth = 1,
