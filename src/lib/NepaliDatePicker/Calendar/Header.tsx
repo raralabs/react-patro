@@ -1,14 +1,13 @@
 import React from "react";
 import { ShowDropdownType, ShowYearDropdownType } from "./types";
 import {
-  ad2bs,
   getAdRangeForBsCalendar,
   getBsRangeForAdCalendar,
   getMonthNames,
   getNepaliNumber,
   getValidYears,
 } from "../CalendarData";
-import { getTotalDaysInAdMonth } from "../date-fns";
+// import { getTotalDaysInAdMonth } from "../date-fns";
 
 type OffsetChange = (a: number) => void;
 

@@ -1,9 +1,8 @@
 import { IDateObject } from "./../Calendar/types.d";
-import { DateType } from "../Calendar/types";
 import isMatch from "date-fns/isMatch";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
-import { isDateValidWithFormat } from "../CalendarData/validator";
+// import { isDateValidWithFormat } from "../CalendarData/validator";
 
 //Since this lib will presumably require only year, month and date
 // converting all small to Capital M as the date-fns require month to be "M"

@@ -5,8 +5,8 @@ import Header from "./Header";
 import RangeRender from "./RangeRender";
 import useSelectedData from "./useSelectedData";
 
-import { getMonthOffset, getTodaysDate, checkDatePropsValidity } from "./util";
-
+import { getMonthOffset, checkDatePropsValidity } from "./util";
+// getTodaysDate
 import { dateFormatter, getDateFromObject } from "../date-fns";
 import { getWeekNames, formatBsDate } from "../CalendarData";
 
