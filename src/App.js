@@ -1,114 +1,166 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { NepaliDatePicker } from './nepali_date_picker/index.js'
-import moment from 'moment';
-import NepaliCalendarRange from './nepali_date_picker/calendar_range';
-import { getCalendarType, get_ad_bs_listener, AD_BS_RENDERER } from './nepali_date_picker/ad_bs_date_render';
-import { Switch, Space } from 'antd';
-// import 'antd/dist/antd.css';
-import NepaliRangeInputPicker from './nepali_date_picker/range_input_picker';
-import CustomDateRangeToggler from './nepali_date_picker/custom_daterange_toggler';
-import NepaliCalendar from './nepali_date_picker/calendar';
+import React, { useState } from "react";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props)
+// import CustomDateRangeToggler from "./nepali_date_picker/custom_daterange_toggler";
 
-    this.state = {
-      date: '',
-      checked: getCalendarType() == "BS"
-    }
-  }
-  render() {
+// import AdBsDateRenderer from "./lib/NepaliDatePicker/AdBsDateRenderer";
+import NepaliCalendar from "./lib/NepaliDatePicker/Calendar";
+import DatePicker from "./lib/NepaliDatePicker/DatePicker";
+import NepaliCalendarRange from "./lib/NepaliDatePicker/Range";
+import PreLabeledRange from "./lib/NepaliDatePicker/Range/PreLabeled";
 
-    return (
-      <Space direction='vertical' size={40} style={{
-        width: '100%',
-        padding: 80,
-        backgroundColor:'tomato'
-      }}>
-        <Switch checked={this.state.checked}
-          unCheckedChildren="AD"
-          checkedChildren="BS"
-          onChange={(checked) => {
-            if (checked) {
-              // to bs
-              let ad_bs_listener = get_ad_bs_listener();
-              ad_bs_listener.ad_bs.publish("BS")
-            } else {
-              // to ad
-              let ad_bs_listener = get_ad_bs_listener();
-              ad_bs_listener.ad_bs.publish("AD")
-            };
-            this.setState({
-              checked: checked
-            })
-          }}></Switch>
+import "./App.css";
+import {
+  ad2bs,
+  bs2ad,
+  isBsDateValid,
+  isInValidRange,
+} from "./lib/NepaliDatePicker/CalendarData";
+import parseDate from "./lib/NepaliDatePicker/CalendarData/parser";
+import format from "./lib/NepaliDatePicker/CalendarData/format";
+import { isAdDateValid } from "./lib/NepaliDatePicker/CalendarData/validator";
 
-        <NepaliCalendar
-          initialDate={this.state.selected_date}
-          showExtra={true}
-          disableDate={this.props.disableDate}
-          shouldPressOK={true}
-          initialDateType="BS"
-          calendarType={"AD"}
-          dateFormat="DD-MM-YYYY"
-          withReference={true}
-          zeroDayName="Receipt Date"
-          reference_date={"24-08-2020"}
-          rangeReference={[0,5,15,20,30,40,50,60,70,80,90]}
-          onSelect={(ad_date, bs_date) => {
-            console.log("Ad date", ad_date)
-            let _ad = moment().date(ad_date.day).month(ad_date.month - 1).year(ad_date.year);
-            this.setState({
-              selected_date: _ad.format("DD-MM-YYYY"),
-              calendarVisible: false
-            })
-            // typeof this.props.onChange === 'function' && this.props.onChange(_ad.format("DD-MM-YYYY"))
-            // this.setState({
-            //     selected_date:`${date.day}-${date.month}-${date.year}`
-            // })
-            // console.log("date is",date)
-          }} />
+const App = () => {
+  const [date, setDate] = useState("");
 
-        <div>For input, type DATE{"<space>"}Month{"<space>"}Year and press ENTER or TAB  to select  date. NOTE: DATE,MONTH,YEAR field can be neglected</div>
-        <NepaliDatePicker
-          value={this.state.date}
-          onChange={(val) => {
-            this.setState({
-              date: val
-            })
-          }}
-        // disableDate={(d) => {
-        //   if (d <= moment()) {
-        //     return true
-        //   }
-        // }} 
-        />
-        <CustomDateRangeToggler />
+  const [selectedDate, setSelectedDate] = useState("2021-07-03");
 
-        <NepaliRangeInputPicker />
+  const [selectedDateBS, setSelectedDateBS] = useState("2078-10-12");
 
-        <NepaliCalendarRange />
-        <div>RENDERED DATE IN AD/BS</div>
-        <div >
-          <Space size={40} style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap'
-          }}>
-            {Array(20).fill("").map((it, ind) => {
-              return <AD_BS_RENDERER adDate={moment().add('day', ind).format("DD-MM-YYYY")} />
-            })}
-          </Space>
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    from: "",
+    to: "",
+  });
+  const [selectedDateRangeBs, setSelectedDateRangeBs] = useState({
+    from: "",
+    to: "",
+  });
+
+  const [definedRangeSelector, setDefinedRangeSelector] = useState({
+    from: "",
+    to: "",
+  });
+
+  //converter
+  window.ad2bs = ad2bs;
+  window.bs2ad = bs2ad;
+
+  // formater and parser
+  window.parse = parseDate;
+  window.format = format;
+
+  ////Range VAlidator
+  window.isBsDateValid = isBsDateValid;
+  window.isAdDateValid = isAdDateValid;
+  window.isInValidRange = isInValidRange;
+
+  return (
+    <div style={{ background: "tomato", padding: 40, color: "white" }}>
+      <div style={{ maxWidth: 960, margin: "0px auto" }}>
+        <h1>AD Calendar</h1>
+        <p>Selected Date AD: {JSON.stringify(selectedDate)};</p>
+        <div style={{ marginBottom: 150 }}>
+          <NepaliCalendar
+            defaultValue="2021-07-09"
+            showExtra={true}
+            calendarType={"AD"}
+            dateFormat="yyyy-mm-dd"
+            value={selectedDate}
+            // showMonthDropdown={true}
+            // showYearDropdown={true}
+            // maxDate="2021-07-10"
+            // minDate="07-03-2021"
+            // disablePast
+            // disableDate={(date) => date === "07-03-2021"}
+            onSelect={(formattedDate, adDate, bsDate, date) => {
+              setSelectedDate(formattedDate);
+            }}
+          />
         </div>
-        {/* <NepaliDatePicker /> */}
-
-
-      </Space>
-    );
-  }
-}
+        <h1>BS Calendar</h1>
+        <p>Selected Date BS: {JSON.stringify(selectedDateBS)};</p>
+        <div style={{ marginBottom: 150 }}>
+          <NepaliCalendar
+            // defaultValue="2021-07-09"
+            showExtra={true}
+            calendarType={"BS"}
+            dateFormat="yyyy-mm-dd"
+            value={selectedDateBS}
+            // showMonthDropdown={true}
+            // showYearDropdown={true}
+            // disablePast
+            // maxDate="2021-07-10"
+            // minDate="07-03-2021"
+            // disablePast
+            // disableDate={(date) => date === "07-03-2021"}
+            onSelect={(formattedDate, adDate, bsDate, date) => {
+              // alert(formattedDate);
+              setSelectedDateBS(formattedDate);
+            }}
+          />
+        </div>
+        <h1>Ad Date Picker</h1>
+        <p>Selected Date: {JSON.stringify(date)}</p>
+        New Date Picker
+        <div style={{ marginBottom: 150 }}>
+          <div style={{ width: 250 }}>
+            <DatePicker
+              value={date}
+              onChange={(val) => {
+                setDate(val);
+              }}
+            />
+          </div>
+        </div>
+        {/* <CustomDateRangeToggler /> */}
+        <h1>Defined Range Selector</h1>
+        <p>
+          Base Date: 2021-09-14 Selected Range: {definedRangeSelector.from} -{" "}
+          {definedRangeSelector.to}
+        </p>
+        <div style={{ marginBottom: 200 }}>
+          <PreLabeledRange
+            from={definedRangeSelector.from}
+            to={definedRangeSelector.to}
+            dateFormat="yyyy-mm-dd"
+            calendarType="AD"
+            onChange={(dateFrom, dateTo) => {
+              setDefinedRangeSelector({ from: dateFrom, to: dateTo });
+            }}
+          />
+        </div>
+        <h1>Ad Date Range</h1>
+        <p>
+          Selected Range: {selectedDateRange.from} - {selectedDateRange.to}
+        </p>
+        <div style={{ marginBottom: 100 }}>
+          <NepaliCalendarRange
+            calendarType="AD"
+            onChange={(from, to) => {
+              setSelectedDateRange({ from, to });
+            }}
+          />
+        </div>
+        BS DAte RAnge
+        <NepaliCalendarRange
+          onChange={(from, to) => {
+            setSelectedDateRangeBs({ from, to });
+          }}
+          calendarType="BS"
+        />
+        <p>
+          Selected Range: {selectedDateRangeBs.from} - {selectedDateRangeBs.to}
+        </p>
+        <div>RENDERED DATE IN AD/BS</div>
+        {/* <div>
+          {Array(20)
+            .fill("")
+            .map((it, ind) => {
+              return <AdBsDateRenderer adDate={"02-04-2021"} key={ind} />; //TODO
+            })}
+        </div> */}
+      </div>
+    </div>
+  );
+};
 
 export default App;
