@@ -2,11 +2,42 @@
   "name": "nepali-date-picker",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.esm",
+  "source": "src/index.tsx",
+  "typings": "dist/index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
+  "keywords": [
+    "ad2bs",
+    "bs2ad",
+    "nepali-calendar",
+    "datepicker",
+    "ad",
+    "bs",
+    "react-datepicker"
+  ],
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "rollup -c",
+    "dev": "rollup -cw",
+    "prepare": "run-s build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "react-scripts build && firebase deploy",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
     "date-fns": "^2.22.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.9.0",
+    "@rollup/plugin-node-resolve": "^13.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -14,31 +45,38 @@
     "@types/node": "^16.0.0",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^7.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "^3.4.1",
+    "rollup": "^2.53.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^1.14.1",
     "typescript": "^4.1.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "react-scripts build && firebase deploy"
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "husky": {
+    "hooks": {}
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "files": [
+    "dist",
+    "package.json"
+  ]
 }
