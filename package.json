@@ -1,11 +1,20 @@
 {
-  "name": "nepali-date-picker",
-  "version": "0.1.0",
+  "name": "react-patro",
+  "version": "0.0.1-beta",
+  "description": "AD and BS Calendar functions as hooks and component",
   "private": true,
+  "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.esm",
   "source": "src/index.tsx",
   "typings": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/raralabs/react-patro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/raralabs/react-patro/issues"
+  },
   "engines": {
     "node": ">=10"
   },
@@ -19,13 +28,9 @@
     "react-datepicker"
   ],
   "scripts": {
-    "start": "react-scripts start",
     "build": "rollup -c",
     "dev": "rollup -cw",
     "prepare": "run-s build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "react-scripts build && firebase deploy",
     "lint": "prettier --check .",
     "format": "prettier --write ."
   },
@@ -70,13 +75,16 @@
     "react-dom": ">=16.8.0"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-commit": "npm run format"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "files": [
     "dist",
-    "package.json"
+    "package.json",
+    "src/styles.css"
   ]
 }

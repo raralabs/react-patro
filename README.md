@@ -15,7 +15,6 @@
 - [ ] year => displaying based on range provided
 - [ ] defaultValue => allow for Date String if no dateFormat is passed
 - [ ] Customizable styles
-- [ ]
 
 <br/>
 
