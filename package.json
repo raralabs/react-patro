@@ -2,7 +2,6 @@
   "name": "react-patro",
   "version": "0.0.1-beta",
   "description": "AD and BS Calendar functions as hooks and component",
-  "private": true,
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.esm",
