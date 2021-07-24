@@ -1,17 +1,16 @@
 import {
   ad2bs,
   bs2ad,
+  formatBsDate,
   isInValidRange,
   parseBsDate,
 } from "./../CalendarData/index";
+import { isInBetween } from "../utils";
 import { CalendarType, DateRange, IDateObject } from "./types";
-import {
-  parseDate,
-  getDateFromObject,
-  isDateValid,
-  dateFormatter,
-} from "../date-fns";
+import { parseDate, getDateFromObject, dateFormatter } from "../date-fns";
 import { DisableProps } from "./types";
+import { isDateValidWithFormat } from "../CalendarData/validator";
+import { isAfter, isBefore } from "../CalendarData/calculation";
 
 type ADBSDateType = {
   ad: IDateObject;
@@ -76,7 +75,8 @@ export function checkIsDisabled(
   adDateObj: IDateObject,
   disableConfig: DisableProps,
   dateFormat: string,
-  bsDateObj: IDateObject
+  bsDateObj: IDateObject,
+  isAD = true
 ): boolean {
   const { disableDate, maxDate, minDate, disablePast, disableFuture } =
     disableConfig;
@@ -87,9 +87,11 @@ export function checkIsDisabled(
     date: adDateObj.date,
   });
 
+  const providedDateString = formatBsDate(
+    isAD ? adDateObj : bsDateObj,
+    dateFormat
+  );
   const formattedAdDate = dateFormatter(adDate, dateFormat);
-  const maxDateString = maxDate ? parseDate(maxDate, dateFormat) : null;
-  const minDateString = minDate ? parseDate(minDate, dateFormat) : null;
 
   const today = new Date();
   if (
@@ -104,65 +106,15 @@ export function checkIsDisabled(
     return true;
   }
 
-  if (maxDateString && adDate > maxDateString) {
+  if (maxDate && isAfter(providedDateString, maxDate, dateFormat)) {
     return true;
   }
 
-  if (minDateString && adDate < minDateString) {
-    return true;
-  }
-
-  return false;
-}
-
-export function checkIsBsDisabled(
-  adDateObj: IDateObject,
-  disableConfig: DisableProps,
-  dateFormat: string,
-  bsDateObj: IDateObject
-): boolean {
-  const { disableDate, maxDate, minDate, disablePast, disableFuture } =
-    disableConfig;
-
-  const adDate = getDateFromObject({
-    year: adDateObj.year,
-    month: adDateObj.month,
-    date: adDateObj.date,
-  });
-
-  const formattedAdDate = dateFormatter(adDate, dateFormat);
-  const maxDateString = maxDate ? parseDate(maxDate, dateFormat) : null;
-  const minDateString = minDate ? parseDate(minDate, dateFormat) : null;
-
-  const today = new Date();
-  if (
-    typeof disableDate === "function" &&
-    disableDate(formattedAdDate, adDateObj, bsDateObj, adDate)
-  )
-    return true;
-  if (adDate > today && disableFuture) {
-    return true;
-  }
-  if (adDate < today && disablePast) {
-    return true;
-  }
-
-  if (maxDateString && adDate > maxDateString) {
-    return true;
-  }
-
-  if (minDateString && adDate < minDateString) {
+  if (minDate && isBefore(providedDateString, minDate, dateFormat)) {
     return true;
   }
 
   return false;
-}
-//TODO may be generic???
-// inclusive of first and last date;
-export function isInBetween(data: any, first: any, last: any): boolean {
-  if (data >= first && data <= last && first < last) {
-    return true;
-  } else return false;
 }
 
 export function checkIsInRange(
@@ -199,6 +151,7 @@ const isYearMonthDateSame = (dateLeft: Date, dateRight: Date): boolean => {
     return true;
   return false;
 };
+
 export function checkIsRangeBoundary(
   adDateObj: IDateObject,
   range?: DateRange
@@ -320,7 +273,7 @@ export const checkDatePropsValidity = (
   checker.forEach((prop) => {
     const value = allDateProps[prop];
     if (value) {
-      if (!isDateValid(value, dateFormat)) {
+      if (!isDateValidWithFormat(value, dateFormat)) {
         throwTypeError(value, prop, dateFormat);
         return;
       } else {
@@ -330,10 +283,5 @@ export const checkDatePropsValidity = (
     }
   });
 };
-export const padDateMonth = (val: string | number) => {
-  return `${val}`.padStart(2, "0");
-};
-
-// export { padDateMonth };
 
 export { getTodaysDate, checkIsToday, checkIsSelected, getMonthOffset };

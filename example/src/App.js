@@ -67,7 +67,6 @@ const App = () => {
         <h1>AD Calendar</h1>
         <p>Selected Date AD: {JSON.stringify(selectedDate)};</p>
         <div style={{ marginBottom: 150 }}>
-          asdfasdf
           <NepaliCalendar
             defaultValue="2021-07-09"
             showExtra={true}
@@ -75,7 +74,7 @@ const App = () => {
             dateFormat="yyyy-mm-dd"
             value={selectedDate}
             disablePast
-            showMonthDropdown={true}
+            // showMonthDropdown={true}
             // showMonthDropdown={true}
             // showYearDropdown={true}
             // maxDate="2021-07-10"
@@ -93,18 +92,18 @@ const App = () => {
           <NepaliCalendar
             // defaultValue="2021-07-09"
             showExtra={true}
-            calendarType={"BS"}
+            calendarType="BS"
             dateFormat="yyyy-mm-dd"
             value={selectedDateBS}
             // showMonthDropdown={true}
             // showYearDropdown={true}
-            // disablePast
-            // maxDate="2021-07-10"
+            disablePast
+            // disableFuture
+            maxDate="2078-10-27"
             // minDate="07-03-2021"
             // disablePast
             // disableDate={(date) => date === "07-03-2021"}
             onSelect={(formattedDate, adDate, bsDate, date) => {
-              // alert(formattedDate);
               setSelectedDateBS(formattedDate);
             }}
           />
@@ -175,17 +174,3 @@ const App = () => {
 };
 
 export default App;
-
-// import React from "react";
-// import { Calendar } from "nepalicalendar";
-// import "./App.css";
-// const App = () => {
-//   return (
-//     <h1>
-//       {" "}
-//       <Calendar />
-//       App
-//     </h1>
-//   );
-// };
-// export default App;

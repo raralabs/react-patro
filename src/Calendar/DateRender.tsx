@@ -1,5 +1,4 @@
 import React from "react";
-// import { getFormattedDateFromObject } from "../date-fns";
 import { DateRange, DisableProps, IDateObject } from "./types";
 import useCalendarData from "./useCalendarData";
 import { checkIsInRange, checkIsSelected, checkIsDisabled } from "./util";

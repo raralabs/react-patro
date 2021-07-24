@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { CalendarType } from "../Calendar/types";
-import { getOffsetFormattedDate, isDateValid } from "../date-fns";
+import { getOffsetFormattedDate } from "../date-fns";
 // import "../nepali_date_picker.css";
 
 import NepaliCalendarForRange from "../Calendar";
 import useDateRange from "./useDateRange";
+import { isDateValidWithFormat } from "../CalendarData/validator";
 
 interface ICalendarRange {
   from: string;
@@ -16,12 +17,16 @@ interface ICalendarRange {
 
 const NepaliCalendarRange = (props: ICalendarRange) => {
   const { from, to, onChange, dateFormat = "yyyy-mm-dd", calendarType } = props;
+  const isAD = calendarType === "AD";
 
-  const { selectedDate, onDateSelect } = useDateRange(from, to, dateFormat);
+  const { selectedDate, onDateSelect } = useDateRange(
+    from,
+    to,
+    dateFormat,
+    isAD
+  );
 
   const { from: selectedDateFrom, to: selectedDateTo } = selectedDate;
-
-  console.log("selected", selectedDate);
 
   //Use Directly on on Select instead
   const onChangeRef = useRef(onChange);
@@ -30,8 +35,6 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
     typeof onChange === "function" &&
       onChange(selectedDate.from, selectedDate.to);
   }, [onChangeRef, selectedDate.from, selectedDate.to]);
-
-  const isAD = calendarType === "AD";
 
   return (
     <div className="rl-range-calendar">
@@ -49,7 +52,8 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
         range={{ from: selectedDateFrom, to: selectedDateTo }}
         defaultValue={
           selectedDateTo == null
-            ? selectedDateFrom && isDateValid(selectedDateFrom, dateFormat)
+            ? selectedDateFrom &&
+              isDateValidWithFormat(selectedDateFrom, dateFormat)
               ? getOffsetFormattedDate(
                   { month: 1 },
                   dateFormat,

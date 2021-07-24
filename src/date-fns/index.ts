@@ -1,30 +1,13 @@
 import { IDateObject } from "../Calendar/types";
-import isMatch from "date-fns/isMatch";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
-// import { isDateValidWithFormat } from "../CalendarData/validator";
+import { isDateValidWithFormat } from "../CalendarData/validator";
 
 //Since this lib will presumably require only year, month and date
 // converting all small to Capital M as the date-fns require month to be "M"
 // Allowing flexbility for user of this library to make use of m, y and d , anyway they want
 const dateFormatFormatter = (dateFormat: string) => {
   return dateFormat.toLowerCase()?.replaceAll("m", "M");
-};
-
-// const minAdYear = 1913;
-// const maxAdYear = 2043;
-
-// type InvalidMessage = { invalidMsg: string };
-export const isDateValid = (date: string, dateFormat: string): boolean => {
-  if (!date || !dateFormat) return false;
-  const formatString = dateFormatFormatter(dateFormat);
-
-  // const dateObj = parseDate(date, dateFormat);
-  // const year = dateObj.getFullYear();
-  // if (+year > 1913 && +year < 2043) {
-  //   return false;
-  // }
-  return isMatch(date, formatString);
 };
 
 export const parseDate = (initialDate: string, dateFormat: string): Date => {
@@ -42,39 +25,6 @@ export const dateFormatter = (date: Date, dateFormat: string): string => {
 
   return format(date, formatString);
 };
-
-export const getFormattedDateFromObject = (
-  obj: IDateObject,
-  dateFormat: string
-): string => {
-  const date = getDateFromObject(obj);
-  return dateFormatter(date, dateFormat);
-};
-
-type offsetType = {
-  year?: number;
-  month?: number;
-  day?: number;
-};
-//returns date
-//TODO a nice name and nice implementation
-export function getOffsetFormattedDate(
-  offsetObj: offsetType,
-  dateFormat?: string,
-  dateString?: string | null
-): string {
-  const date =
-    dateString && dateFormat ? parseDate(dateString, dateFormat) : new Date();
-  const newDate = new Date(
-    date.getFullYear() + +(offsetObj?.year ?? 0),
-    date.getMonth() + +(offsetObj?.month ?? 0),
-    date.getDate() + +(offsetObj?.day ?? 0)
-  );
-
-  //TODO allow for this date
-  // return dateFormat ? dateFormatter(newDate, dateFormat) : date;
-  return dateFormat ? dateFormatter(newDate, dateFormat) : "";
-}
 
 export const getInfoOfOffsetDate = (
   year: number,
@@ -101,7 +51,7 @@ export const getDateObj = (
   date: string,
   dateFormat: string
 ): IDateObject | null => {
-  if (date && isDateValid(date, dateFormat)) {
+  if (date && isDateValidWithFormat(date, dateFormat)) {
     const dateString = parseDate(date, dateFormat);
 
     return {
@@ -124,14 +74,29 @@ export const changeDateFromOneFormatToAnother = (
   return newDate;
 };
 
-// type DateOffset = {
-//   year?: number;
-//   month?: number;
-//   date?: number;
-// };
-
 export function getTotalDaysInAdMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate();
 }
 
-export { dateFormatFormatter };
+type offsetType = {
+  year?: number;
+  month?: number;
+  day?: number;
+};
+export function getOffsetFormattedDate(
+  offsetObj: offsetType,
+  dateFormat?: string,
+  dateString?: string | null
+): string {
+  const date =
+    dateString && dateFormat ? parseDate(dateString, dateFormat) : new Date();
+  const newDate = new Date(
+    date.getFullYear() + +(offsetObj?.year ?? 0),
+    date.getMonth() + +(offsetObj?.month ?? 0),
+    date.getDate() + +(offsetObj?.day ?? 0)
+  );
+
+  //TODO allow for this date
+  // return dateFormat ? dateFormatter(newDate, dateFormat) : date;
+  return dateFormat ? dateFormatter(newDate, dateFormat) : "";
+}

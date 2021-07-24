@@ -1,6 +1,6 @@
-import { getTotalDaysInBsMonth } from "./index";
+import { getTotalDaysInBsMonth } from "./getBsData";
 import { CalendarType, IDateObject } from "../Calendar/types";
-import { isInBetween } from "../Calendar/util";
+import { isInBetween } from "../utils";
 import {
   // calendar_data,
   minBsYear,
@@ -148,9 +148,11 @@ export function isDateValidWithFormat(
   format: string,
   throwError?: boolean
 ): boolean {
-  if (!format) {
+  if (!format || !input) {
     if (throwError) {
-      throw new Error("Format isn't passed as second argument");
+      throw new Error(
+        `Date provided or Format  isn't supported. Got date=${input} and format =${format}`
+      );
     }
     return false;
   }

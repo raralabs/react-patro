@@ -7,7 +7,6 @@ import {
   getNepaliNumber,
   getValidYears,
 } from "../CalendarData";
-// import { getTotalDaysInAdMonth } from "../date-fns";
 
 type OffsetChange = (a: number) => void;
 

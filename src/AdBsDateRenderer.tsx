@@ -1,5 +1,6 @@
 import { ad2bs } from "./CalendarData";
-import { parseDate, isDateValid } from "./date-fns";
+import { isDateValidWithFormat } from "./CalendarData/validator";
+import { parseDate } from "./date-fns";
 import { useCalendarType } from "./hooks";
 
 type AdBsDateRendererProps = {
@@ -25,7 +26,7 @@ const AdBsDateRenderer = ({
   if (adDate == null || adDate === "") {
     return "";
   }
-  if (isDateValid(adDate, adDateFormat)) {
+  if (isDateValidWithFormat(adDate, adDateFormat)) {
     return calendarType === "AD"
       ? adDate
       : `${padDateMonth(bsDateObj.date)}-${padDateMonth(bsDateObj.month)}-${

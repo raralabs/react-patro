@@ -199,3 +199,8 @@ Last 45 days    2020-08-28 - 2020-10-12
 Next week       2020-10-12 - 2020-10-19
 ///
 ```
+
+## Terms:
+
+-parse => Convert date string to date object using the date format for example: "2020-10-12" => {year: 2020, month:10, date:12} given format ("YYYY-MM-DD");
+-format => Opposite of parse. Converts date object to date string. for example: {year: 2020, month:10, date:12}=>"2020-10-12" => given format ("YYYY-MM-DD");
