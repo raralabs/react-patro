@@ -2,32 +2,40 @@
   "compilerOptions": {
     "outDir": "dist",
     "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "moduleResolution": "node",
     "jsx": "react",
     "sourceMap": true,
-    // output .d.ts declaration files
     "declaration": true,
-    // all Declration files (.d.ts) wil be within dist (so that final package will have typings bundled with them)
     "declarationDir": "./dist",
-
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-
-    //imports tslib
     "importHelpers": true,
-
     "strictNullChecks": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
-    //TODO change to true
     "noUnusedParameters": false,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "example"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "example"
+  ]
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CalendarType, IDateOffset } from "../Calendar/types";
-import { getOffsetFormattedDate, isDateValid } from "../date-fns";
+import { getOffsetFormattedDate } from "../date-fns";
 // import "../nepali_date_picker.css";
 
 import NepaliCalendarForRange from "../Calendar";
@@ -10,6 +10,7 @@ import {
   getNewAdDate,
   getNewBsDate,
 } from "../CalendarData/calculation";
+import { isDateValidWithFormat } from "../CalendarData/validator";
 
 type DefinedRanges = { label: string; offset: number | IDateOffset };
 interface IDefinedRange {
@@ -136,7 +137,8 @@ const NepaliCalendarRange = (props: IDefinedRange) => {
         range={{ from: selectedDateFrom, to: selectedDateTo }}
         defaultValue={
           selectedDateTo == null
-            ? selectedDateFrom && isDateValid(selectedDateFrom, dateFormat)
+            ? selectedDateFrom &&
+              isDateValidWithFormat(selectedDateFrom, dateFormat)
               ? getOffsetFormattedDate(
                   { month: 1 },
                   dateFormat,

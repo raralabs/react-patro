@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 import Header from "./Header";
-// import DateRender from "./DateRender";
 import RangeRender from "./RangeRender";
 import useSelectedData from "./useSelectedData";
 
 import { getMonthOffset, checkDatePropsValidity } from "./util";
-// getTodaysDate
 import { dateFormatter, getDateFromObject } from "../date-fns";
 import { getWeekNames, formatBsDate } from "../CalendarData";
 
 import { DateRange, INepaliCalendar, IDateObject } from "./types";
-
-// import "../nepali_date_picker.css";
 
 const NepaliCalendar = (props: INepaliCalendar) => {
   const {
@@ -107,11 +103,6 @@ const NepaliCalendar = (props: INepaliCalendar) => {
   const dateRange: DateRange | null = range
     ? { from: range?.from, to: range?.to, format: range?.format ?? dateFormat }
     : null;
-
-  console.log("just trying this");
-  console.log("dateRange", dateRange);
-  const x = 100;
-  console.log("x", x);
 
   return (
     <div className="rl-nepali-date-panel-wrapper">

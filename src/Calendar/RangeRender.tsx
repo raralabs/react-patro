@@ -1,5 +1,4 @@
 import React from "react";
-// import { getFormattedDateFromObject } from "../date-fns";
 import { DateRange, DisableProps, IDateObject } from "./types";
 import useCalendarData from "./useCalendarData";
 import {
@@ -58,16 +57,20 @@ const DateRenderer = (props: DateRendererProps) => {
                   minDate,
                 },
                 dateFormat,
-                d.bsDate
+                d.bsDate,
+                isAD
               );
 
               const isSelected =
                 d.isCurrentMonth && checkIsSelected(selectedData, d.adDate);
-              const isInRange = range ? checkIsInRange(d.adDate, range) : false;
+              const isInRange = range
+                ? checkIsInRange(isAD ? d.adDate : d.bsDate, range)
+                : false;
 
               const isRangeBoundary = range
-                ? checkIsRangeBoundary(d.adDate, range)
+                ? checkIsRangeBoundary(isAD ? d.adDate : d.bsDate, range)
                 : false;
+
               return (
                 <td
                   key={i}

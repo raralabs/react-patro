@@ -21,7 +21,7 @@ export function getNewBsDate<T extends string | undefined>(
         return bsObj;
       } else
         throw new Error(
-          `If string type is passed as first argument then dateFormat should be passed compulsarily to parse the string. Or pass the date Object {year,month,date} but received dateFormat as ${dateFormat} for first argument ${JSON.stringify(
+          `If string type is passed as second argument then dateFormat should be passed compulsarily to parse the string. Or pass the date Object {year,month,date} but received dateFormat as ${dateFormat} for second argument ${JSON.stringify(
             dateObjString
           )}`
         );
@@ -61,7 +61,7 @@ export function getNewAdDate<T extends string | undefined>(
         return adObj;
       } else
         throw new Error(
-          `If string type is passed as first argument then dateFormat should be passed compulsarily to parse the string. Or pass the date Object {year,month,date} but received dateFormat as ${dateFormat} for first argument ${JSON.stringify(
+          `If string type is passed as second argument then dateFormat should be passed compulsarily to parse the string. Or pass the date Object {year,month,date} but received dateFormat as ${dateFormat} for first argument ${JSON.stringify(
             dateObjString
           )}`
         );
@@ -102,11 +102,36 @@ export function compareDates(
   if (date1Obj.year > date2Obj.year) return 1;
   if (date2Obj.year > date1Obj.year) return -1;
 
-  if (date1Obj.month > date2Obj.year) return 1;
+  if (date1Obj.month > date2Obj.month) return 1;
   if (date2Obj.month > date1Obj.month) return -1;
 
   if (date1Obj.date > date2Obj.date) return 1;
   if (date2Obj.date > date1Obj.date) return -1;
 
   return 0;
+}
+
+export function areDateEqual(
+  date1: string,
+  date2: string,
+  dateFormat: string
+): boolean {
+  const compareBoolean = compareDates(date1, date2, dateFormat);
+  return compareBoolean === 0;
+}
+export function isAfter(
+  date1: string,
+  date2: string,
+  dateFormat: string
+): boolean {
+  const compareBoolean = compareDates(date1, date2, dateFormat);
+  return compareBoolean === 1;
+}
+export function isBefore(
+  date1: string,
+  date2: string,
+  dateFormat: string
+): boolean {
+  const compareBoolean = compareDates(date1, date2, dateFormat);
+  return compareBoolean === -1;
 }

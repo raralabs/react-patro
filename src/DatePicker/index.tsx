@@ -7,16 +7,15 @@ import CrossIcon from "../assets/CrossIcon";
 import { usePopper } from "./usePopper";
 import useCalendarType from "../hooks/useCalendarType";
 
-// import "../nepali_date_picker.css";
 import {
-  getFormattedDateFromObject,
-  isDateValid,
   changeDateFromOneFormatToAnother,
   dateFormatter,
   parseDate,
   getDateObj,
 } from "../date-fns";
 import { INepaliCalendar } from "../Calendar/types";
+import { isDateValidWithFormat } from "../CalendarData/validator";
+import { formatBsDate } from "../CalendarData";
 
 const random_id = `rl-nepali-${Math.random()}`;
 
@@ -77,7 +76,7 @@ const DatePicker = (props: DatePickerProps) => {
     ];
 
     acceptableFormat.forEach((format, index) => {
-      if (isDateValid(value, format)) {
+      if (isDateValidWithFormat(value, format)) {
         const yearValidator = /\d+.\d+.(\d){4}/;
         const bool =
           index === 1 || index === 2 ? value.match(yearValidator) : true;
@@ -105,14 +104,14 @@ const DatePicker = (props: DatePickerProps) => {
 
         if (obj && +value <= totalDaysInMonth) {
           obj.date = +value;
-          const newDate = getFormattedDateFromObject(obj, dateFormat);
+          const newDate = formatBsDate(obj, dateFormat);
           setSelectedDate(newDate);
         }
       }
       if (value.length === 4) {
         if (obj) {
           obj.year = +value;
-          const newDate = getFormattedDateFromObject(obj, dateFormat);
+          const newDate = formatBsDate(obj, dateFormat);
           setSelectedDate(newDate);
         }
       }

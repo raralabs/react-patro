@@ -1,11 +1,11 @@
-import { isInBetween } from "../Calendar/util";
 import { getTotalDaysInAdMonth } from "../date-fns";
+import { isInBetween } from "../utils";
 
 import { CalendarType } from "../Calendar/types";
 import parser from "./parser";
 import format from "./format";
 import { isInValidRange, isMonthValid, isBsDateValid } from "./validator";
-
+import { getTotalDaysInBsMonth } from "./getBsData";
 import * as BSdata from "./data";
 
 const parseBsDate = parser;
@@ -14,6 +14,7 @@ const formatBsDate = format;
 export { isInValidRange, isMonthValid, isBsDateValid };
 
 export { formatBsDate, parseBsDate };
+export { getTotalDaysInBsMonth };
 
 const dataType = ["np", "rm", "en"];
 const lengthType = ["full", "short", "min"];
@@ -40,12 +41,12 @@ export function getNames<T extends Length>(
           return BSdata[lang][type][length];
         }
         console.error(
-          `Second parameter in getMonthNames should specity length of month which should be one of ${lengthType}`
+          `Second parameter in getMonthNames should specify length of month which should be one of ${lengthType}`
         );
       }
     }
     console.error(
-      `First Parameter in getMonthNames should specity the name Format which should be one of ${dataType}`
+      `First Parameter in getMonthNames should specify the name Format which should be one of ${dataType}`
     );
     return BSdata[lang][type] as any;
   } else {
@@ -242,24 +243,6 @@ export const getStartingDayOfBsMonth = (year: number, month: number) => {
   }
   const daysCount = prevYearTotal + days;
   return getDayIndex(daysCount);
-};
-
-//TODO
-export const getTotalDaysInBsMonth = (year: number, month: number): number => {
-  try {
-    const allYears = Object.keys(BSdata.calendar_data);
-
-    const monthIndex = +month - 1;
-    if (year && allYears.includes(year + "") && monthIndex <= 12) {
-      return BSdata.calendar_data[year as EachBSYear][monthIndex];
-    } else
-      throw new RangeError(
-        `Expeceted first paramater as year within range ${BSdata.minBsYear}-${BSdata.maxBsYear} and second parameter as month within range 0-12. But got year as ${year} and month as ${month} in getNumberOfDaysInMonth function`
-      );
-  } catch (err) {
-    throw new Error("Error");
-    // console.(err);
-  }
 };
 
 type DateDetail = {

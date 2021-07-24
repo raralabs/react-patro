@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { IDateObject } from "../Calendar/types";
-import {
-  getFormattedDateFromObject,
-  isDateValid,
-  parseDate,
-  getDateFromObject,
-} from "../date-fns";
+import { formatBsDate } from "../CalendarData";
+import { isDateValidWithFormat } from "../CalendarData/validator";
+import { parseDate, getDateFromObject } from "../date-fns";
 
 type SelectedDateRange = {
   from: string | null;
@@ -13,20 +10,25 @@ type SelectedDateRange = {
 };
 type RangeType = "from" | "to";
 
-const useDateRange = (dateFrom: string, dateTo: string, dateFormat: string) => {
+const useDateRange = (
+  dateFrom: string,
+  dateTo: string,
+  dateFormat: string,
+  isAD = true
+) => {
   const [selectedDate, setSelectedDate] = useState<SelectedDateRange>({
     from: dateFrom,
     to: dateFrom,
   });
 
   useEffect(() => {
-    if (isDateValid(dateFrom, dateFormat)) {
+    if (dateFrom && isDateValidWithFormat(dateFrom, dateFormat)) {
       setSelectedDate((selectedDate) => ({ ...selectedDate, from: dateFrom }));
     }
   }, [dateFrom, dateFormat]);
 
   useEffect(() => {
-    if (isDateValid(dateTo, dateFormat)) {
+    if (dateTo && isDateValidWithFormat(dateTo, dateFormat)) {
       setSelectedDate((selectedDate) => ({ ...selectedDate, to: dateTo }));
     }
   }, [dateTo, dateFormat]);
@@ -35,10 +37,10 @@ const useDateRange = (dateFrom: string, dateTo: string, dateFormat: string) => {
   const turnRef = useRef<RangeType>("from");
 
   const onDateSelect = useCallback(
-    (ad_date: IDateObject) => {
+    (adDate: IDateObject) => {
       const turn = turnRef.current;
-      const date = getDateFromObject(ad_date);
-      const formattedDate = getFormattedDateFromObject(ad_date, dateFormat);
+      const date = getDateFromObject(adDate);
+      const formattedDate = formatBsDate(adDate, dateFormat);
 
       setSelectedDate((selectedDate) => {
         const { from: selectedDateFrom, to: selectedDateTo } = selectedDate;
