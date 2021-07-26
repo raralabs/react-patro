@@ -1,4 +1,4 @@
-import { IDateObject } from "../Calendar/types";
+import { IDateObject } from "../types/main";
 type DateFormat = {
   yyyy: string;
   mm: string;

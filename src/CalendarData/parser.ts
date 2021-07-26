@@ -1,21 +1,14 @@
-import { IDateObject } from "../Calendar/types";
-type DateFormat = {
-  yyyy?: number;
-  mm?: number;
-  m?: number;
-  dd?: number;
-  d?: number;
-};
+import { IDateObject, IDateFormat } from "../types/main";
 
 function parseDate(input: string, format: string): IDateObject {
   format = String(format)?.toLocaleLowerCase() || "yyyy-mm-dd"; // default format
   const parts = input.match(/(\d+)/g);
   if (parts) {
     let i = 0;
-    const fmt: DateFormat = {};
+    const fmt: IDateFormat = {};
 
     format.replace(/(yyyy|dd|d|mm|m)/g, function (part) {
-      fmt[part as keyof DateFormat] = i++;
+      fmt[part as keyof IDateFormat] = i++;
       return "";
     });
 

@@ -5,10 +5,10 @@ import RangeRender from "./RangeRender";
 import useSelectedData from "./useSelectedData";
 
 import { getMonthOffset, checkDatePropsValidity } from "./util";
-import { dateFormatter, getDateFromObject } from "../date-fns";
+import { getDateFromObject } from "../date-fns";
 import { getWeekNames, formatBsDate } from "../CalendarData";
 
-import { DateRange, INepaliCalendar, IDateObject } from "./types";
+import { DateRange, INepaliCalendar, IDateObject } from "../types/main";
 
 const NepaliCalendar = (props: INepaliCalendar) => {
   const {
@@ -45,6 +45,7 @@ const NepaliCalendar = (props: INepaliCalendar) => {
   }, [dateFormat, defaultValue, maxDate, minDate, value, calendarType]);
 
   const isAD = calendarType === "AD";
+
   // //always in ad
   const [selectedData, setSelectedData] = useSelectedData(
     dateFormat,
@@ -68,15 +69,13 @@ const NepaliCalendar = (props: INepaliCalendar) => {
     }
   };
 
-  const onChangeDate = (adDate: IDateObject, bsDate: IDateObject) => {
+  const onSelectDate = (adDate: IDateObject, bsDate: IDateObject) => {
     const date = getDateFromObject(adDate);
-    const formattedDate = isAD
-      ? dateFormatter(date, dateFormat)
-      : formatBsDate(bsDate, dateFormat);
+    const formattedDate = formatBsDate(isAD ? adDate : bsDate, dateFormat);
 
     if (!value) setSelectedData({ ...adDate });
     typeof onSelect === "function" &&
-      onSelect(formattedDate, adDate, bsDate, date); //TODO
+      onSelect(formattedDate, adDate, bsDate, date);
   };
 
   //TODO range check
@@ -135,7 +134,7 @@ const NepaliCalendar = (props: INepaliCalendar) => {
                 isAD={isAD}
                 showExtra={showExtra}
                 shouldPressOK={shouldPressOK}
-                onChangeDate={onChangeDate}
+                onChangeDate={onSelectDate}
                 changeMonth={changeMonth}
                 range={dateRange}
                 disableDate={disableDate}

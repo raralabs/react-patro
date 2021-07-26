@@ -1,5 +1,5 @@
 import React from "react";
-import { DateRange, DisableProps, IDateObject } from "./types";
+import { DateRange, DisableProps, IDateObject } from "../types/main";
 import useCalendarData from "./useCalendarData";
 import {
   checkIsInRange,

@@ -1,19 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import { CalendarType } from "../Calendar/types";
+import { ICalendarRange } from "../types/main";
 import { getOffsetFormattedDate } from "../date-fns";
-// import "../nepali_date_picker.css";
 
 import NepaliCalendarForRange from "../Calendar";
 import useDateRange from "./useDateRange";
 import { isDateValidWithFormat } from "../CalendarData/validator";
-
-interface ICalendarRange {
-  from: string;
-  to: string;
-  onChange: (dateFrom: string | null, dateTo: string | null) => void;
-  dateFormat: string;
-  calendarType: CalendarType;
-}
 
 const NepaliCalendarRange = (props: ICalendarRange) => {
   const { from, to, onChange, dateFormat = "yyyy-mm-dd", calendarType } = props;

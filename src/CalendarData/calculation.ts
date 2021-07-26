@@ -1,5 +1,5 @@
 import { ad2bs, bs2ad } from "./index";
-import { IDateObject } from "../Calendar/types";
+import { IDateObject } from "../types/main";
 import parse from "./parser";
 import format from "./format";
 

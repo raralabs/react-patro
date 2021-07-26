@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarType } from "../Calendar/types";
+import { CalendarType } from "../types/main";
 
 //TODO generalize for global cases.
 // Maybe used in future for global context.. Maybe...

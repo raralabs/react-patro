@@ -1,4 +1,4 @@
-import { IDateObject } from "../Calendar/types";
+import { IDateObject } from "../types/main";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
 import { isDateValidWithFormat } from "../CalendarData/validator";

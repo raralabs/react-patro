@@ -1,5 +1,5 @@
 import React from "react";
-import { DateType } from "./types";
+import { DateType } from "../types/main";
 
 //TODO
 interface RenderReferenceProps {

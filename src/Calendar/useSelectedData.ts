@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { IDateObject } from "./types";
-import { parseDate } from "../date-fns";
+import { IDateObject } from "../types/main";
 
 import { getDateObj } from "../date-fns";
 import { parseBsDate, bs2ad } from "../CalendarData";
 import { isDateValidWithFormat } from "../CalendarData/validator";
+import { getTodaysDate } from "./util";
 
 //Regardless of isAD value the data should always contain Ad data by converting bs Data to ad if isAD = false
 const useSelectedData = (
@@ -14,20 +14,17 @@ const useSelectedData = (
   defaultDate: string | null | undefined
 ) => {
   const initialDate = value ?? defaultDate;
-  let currentDate = new Date();
+  const { ad: todaysDateInAd, bs: todaysDateInBs } = getTodaysDate();
+
+  let currentDate = isAD ? todaysDateInAd : todaysDateInBs;
+
   let selectedData: IDateObject = {
-    date: currentDate.getDate(),
-    month: currentDate.getMonth() + 1,
-    year: currentDate.getFullYear(),
+    date: currentDate.date,
+    month: currentDate.month,
+    year: currentDate.year,
   };
   if (initialDate && isDateValidWithFormat(initialDate, dateFormat)) {
-    currentDate = parseDate(initialDate, dateFormat);
-
-    selectedData = {
-      date: currentDate.getDate(),
-      month: currentDate.getMonth() + 1,
-      year: currentDate.getFullYear(),
-    };
+    selectedData = parseBsDate(initialDate, dateFormat);
   }
   const [data, setData] = useState<IDateObject>(selectedData);
 

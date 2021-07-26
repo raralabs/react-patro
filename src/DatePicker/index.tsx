@@ -12,22 +12,16 @@ import {
   dateFormatter,
   parseDate,
   getDateObj,
+  // getDateFromObject,
 } from "../date-fns";
-import { INepaliCalendar } from "../Calendar/types";
 import { isDateValidWithFormat } from "../CalendarData/validator";
 import { formatBsDate } from "../CalendarData";
+// import { ad2bs, bs2ad, formatBsDate, parseBsDate } from "../CalendarData";
+import { IDatePicker } from "../types/main";
 
 const random_id = `rl-nepali-${Math.random()}`;
 
-interface DatePickerProps extends INepaliCalendar {
-  size: "small" | "large"; // TODO,
-  onChange: (formattedDate: string) => void; //,TODO
-  isClearable: boolean;
-  value: string;
-  placehoder?: string;
-  dateFormat: string;
-}
-const DatePicker = (props: DatePickerProps) => {
+const DatePicker = (props: IDatePicker) => {
   const {
     value,
     size = "small",
@@ -37,23 +31,49 @@ const DatePicker = (props: DatePickerProps) => {
     calendarType: calendarTypeFromProps,
     showMonthDropdown,
     placehoder,
+    hideOnSelect = true,
+    onSelect,
+    ...otherProps
   } = props;
 
   const calendarType = useCalendarType(calendarTypeFromProps);
+
+  // const isAD = calendarType === "AD";
+
+  //This is the data that is sent to the NepaliCalendar
   const [selectedDate, setSelectedDate] = useState(value);
+
+  //This is what is shown in input field;
   const [entetereDate, setEnteredDate] = useState("");
+  //Eventually selectedDate and enteredDate is supposed to be equal but not neccesary. When the user is typing on the input field only enteredDate is selected and when s/he stops or blurs or presses enter then only the states are synced.
 
   useEffect(() => {
     setSelectedDate(value);
   }, [value]);
 
-  const { popupRef, inputRef, isVisible, setIsVisible } = usePopper(false);
+  const { popupRef, inputRef, isVisible, setIsVisible, containerRef } =
+    usePopper();
 
-  const handleBlur = () => {
-    setEnteredDate(selectedDate);
-    typeof onChange === "function" && onChange(selectedDate);
-    // setIsVisible(false);
-  };
+  // const handleBlur = () => {
+  // setEnteredDate(selectedDate);
+
+  // if (isAD) {
+  //   const adDateObj = parseBsDate(selectedDate, dateFormat);
+  //   const bsDateObj = ad2bs(adDateObj.year, adDateObj.month, adDateObj.date);
+  //   const date = getDateFromObject(adDateObj);
+
+  //   typeof onChange === "function" &&
+  //     onChange(selectedDate, adDateObj, bsDateObj, date);
+  // } else {
+  //   const bsDateObj = parseBsDate(selectedDate, dateFormat);
+  //   const adDateObj = bs2ad(bsDateObj.year, bsDateObj.month, bsDateObj.date);
+  //   const date = getDateFromObject(adDateObj);
+
+  //   typeof onChange === "function" &&
+  //     onChange(selectedDate, adDateObj, bsDateObj, date);
+  // }
+  // setIsVisible(false);
+  // };
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.currentTarget;
 
@@ -118,8 +138,13 @@ const DatePicker = (props: DatePickerProps) => {
     }
     setEnteredDate(value);
   };
+
   return (
-    <div id={random_id} className="rl-nepali-datepicker-wrapper">
+    <div
+      id={random_id}
+      className="rl-nepali-datepicker-wrapper"
+      ref={containerRef}
+    >
       {isClearable && (
         <CrossIcon
           visible={!!selectedDate}
@@ -142,24 +167,14 @@ const DatePicker = (props: DatePickerProps) => {
               inputRef.current?.blur();
             }
           }}
-          onFocus={() => setIsVisible(true)}
-          onBlur={handleBlur}
+          // onFocus={() => setIsVisible(true)}
+          // onBlur={handleBlur}
         />
 
         <CalendarIcon
           onClick={() => setIsVisible(true)}
           className="rl-nepali-datepicker-icon hand-cursor"
-          // style={{ position: "absolute", top: 5, right: 5 }}
         />
-        {/* <img
-          alt="calendar"
-          onClick={() => {
-            setIsVisible(true);
-          }}
-          style={{ position: "absolute", top: 5, right: 5 }}
-          className="rl-nepali-datepicker-icon hand-cursor"
-          src={CalendarIcon}
-        /> */}
       </div>
       {isVisible && (
         <div ref={popupRef} style={{ zIndex: 999 }}>
@@ -173,10 +188,12 @@ const DatePicker = (props: DatePickerProps) => {
             dateFormat={dateFormat}
             showMonthDropdown={showMonthDropdown}
             onSelect={(formattedDate, adDate, bsDate, dateString) => {
-              setIsVisible(false);
+              hideOnSelect && setIsVisible(false);
               setEnteredDate(formattedDate);
-              typeof onChange === "function" && onChange(formattedDate);
+              typeof onChange === "function" &&
+                onChange(formattedDate, adDate, bsDate, dateString);
             }}
+            {...otherProps}
           />
         </div>
       )}

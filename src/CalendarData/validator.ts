@@ -1,8 +1,7 @@
 import { getTotalDaysInBsMonth } from "./getBsData";
-import { CalendarType, IDateObject } from "../Calendar/types";
+import { CalendarType, IDateObject } from "../types/main";
 import { isInBetween } from "../utils";
 import {
-  // calendar_data,
   minBsYear,
   maxBsYear,
   minAdYear,
@@ -12,7 +11,6 @@ import {
 } from "./data";
 import { getTotalDaysInAdMonth } from "../date-fns";
 
-// type EachBSYear = keyof typeof calendar_data;
 export const isMonthValid = (
   month: number | string,
   throwError?: boolean

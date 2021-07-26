@@ -33,6 +33,13 @@ export type onSelectProps = (
   dateString: Date
 ) => void;
 
+export type onChangeProps = (
+  formattedDate: string,
+  adDate?: IDateObject,
+  bsDate?: IDateObject,
+  dateString?: Date
+) => void;
+
 export interface IDateObject {
   year: number;
   month: number;
@@ -60,6 +67,17 @@ export type DisableProps = {
 export type RangeProps = {
   range?: DateRange;
 };
+
+interface IDatePicker extends INepaliCalendar {
+  size: "small" | "large"; // TODO,
+  onChange: onChangeProps;
+  isClearable: boolean;
+  value: string;
+  placehoder?: string;
+  dateFormat: string;
+  hideOnSelect: boolean;
+}
+
 export interface INepaliCalendar extends DisableProps, RangeProps {
   showToday?: boolean;
   zeroDayName?: string;
@@ -75,4 +93,20 @@ export interface INepaliCalendar extends DisableProps, RangeProps {
   reference_date?: string;
   rangeReference?: number[];
   calendarType: CalendarType;
+}
+
+export interface ICalendarRange {
+  from: string;
+  to: string;
+  onChange: (dateFrom: string | null, dateTo: string | null) => void;
+  dateFormat: string;
+  calendarType: CalendarType;
+}
+
+export interface IDateFormat {
+  yyyy?: number;
+  mm?: number;
+  m?: number;
+  dd?: number;
+  d?: number;
 }

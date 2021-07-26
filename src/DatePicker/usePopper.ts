@@ -1,38 +1,30 @@
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { createPopper } from "@popperjs/core";
 
-//TODO make more specific
-function useVisible(initialIsVisible: boolean) {
-  const [isVisible, setIsVisible] = useState(initialIsVisible);
-  const ref = useRef<HTMLDivElement>(null);
+function usePopper() {
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleClickOutside = (event: any) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setIsVisible(false);
-    }
-  };
+  const popupRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
+        setIsVisible(false);
+      }
+    };
+
     document.addEventListener("click", handleClickOutside, true);
     return () => {
       document.removeEventListener("click", handleClickOutside, true);
     };
   }, []);
 
-  return { ref, isVisible, setIsVisible };
-}
-
-function usePopper(initialIsVisible: boolean) {
-  const {
-    ref: popupRef,
-    isVisible,
-    setIsVisible,
-  } = useVisible(initialIsVisible);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
   //useEffect causes flickering of popper from bottom-start to bottom-end
-  //TODO check if requires dependencies
   useLayoutEffect(() => {
     if (isVisible) {
       const input = inputRef.current;
@@ -50,8 +42,15 @@ function usePopper(initialIsVisible: boolean) {
           ],
         });
     }
-  });
-  return { popupRef, inputRef, isVisible, setIsVisible };
+  }, [isVisible, popupRef]);
+
+  return {
+    popupRef,
+    inputRef,
+    isVisible,
+    containerRef,
+    setIsVisible,
+  };
 }
 
-export { usePopper, useVisible };
+export { usePopper };

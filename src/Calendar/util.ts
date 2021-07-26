@@ -6,9 +6,13 @@ import {
   parseBsDate,
 } from "./../CalendarData/index";
 import { isInBetween } from "../utils";
-import { CalendarType, DateRange, IDateObject } from "./types";
+import {
+  CalendarType,
+  DateRange,
+  IDateObject,
+  DisableProps,
+} from "../types/main";
 import { parseDate, getDateFromObject, dateFormatter } from "../date-fns";
-import { DisableProps } from "./types";
 import { isDateValidWithFormat } from "../CalendarData/validator";
 import { isAfter, isBefore } from "../CalendarData/calculation";
 

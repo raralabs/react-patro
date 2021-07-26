@@ -1,5 +1,5 @@
 import React from "react";
-import { ShowDropdownType, ShowYearDropdownType } from "./types";
+import { ShowDropdownType, ShowYearDropdownType } from "../types/main";
 import {
   getAdRangeForBsCalendar,
   getBsRangeForAdCalendar,

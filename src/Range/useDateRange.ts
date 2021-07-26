@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { IDateObject } from "../Calendar/types";
+import { IDateObject } from "../types/main";
 import { formatBsDate } from "../CalendarData";
 import { isDateValidWithFormat } from "../CalendarData/validator";
 import { parseDate, getDateFromObject } from "../date-fns";

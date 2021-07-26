@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CalendarType, IDateOffset } from "../Calendar/types";
+import { CalendarType, IDateOffset } from "../types/main";
 import { getOffsetFormattedDate } from "../date-fns";
-// import "../nepali_date_picker.css";
 
 import NepaliCalendarForRange from "../Calendar";
 import useDateRange from "./useDateRange";

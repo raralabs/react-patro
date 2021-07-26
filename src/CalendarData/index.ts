@@ -1,7 +1,7 @@
 import { getTotalDaysInAdMonth } from "../date-fns";
 import { isInBetween } from "../utils";
 
-import { CalendarType } from "../Calendar/types";
+import { CalendarType } from "../types/main";
 import parser from "./parser";
 import format from "./format";
 import { isInValidRange, isMonthValid, isBsDateValid } from "./validator";
@@ -185,12 +185,17 @@ export const ad2bs = (years: number, months: number, day: number) => {
 
   let month = 0;
 
-  while (1) {
-    if (calendar_data[year as EachBSYear][month] <= offsetDays) {
-      //check
-      offsetDays -= calendar_data[year as EachBSYear][month];
-      month++;
-    } else break;
+  // while (1) {
+  //   if (calendar_data[year as EachBSYear][month] <= offsetDays) {
+  //     //check
+  //     offsetDays -= calendar_data[year as EachBSYear][month];
+  //     month++;
+  //   } else break;
+  // }
+  while (calendar_data[year as EachBSYear][month] <= offsetDays) {
+    //check
+    offsetDays -= calendar_data[year as EachBSYear][month];
+    month++;
   }
   if (+month === 12) {
     month = 0;
