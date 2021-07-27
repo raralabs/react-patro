@@ -6,15 +6,15 @@ sidebar_position: 2
 
 ```jsx live
 function PlayGround(props) {
-  const [selectedDate, setSelectedDate] = useState("2021-07-03");
+  // const [selectedDate, setSelectedDate] = useState("2021-07-03");
 
   return (
     <NepaliCalendar
       defaultValue="2021-07-09"
       showExtra={true}
       calendarType={"AD"}
-      dateFormat="yyyy-mm-dd"
-      value={selectedDate}
+      // dateFormat="yyyy-mm-dd"
+      // value={selectedDate}
       disablePast
       // showMonthDropdown={true}
       // showMonthDropdown={true}
@@ -24,7 +24,7 @@ function PlayGround(props) {
       // disablePast
       // disableDate={(date) => date === "07-03-2021"}
       onSelect={(formattedDate, adDate, bsDate, date) => {
-        setSelectedDate(formattedDate);
+        // setSelectedDate(formattedDate);
       }}
     />
   );

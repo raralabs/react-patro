@@ -6,12 +6,21 @@
  */
 
 import React from "react";
-import { NepaliCalendar } from "react-patro";
+import {
+  DatePicker,
+  NepaliCalendar,
+  RangeCalendar,
+  DefinedRangeCalendar,
+} from "react-patro";
+
 // Add react-live imports you need here
 const ReactLiveScope = {
   React,
   ...React,
   NepaliCalendar,
+  DatePicker,
+  RangeCalendar,
+  DefinedRangeCalendar,
 };
 
 export default ReactLiveScope;

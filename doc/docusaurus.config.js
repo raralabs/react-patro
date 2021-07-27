@@ -10,8 +10,8 @@ module.exports = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  organizationName: "Rara Labs", // Usually your GitHub org/user name.
-  projectName: "react-patro", // Usually your repo name.
+  organizationName: "Rara Labs",
+  projectName: "react-patro",
   themeConfig: {
     navbar: {
       title: "React Patro",
@@ -36,47 +36,7 @@ module.exports = {
     },
     footer: {
       style: "dark",
-      links: [
-        {
-          title: "Docs",
-          items: [
-            {
-              label: "Tutorial",
-              to: "/docs/intro",
-            },
-          ],
-        },
-        {
-          title: "Community",
-          items: [
-            {
-              label: "Stack Overflow",
-              href: "https://stackoverflow.com/questions/tagged/docusaurus",
-            },
-            {
-              label: "Discord",
-              href: "https://discordapp.com/invite/docusaurus",
-            },
-            {
-              label: "Twitter",
-              href: "https://twitter.com/docusaurus",
-            },
-          ],
-        },
-        {
-          title: "More",
-          items: [
-            {
-              label: "Blog",
-              to: "/blog",
-            },
-            {
-              label: "GitHub",
-              href: "https://github.com/raralabs/react-patro",
-            },
-          ],
-        },
-      ],
+
       copyright: `Copyright © ${new Date().getFullYear()} Rara Labs. Built with Docusaurus.`,
     },
     prism: {
@@ -91,14 +51,12 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/",
+          editUrl: "https://github.com/raralabs/react-patro/edit/master/doc/",
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
-          editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/blog/",
+          editUrl: "https://github.com/raralabs/react-patro/edit/master/blog/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),

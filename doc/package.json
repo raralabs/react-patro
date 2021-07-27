@@ -22,10 +22,10 @@
     "clsx": "^1.1.1",
     "file-loader": "^6.2.0",
     "prism-react-renderer": "^1.2.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "file:../node_modules/react",
+    "react-dom": "file:../node_modules/react-dom",
     "url-loader": "^4.1.1",
-    "react-patro": "file:.."
+    "react-patro": "file:../dist/"
   },
   "browserslist": {
     "production": [
