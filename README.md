@@ -35,3 +35,19 @@ import "react-patro/src/styles.css";
 ## License
 
 React Patro is [MIT Licensed](LICENSE)
+
+## How to start for development
+
+run the react-patro source code. This generates dist folder
+
+```javascript
+    npm run dev
+
+```
+
+then go to example folder which is basically create-react-app template where react-patro is installed from the local react-patro source code. Here you can play around with the code
+
+```javascript
+    cd example && npm i
+    npm start
+```

@@ -13,7 +13,7 @@ import {
   NepaliCalendar,
   RangeCalendar,
   DefinedRangeCalendar,
-} from "nepalicalendar";
+} from "react-patro";
 
 // import {
 //   ad2bs,
