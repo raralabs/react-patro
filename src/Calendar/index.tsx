@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import RangeRender from "./RangeRender";
 import useSelectedData from "./useSelectedData";
-
 import { getMonthOffset, checkDatePropsValidity } from "./util";
 import { getDateFromObject } from "../date-fns";
 import { getWeekNames, formatBsDate } from "../CalendarData";

@@ -19,6 +19,8 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
 
   const { from: selectedDateFrom, to: selectedDateTo } = selectedDate;
 
+  console.log("props", props);
+
   //Use Directly on on Select instead
   const onChangeRef = useRef(onChange);
   useEffect(() => {
@@ -39,6 +41,7 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
         calendarType={calendarType}
         showToday={false}
       />
+
       <NepaliCalendarForRange
         range={{ from: selectedDateFrom, to: selectedDateTo }}
         defaultValue={
@@ -50,7 +53,12 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
                   dateFormat,
                   selectedDateFrom
                 )
-              : getOffsetFormattedDate({ month: 1 }, dateFormat)
+              : getOffsetFormattedDate(
+                  { month: 1 },
+                  dateFormat,
+                  null,
+                  calendarType
+                )
             : selectedDateTo
         }
         onSelect={(hello, adDate, bsDate) => {

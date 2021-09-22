@@ -46,6 +46,13 @@ const Header = ({
 
   const allYears = isAD ? getValidYears("en", "AD") : getValidYears("en", "BS");
 
+  // console.log("all Nepali Month", allNepaliMonth);
+  // console.log("all english month", allEnglishMonth);
+  // console.log("all months", allMonth);
+  // console.log("Current month name", currentMonthName);
+  // console.log("Current year", currentYear);
+  // console.log("All years", allYears);
+
   const alternateCalendarTypeRange = isAD
     ? getBsRangeForAdCalendar(year, month)
     : getAdRangeForBsCalendar(year, month);

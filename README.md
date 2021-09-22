@@ -51,3 +51,7 @@ then go to example folder which is basically create-react-app template where rea
     cd example && npm i
     npm start
 ```
+
+#todo -default date issue ; default date not shown in calendar
+#todo -date format issue ; only accepts yyyy-mm-dd format
+#todo - error appears when going beyond 2035 march in AD calender 

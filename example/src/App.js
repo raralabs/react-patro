@@ -31,9 +31,9 @@ const App = () => {
   const [date, setDate] = useState("");
   const [dateBS, setDateBS] = useState("");
 
-  const [selectedDate, setSelectedDate] = useState("2021-07-03");
+  const [selectedDate, setSelectedDate] = useState("");
 
-  const [selectedDateBS, setSelectedDateBS] = useState("2078-10-12");
+  const [selectedDateBS, setSelectedDateBS] = useState("");
 
   const [selectedDateRange, setSelectedDateRange] = useState({
     from: "",
@@ -69,7 +69,7 @@ const App = () => {
         <p>Selected Date AD: {JSON.stringify(selectedDate)};</p>
         <div style={{ marginBottom: 150 }}>
           <NepaliCalendar
-            defaultValue="2021-07-09"
+            defaultValue="2020-07-09"
             showExtra={true}
             calendarType={"AD"}
             dateFormat="yyyy-mm-dd"
@@ -91,7 +91,7 @@ const App = () => {
         <p>Selected Date BS: {JSON.stringify(selectedDateBS)};</p>
         <div style={{ marginBottom: 150 }}>
           <NepaliCalendar
-            // defaultValue="2021-07-09"
+            defaultValue="2078-07-09"
             showExtra={true}
             calendarType="BS"
             dateFormat="yyyy-mm-dd"
@@ -122,7 +122,7 @@ const App = () => {
               }}
             />
           </div>
-        </div>  
+        </div>
 
         <h1>AD Date Picker</h1>
         <p>Selected Date: {JSON.stringify(date)}</p>
@@ -166,12 +166,13 @@ const App = () => {
             }}
           />
         </div>
-        BS DAte RAnge
+
         <RangeCalendar
+         calendarType="BS"
           onChange={(from, to) => {
             setSelectedDateRangeBs({ from, to });
           }}
-          calendarType="BS"
+
         />
         <p>
           Selected Range: {selectedDateRangeBs.from} - {selectedDateRangeBs.to}
