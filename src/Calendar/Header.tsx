@@ -31,6 +31,8 @@ const Header = ({
   showYearDropdown,
   showExtra,
 }: HeaderProps) => {
+  const maxAD = 2035;
+  const maxBS = 2092;
   // because month from props is received in readable format 1= Baishakh
   // but the component manipulates in array format 0= Baisakh
   const monthIndex = month - 1;
@@ -58,6 +60,8 @@ const Header = ({
     : getAdRangeForBsCalendar(year, month);
 
   const { from, to } = alternateCalendarTypeRange;
+
+  const reachedMaxYear = isAD ? year >= maxAD : year >= maxBS;
 
   return (
     <div>
@@ -147,14 +151,16 @@ const Header = ({
         <div className="right-actions">
           <div
             title="Next Month"
-            onClick={() => changeMonth(1)}
+            onClick={() => {
+              reachedMaxYear && month >= 9 ? changeMonth(0) : changeMonth(1);
+            }}
             className="next-month hand-cursor"
           >
             &#10095;
           </div>
           <div
             onClick={() => {
-              changeYear(1);
+              reachedMaxYear ? changeYear(0) : changeYear(1);
             }}
             title="Next Year"
             className="next-year hand-cursor"

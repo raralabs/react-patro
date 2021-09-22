@@ -19,8 +19,6 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
 
   const { from: selectedDateFrom, to: selectedDateTo } = selectedDate;
 
-  console.log("props", props);
-
   //Use Directly on on Select instead
   const onChangeRef = useRef(onChange);
   useEffect(() => {
