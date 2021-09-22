@@ -101,10 +101,8 @@ export function getOffsetFormattedDate(
       adDate.getDate()
     );
 
-    console.log(adDate.getMonth())
+    console.log(adDate.getMonth());
     const stringbsDate = getDateFromObject(bsDate);
-    console.log("bsDate", bsDate)
-
 
     const newDateBs = new Date(
       stringbsDate.getFullYear() + +(offsetObj?.year ?? 0),
