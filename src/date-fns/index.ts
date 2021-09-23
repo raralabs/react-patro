@@ -84,6 +84,9 @@ type offsetType = {
   month?: number;
   day?: number;
 };
+
+//adds offset to the current provided date and format it accordingly
+
 export function getOffsetFormattedDate(
   offsetObj: offsetType,
   dateFormat?: string,
@@ -92,25 +95,6 @@ export function getOffsetFormattedDate(
 ): string {
   let date =
     dateString && dateFormat ? parseDate(dateString, dateFormat) : new Date();
-  if (calendarType === "BS") {
-    const adDate = new Date();
-
-    const bsDate = ad2bs(
-      adDate.getFullYear(),
-      adDate.getMonth() + 1,
-      adDate.getDate()
-    );
-
-    console.log(adDate.getMonth());
-    const stringbsDate = getDateFromObject(bsDate);
-
-    const newDateBs = new Date(
-      stringbsDate.getFullYear() + +(offsetObj?.year ?? 0),
-      stringbsDate.getMonth() + +(offsetObj?.month ?? 0),
-      stringbsDate.getDate() + +(offsetObj?.day ?? 0)
-    );
-    return dateFormat ? dateFormatter(newDateBs, dateFormat) : "";
-  }
 
   const newDate = new Date(
     date.getFullYear() + +(offsetObj?.year ?? 0),
@@ -121,4 +105,22 @@ export function getOffsetFormattedDate(
   //TODO allow for this date
   // return dateFormat ? dateFormatter(newDate, dateFormat) : date;
   return dateFormat ? dateFormatter(newDate, dateFormat) : "";
+}
+
+export function addOffsetBS(offsetObj: offsetType, dateFormat?: string) {
+  const adDate = new Date();
+
+  const bsDate = ad2bs(
+    adDate.getFullYear(),
+    adDate.getMonth() + 1,
+    adDate.getDate()
+  );
+  const stringbsDate = getDateFromObject(bsDate);
+
+  const newDateBs = new Date(
+    stringbsDate.getFullYear() + +(offsetObj?.year ?? 0),
+    stringbsDate.getMonth() + +(offsetObj?.month ?? 0),
+    stringbsDate.getDate() + +(offsetObj?.day ?? 0)
+  );
+  return dateFormat ? dateFormatter(newDateBs, dateFormat) : "";
 }

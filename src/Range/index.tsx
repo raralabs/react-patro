@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { ICalendarRange } from "../types/main";
-import { getOffsetFormattedDate } from "../date-fns";
+import { addOffsetBS, getOffsetFormattedDate } from "../date-fns";
 
 import NepaliCalendarForRange from "../Calendar";
 import useDateRange from "./useDateRange";
@@ -51,12 +51,14 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
                   dateFormat,
                   selectedDateFrom
                 )
-              : getOffsetFormattedDate(
+              : isAD
+              ? getOffsetFormattedDate(
                   { month: 1 },
                   dateFormat,
                   null,
                   calendarType
                 )
+              : addOffsetBS({ month: 1 }, dateFormat)
             : selectedDateTo
         }
         onSelect={(hello, adDate, bsDate) => {

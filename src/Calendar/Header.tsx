@@ -48,13 +48,6 @@ const Header = ({
 
   const allYears = isAD ? getValidYears("en", "AD") : getValidYears("en", "BS");
 
-  // console.log("all Nepali Month", allNepaliMonth);
-  // console.log("all english month", allEnglishMonth);
-  // console.log("all months", allMonth);
-  // console.log("Current month name", currentMonthName);
-  // console.log("Current year", currentYear);
-  // console.log("All years", allYears);
-
   const alternateCalendarTypeRange = isAD
     ? getBsRangeForAdCalendar(year, month)
     : getAdRangeForBsCalendar(year, month);
@@ -67,20 +60,30 @@ const Header = ({
     <div>
       <div className="month-header">
         <div className="left-actions">
-          <div
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "inherit",
+              color: "White",
+            }}
             title="Previous Year"
             onClick={() => changeYear(-1)}
             className="prev-year hand-cursor"
           >
             &#10094;&#10094;
-          </div>
-          <div
+          </button>
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "inherit",
+              color: "White",
+            }}
             title="Previous Month"
             onClick={() => changeMonth(-1)}
             className="prev-month hand-cursor"
           >
             &#10094;
-          </div>
+          </button>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -149,24 +152,36 @@ const Header = ({
         </div>
 
         <div className="right-actions">
-          <div
+          <button
             title="Next Month"
+            style={{
+              border: "none",
+              backgroundColor: "inherit",
+              color: `${reachedMaxYear && month >= 9 ? "gray" : "white"}`,
+            }}
+            disabled={reachedMaxYear && month >= 9}
             onClick={() => {
-              reachedMaxYear && month >= 9 ? changeMonth(0) : changeMonth(1);
+              changeMonth(1);
             }}
             className="next-month hand-cursor"
           >
             &#10095;
-          </div>
-          <div
-            onClick={() => {
-              reachedMaxYear ? changeYear(0) : changeYear(1);
+          </button>
+          <button
+            style={{
+              border: "none",
+              backgroundColor: "inherit",
+              color: `${reachedMaxYear ? "gray" : "white"}`,
             }}
+            onClick={() => {
+              changeYear(1);
+            }}
+            disabled={reachedMaxYear}
             title="Next Year"
             className="next-year hand-cursor"
           >
             &#10095;&#10095;
-          </div>
+          </button>
         </div>
       </div>
     </div>
