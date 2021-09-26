@@ -44,7 +44,6 @@ const useDateRange = (
 
       setSelectedDate((selectedDate) => {
         const { from: selectedDateFrom, to: selectedDateTo } = selectedDate;
-
         if (turn === "from") {
           const dateTo = selectedDateTo
             ? parseDate(selectedDateTo, dateFormat)

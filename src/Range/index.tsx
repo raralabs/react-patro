@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { ICalendarRange } from "../types/main";
-import { getOffsetFormattedDate } from "../date-fns";
 
 import NepaliCalendarForRange from "../Calendar";
 import useDateRange from "./useDateRange";
-import { isDateValidWithFormat } from "../CalendarData/validator";
+import { getNewAdDate, getNewBsDate } from "CalendarData/calculation";
+import { getTodaysDate } from "Calendar/util";
+import { formatBsDate } from "CalendarData";
 
 const NepaliCalendarRange = (props: ICalendarRange) => {
   const { from, to, onChange, dateFormat = "yyyy-mm-dd", calendarType } = props;
@@ -27,6 +28,12 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
       onChange(selectedDate.from, selectedDate.to);
   }, [onChangeRef, selectedDate.from, selectedDate.to]);
 
+  const today = getTodaysDate();
+  const nextMonthDateObj = isAD
+    ? getNewAdDate({ month: 1 }, today.ad)
+    : getNewBsDate({ month: 1 }, today.bs);
+  const formattedNextMonthDate = formatBsDate(nextMonthDateObj, dateFormat);
+
   return (
     <div className="rl-range-calendar">
       <NepaliCalendarForRange
@@ -39,20 +46,10 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
         calendarType={calendarType}
         showToday={false}
       />
+
       <NepaliCalendarForRange
         range={{ from: selectedDateFrom, to: selectedDateTo }}
-        defaultValue={
-          selectedDateTo == null
-            ? selectedDateFrom &&
-              isDateValidWithFormat(selectedDateFrom, dateFormat)
-              ? getOffsetFormattedDate(
-                  { month: 1 },
-                  dateFormat,
-                  selectedDateFrom
-                )
-              : getOffsetFormattedDate({ month: 1 }, dateFormat)
-            : selectedDateTo
-        }
+        defaultValue={selectedDateTo ?? formattedNextMonthDate}
         onSelect={(hello, adDate, bsDate) => {
           onDateSelect(isAD ? adDate : bsDate);
         }}

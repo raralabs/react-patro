@@ -16,7 +16,7 @@
     "strictNullChecks": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "forceConsistentCasingInFileNames": true,
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true,
