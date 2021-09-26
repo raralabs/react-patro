@@ -51,3 +51,7 @@ then go to example folder which is basically create-react-app template where rea
     cd example && npm i
     npm start
 ```
+
+## Ugly error message
+
+Comment the terser `rollup.config.js` from line 33 & 8 . and rebuild the code.The should remove the code uglifying process.
