@@ -1,4 +1,3 @@
-import { ad2bs, formatBsDate } from "./../CalendarData/index";
 import { IDateObject } from "../types/main";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
@@ -84,45 +83,3 @@ type offsetType = {
   month?: number;
   day?: number;
 };
-
-//adds offset to the current provided date and format it accordingly
-
-export function getOffsetFormattedDate(
-  offsetObj: offsetType,
-  dateFormat?: string,
-  dateString?: string | null,
-  calendarType?: string | null
-): string {
-  let date =
-    dateString && dateFormat ? parseDate(dateString, dateFormat) : new Date();
-
-  const newDate = new Date(
-    date.getFullYear() + +(offsetObj?.year ?? 0),
-    date.getMonth() + +(offsetObj?.month ?? 0),
-    date.getDate() + +(offsetObj?.day ?? 0)
-  );
-
-  //TODO allow for this date
-  // return dateFormat ? dateFormatter(newDate, dateFormat) : date;
-  return dateFormat ? dateFormatter(newDate, dateFormat) : "";
-}
-
-export function addOffsetBS(offsetObj: offsetType, dateFormat?: string) {
-  const adDate = new Date();
-
-   const newDate = new Date(
-     adDate.getFullYear() + +(offsetObj?.year ?? 0),
-     adDate.getMonth() + +(offsetObj?.month ?? 0),
-     adDate.getDate() + +(offsetObj?.day ?? 0)
-   );
-
-  const bsDate = ad2bs(
-    newDate.getFullYear(),
-    newDate.getMonth() + 1,
-    newDate.getDate()
-  );
-
-  return dateFormat ? formatBsDate(bsDate, dateFormat) : "";
-}
-
-

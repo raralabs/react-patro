@@ -1,7 +1,6 @@
 import { ad2bs, bs2ad } from "./index";
 import { IDateObject } from "../types/main";
 import parse from "./parser";
-import format from "./format";
 
 type DateOffset = {
   year?: number;
@@ -9,24 +8,8 @@ type DateOffset = {
   date?: number;
 };
 
-export function getNewBsDate<T extends string | undefined>(
-  offset: DateOffset,
-  dateObjString: IDateObject | string,
-  dateFormat?: T
-): T extends string | undefined ? string : IDateObject {
-  const { year, month, date } = (() => {
-    if (typeof dateObjString === "string") {
-      if (dateFormat) {
-        const bsObj = parse(dateObjString, dateFormat);
-        return bsObj;
-      } else
-        throw new Error(
-          `If string type is passed as second argument then dateFormat should be passed compulsarily to parse the string. Or pass the date Object {year,month,date} but received dateFormat as ${dateFormat} for second argument ${JSON.stringify(
-            dateObjString
-          )}`
-        );
-    } else return dateObjString;
-  })();
+export function getNewBsDate(offset: DateOffset, dateObj: IDateObject) {
+  const { year, month, date } = dateObj;
 
   const ad = bs2ad(year, month, date);
 
@@ -42,31 +25,11 @@ export function getNewBsDate<T extends string | undefined>(
     adDate.getMonth() + 1,
     adDate.getDate()
   );
-
-  if (dateFormat) {
-    return format(bs, dateFormat) as any;
-  }
-  return bs as any;
+  return bs;
 }
 
-export function getNewAdDate<T extends string | undefined>(
-  offset: DateOffset,
-  dateObjString: IDateObject | string,
-  dateFormat?: T
-): T extends string | undefined ? string : IDateObject {
-  const { year, month, date } = (() => {
-    if (typeof dateObjString === "string") {
-      if (dateFormat) {
-        const adObj = parse(dateObjString, dateFormat);
-        return adObj;
-      } else
-        throw new Error(
-          `If string type is passed as second argument then dateFormat should be passed compulsarily to parse the string. Or pass the date Object {year,month,date} but received dateFormat as ${dateFormat} for first argument ${JSON.stringify(
-            dateObjString
-          )}`
-        );
-    } else return dateObjString;
-  })();
+export function getNewAdDate(offset: DateOffset, dateObj: IDateObject) {
+  const { year, month, date } = dateObj;
 
   const monthIndex = month - 1;
   const adDate = new Date(
@@ -75,16 +38,18 @@ export function getNewAdDate<T extends string | undefined>(
     date + (offset?.date ?? 0)
   );
 
+  console.log("input", dateObj);
+  console.log("offset", offset);
+  console.log("output", adDate.getMonth() + 1);
+  console.log("**************************");
+
   const ad = {
     year: adDate.getFullYear(),
     month: adDate.getMonth() + 1,
     date: adDate.getDate(),
   };
 
-  if (dateFormat) {
-    return format(ad, dateFormat) as any;
-  }
-  return ad as any;
+  return ad;
 }
 
 type CompareBoolean = 1 | -1 | 0;

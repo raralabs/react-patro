@@ -170,9 +170,9 @@ const getDayIndex = (daysCount: number) =>
 
 //month =1 for Baisakh
 //TODO error checking
-export const ad2bs = (years: number, months: number, day: number) => {
+export const ad2bs = (years: number, months: number, date: number) => {
   const { base_bs, calendar_data } = BSdata;
-  const dayCount = countBSDaysFromBaseDateUsingAdDate(years, months, day);
+  const dayCount = countBSDaysFromBaseDateUsingAdDate(years, months, date);
 
   const cumulativeData = cache.getCumulativeTotal();
 
@@ -185,13 +185,6 @@ export const ad2bs = (years: number, months: number, day: number) => {
 
   let month = 0;
 
-  // while (1) {
-  //   if (calendar_data[year as EachBSYear][month] <= offsetDays) {
-  //     //check
-  //     offsetDays -= calendar_data[year as EachBSYear][month];
-  //     month++;
-  //   } else break;
-  // }
   while (calendar_data[year as EachBSYear][month] <= offsetDays) {
     //check
     offsetDays -= calendar_data[year as EachBSYear][month];
