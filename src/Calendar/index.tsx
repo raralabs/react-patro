@@ -13,7 +13,7 @@ const NepaliCalendar = (props: INepaliCalendar) => {
   const {
     // showToday = true,
     defaultValue,
-    dateFormat = "yyyy-mm-dd", // TODO
+    dateFormat,
     value,
     onSelect,
     shouldPressOK = true,
@@ -30,17 +30,18 @@ const NepaliCalendar = (props: INepaliCalendar) => {
   } = props;
 
   useEffect(() => {
-    if (value && defaultValue) {
+    if (value !== undefined && defaultValue !== undefined) {
       console.warn("If value is provided defaultValue is ignored.");
     }
   }, [value, defaultValue]);
 
   useEffect(() => {
-    checkDatePropsValidity(
-      { maxDate, defaultValue, minDate, value },
-      dateFormat,
-      calendarType
-    );
+    if (dateFormat)
+      checkDatePropsValidity(
+        { maxDate, defaultValue, minDate, value },
+        dateFormat,
+        calendarType
+      );
   }, [dateFormat, defaultValue, maxDate, minDate, value, calendarType]);
 
   const isAD = calendarType === "AD";

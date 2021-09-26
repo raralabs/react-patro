@@ -276,6 +276,7 @@ export const checkDatePropsValidity = (
   }
   checker.forEach((prop) => {
     const value = allDateProps[prop];
+
     if (value) {
       if (!isDateValidWithFormat(value, dateFormat)) {
         throwTypeError(value, prop, dateFormat);

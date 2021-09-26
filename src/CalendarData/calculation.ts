@@ -38,11 +38,6 @@ export function getNewAdDate(offset: DateOffset, dateObj: IDateObject) {
     date + (offset?.date ?? 0)
   );
 
-  console.log("input", dateObj);
-  console.log("offset", offset);
-  console.log("output", adDate.getMonth() + 1);
-  console.log("**************************");
-
   const ad = {
     year: adDate.getFullYear(),
     month: adDate.getMonth() + 1,
