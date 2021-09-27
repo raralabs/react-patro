@@ -24,6 +24,7 @@ You need to import `css` separately in the project. This is provided separately,
 import "react-patro/src/styles.css";
 ```
 
+<!--
 ## Dependencies
 
-## Peer Library
+## Peer Library -->

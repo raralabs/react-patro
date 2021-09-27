@@ -4,32 +4,4 @@ sidebar_position: 1
 
 # Overview
 
-Let's discover **Docusaurus in less than 5 minutes**.
-
-## Getting Started
-
-Get started by **creating a new site**.
-
-Or **try Docusaurus immediately** with **[new.docusaurus.io](https://new.docusaurus.io)**.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**:
-
-```shell
-npx @docusaurus/init@latest init my-website classic
-```
-
-## Start your site
-
-Run the development server:
-
-```shell
-cd my-website
-
-npx docusaurus start
-```
-
-Your site starts at `http://localhost:3000`.
-
-Open `docs/intro.md` and edit some lines: the site **reloads automatically** and display your changes.
+React-patro is a collection of functions, hooks and components for both AD and BS calendar. These functions and hooks can be used independently to create your own designs of calendar though we try to provide our own simplistic implementation as well which is totally customization. You can perform date conversions, manipulate date formats and render a datepicker and calendar.

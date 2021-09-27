@@ -10,24 +10,6 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      {/* <NepaliCalendar
-        defaultValue="2021-07-09"
-        showExtra={true}
-        calendarType={"AD"}
-        // dateFormat="yyyy-mm-dd"
-        // value={selectedDate}
-        disablePast
-        // showMonthDropdown={true}
-        // showMonthDropdown={true}
-        // showYearDropdown={true}
-        // maxDate="2021-07-10"
-        // minDate="07-03-2021"
-        // disablePast
-        // disableDate={(date) => date === "07-03-2021"}
-        onSelect={(formattedDate, adDate, bsDate, date) => {
-          // setSelectedDate(formattedDate);
-        }}
-      /> */}
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
@@ -36,10 +18,7 @@ function HomepageHeader() {
             className="button button--secondary button--lg"
             to="/docs/intro"
           >
-            Tutorial - 5min{" "}
-            <span role="img" aria-label="timer">
-              ⏱️
-            </span>
+            Tutorial
           </Link>
         </div>
       </div>
@@ -51,8 +30,8 @@ export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`${siteConfig.title}| AD to BS Calendar functions as hooks and components`}
+      description="AD and BS calendar functions"
     >
       <HomepageHeader />
       <main>
