@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CalendarType, IDateOffset } from "../types/main";
-import { getOffsetFormattedDate } from "../date-fns";
 
 import NepaliCalendarForRange from "../Calendar";
 import useDateRange from "./useDateRange";
@@ -10,6 +9,8 @@ import {
   getNewBsDate,
 } from "../CalendarData/calculation";
 import { isDateValidWithFormat } from "../CalendarData/validator";
+import { formatBsDate, parseBsDate } from "CalendarData";
+import { getTodaysDate } from "Calendar/util";
 
 type DefinedRanges = { label: string; offset: number | IDateOffset };
 interface IDefinedRange {
@@ -53,6 +54,7 @@ const _defined = [
   },
 ];
 const baseDate = "2021-07-14";
+const baseDateObj = { year: 2021, month: 7, date: 14 };
 
 const NepaliCalendarRange = (props: IDefinedRange) => {
   const {
@@ -91,13 +93,18 @@ const NepaliCalendarRange = (props: IDefinedRange) => {
             typeof e.offset === "number" ? { date: e.offset } : e.offset;
 
           const newDate = isAD
-            ? getNewAdDate({ ...offsetObj }, baseDate, dateFormat)
-            : getNewBsDate({ ...offsetObj }, baseDate, dateFormat);
+            ? getNewAdDate({ ...offsetObj }, baseDateObj)
+            : getNewBsDate({ ...offsetObj }, baseDateObj);
+          const formattedNewDate = formatBsDate(newDate, dateFormat);
 
-          const comparison = compareDates(newDate, baseDate, dateFormat);
+          const comparison = compareDates(
+            formattedNewDate,
+            baseDate,
+            dateFormat
+          );
 
-          const fromDate = comparison < 0 ? newDate : baseDate;
-          const toDate = comparison < 0 ? baseDate : newDate;
+          const fromDate = comparison < 0 ? formattedNewDate : baseDate;
+          const toDate = comparison < 0 ? baseDate : formattedNewDate;
           const range = `${fromDate} - ${toDate}`;
 
           const isSelected = selectedDefinition === e.label;
@@ -121,29 +128,23 @@ const NepaliCalendarRange = (props: IDefinedRange) => {
         })}
       </div>
 
-      {/* <NepaliCalendarForRange
-        range={{ from: selectedDateFrom, to: selectedDateTo }}
-        defaultValue={selectedDateFrom}
-        onSelect={(hello, adDate) => {
-          onDateSelect(adDate);
-        }}
-        dateFormat={dateFormat}
-        calendarType={calendarType}
-        showToday={false}
-      /> */}
-
       <NepaliCalendarForRange
         range={{ from: selectedDateFrom, to: selectedDateTo }}
         defaultValue={
           selectedDateTo == null
             ? selectedDateFrom &&
               isDateValidWithFormat(selectedDateFrom, dateFormat)
-              ? getOffsetFormattedDate(
-                  { month: 1 },
-                  dateFormat,
-                  selectedDateFrom
+              ? formatBsDate(
+                  getNewAdDate(
+                    { month: 1 },
+                    parseBsDate(selectedDateFrom, dateFormat)
+                  ),
+                  dateFormat
                 )
-              : getOffsetFormattedDate({ month: 1 }, dateFormat)
+              : formatBsDate(
+                  getNewAdDate({ month: 1 }, getTodaysDate().ad),
+                  dateFormat
+                )
             : selectedDateTo
         }
         onSelect={(hello, adDate) => {

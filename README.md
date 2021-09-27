@@ -31,11 +31,6 @@ You need to import `css` separately in the project. This is provided separately,
 ```jsx
 import "react-patro/src/styles.css";
 ```
-
-## License
-
-React Patro is [MIT Licensed](LICENSE)
-
 ## How to start for development
 
 run the react-patro source code. This generates dist folder
@@ -51,3 +46,12 @@ then go to example folder which is basically create-react-app template where rea
     cd example && npm i
     npm start
 ```
+
+## How to remove Ugly error message ( for development)
+
+Comment the terser `rollup.config.js` from line 33 & 8 . and rebuild the code.The should remove the code uglifying process.
+
+## License
+
+React Patro is [MIT Licensed](LICENSE)
+

@@ -83,20 +83,3 @@ type offsetType = {
   month?: number;
   day?: number;
 };
-export function getOffsetFormattedDate(
-  offsetObj: offsetType,
-  dateFormat?: string,
-  dateString?: string | null
-): string {
-  const date =
-    dateString && dateFormat ? parseDate(dateString, dateFormat) : new Date();
-  const newDate = new Date(
-    date.getFullYear() + +(offsetObj?.year ?? 0),
-    date.getMonth() + +(offsetObj?.month ?? 0),
-    date.getDate() + +(offsetObj?.day ?? 0)
-  );
-
-  //TODO allow for this date
-  // return dateFormat ? dateFormatter(newDate, dateFormat) : date;
-  return dateFormat ? dateFormatter(newDate, dateFormat) : "";
-}

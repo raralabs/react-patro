@@ -176,14 +176,14 @@ export function isDateValidWithFormat(
         );
       return false;
     }
-    if (!monthIndex) {
+    if (monthIndex === undefined) {
       if (throwError)
         throw new TypeError(
           `Month isn't Provided in the given date input or the format doesn't contain correct combination of 'mm' | 'm'. Acceptable formats are the pemutation of 'yyyy', 'mm','m','d', and 'dd'  instead got ${format} `
         );
       return false;
     }
-    if (!dateIndex) {
+    if (dateIndex === undefined) {
       if (throwError)
         throw new TypeError(
           `Date isn't Provided in the given date input or the format doesn't contain correct combination of 'dd' | 'd'. Acceptable formats are the pemutation of 'yyyy', 'mm','m', 'd', and 'dd'  instead got ${format} `

@@ -69,7 +69,7 @@ const App = () => {
         <p>Selected Date AD: {JSON.stringify(selectedDate)};</p>
         <div style={{ marginBottom: 150 }}>
           <NepaliCalendar
-            defaultValue="2021-07-09"
+            // defaultValue="2021-07-09"
             showExtra={true}
             calendarType={"AD"}
             dateFormat="yyyy-mm-dd"
@@ -122,7 +122,7 @@ const App = () => {
               }}
             />
           </div>
-        </div>  
+        </div>
 
         <h1>AD Date Picker</h1>
         <p>Selected Date: {JSON.stringify(date)}</p>

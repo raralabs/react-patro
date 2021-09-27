@@ -5,7 +5,7 @@ import typescript from "rollup-plugin-typescript2";
 // resolves third party modules and add in the source
 import resolve from "@rollup/plugin-node-resolve";
 //uglifying and minizing the budle
-import { terser } from "rollup-plugin-terser";
+// import { terser } from "rollup-plugin-terser";
 // babel
 import babel from "rollup-plugin-babel";
 
@@ -30,7 +30,7 @@ export default [
       typescript(),
       external(),
       resolve(),
-      terser(),
+      // terser(),
     ],
   },
 ];

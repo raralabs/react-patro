@@ -20,18 +20,22 @@ function parseDate(input: string, format: string): IDateObject {
         `Year isn't Provided in the given date input or the format doesn't contain correct combination of 'yyyy'. Please Acceptable formats are the pemutation of 'yyyy', 'mm' and 'dd'  instead got ${format} `
       );
     }
-    if (!monthIndex) {
+    if (monthIndex === undefined) {
       throw new TypeError(
         `Month isn't Provided in the given date input or the format doesn't contain correct combination of 'mm' | 'm'. Please Acceptable formats are the pemutation of 'yyyy', 'mm' and 'dd'  instead got ${format} `
       );
     }
-    if (!dateIndex) {
+    if (dateIndex === undefined) {
       throw new TypeError(
         `Date isn't Provided in the given date input or the format doesn't contain correct combination of 'dd' | 'd'. Please Acceptable formats are the pemutation of 'yyyy', 'mm' and 'dd'  instead got ${format} `
       );
     }
 
-    if (yearIndex !== undefined && monthIndex && dateIndex) {
+    if (
+      yearIndex !== undefined &&
+      monthIndex !== undefined &&
+      dateIndex !== undefined
+    ) {
       const year = +parts[yearIndex];
       const month = +parts[monthIndex];
       const date = +parts[dateIndex];

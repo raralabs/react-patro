@@ -26,7 +26,6 @@ module.exports = {
           position: "left",
           label: "Tutorial",
         },
-        { to: "/blog", label: "Blog", position: "left" },
         {
           href: "https://github.com/raralabs/react-patro",
           label: "GitHub",
@@ -50,13 +49,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
           editUrl: "https://github.com/raralabs/react-patro/edit/master/doc/",
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl: "https://github.com/raralabs/react-patro/edit/master/blog/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
