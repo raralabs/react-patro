@@ -31,6 +31,11 @@ You need to import `css` separately in the project. This is provided separately,
 ```jsx
 import "react-patro/src/styles.css";
 ```
+
+## Documentation
+
+Documentation and demo available at [here](https://react-patro.netlify.app/)
+
 ## How to start for development
 
 run the react-patro source code. This generates dist folder
@@ -54,4 +59,3 @@ Comment the terser `rollup.config.js` from line 33 & 8 . and rebuild the code.Th
 ## License
 
 React Patro is [MIT Licensed](LICENSE)
-
