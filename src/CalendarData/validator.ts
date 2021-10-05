@@ -156,6 +156,12 @@ export function isDateValidWithFormat(
   }
   format = String(format)?.toLocaleLowerCase(); // default format
   const parts = input.match(/(\d+)/g);
+
+  const formatSymbol = format.replace(/(yyyy|dd|d|mm|m)/g, "");
+
+  const inputSymbol = input.replace(/\d/g, "");
+
+  console.log("parts", parts);
   if (parts) {
     let i = 0;
     const fmt: DateFormat = {};
@@ -168,6 +174,22 @@ export function isDateValidWithFormat(
     const yearIndex = fmt["yyyy"];
     const monthIndex = fmt["mm"] ?? fmt["m"];
     const dateIndex = fmt["dd"] ?? fmt["d"];
+
+    if (
+      yearIndex !== undefined &&
+      monthIndex !== undefined &&
+      dateIndex !== undefined
+    ) {
+      let year = +parts[yearIndex];
+      let month = +parts[monthIndex];
+      let date = +parts[dateIndex];
+
+      if (!year && month > 12 && date > 31) {
+        return false;
+      }
+    }
+
+    if (inputSymbol !== formatSymbol) return false;
 
     if (yearIndex === undefined) {
       if (throwError)
