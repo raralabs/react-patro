@@ -84,11 +84,7 @@ const DatePicker = (props: IDatePicker) => {
       dateFormat
     );
 
-    console.log("Data string of selected date>>>>", dateStringOfSelectedDate);
-
     const obj = getDateObj(selectedDate || today, dateFormat);
-
-    console.log("Date object from getDateObj", obj);
 
     //TODO static
     const acceptableFormat = [
@@ -98,13 +94,6 @@ const DatePicker = (props: IDatePicker) => {
       "yyyy/mm/dd",
       dateFormat,
     ];
-
-    console.log(
-      "isDateValidWithFormat",
-      isDateValidWithFormat("13-07-2061", "yyyy-mm-dd")
-    );
-
-    console.log("Acceptable Format >>>>", acceptableFormat);
 
     acceptableFormat.forEach((format, index) => {
       if (isDateValidWithFormat(value, format)) {
