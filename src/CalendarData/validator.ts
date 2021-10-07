@@ -170,13 +170,9 @@ export function isDateValidWithFormat(input: string, format: string): boolean {
   const dateD = fmt["dd"] ?? fmt["d"];
 
   if (yearD !== undefined && monthD !== undefined && dateD !== undefined) {
-    let year = +parts[yearD.index];
     let month = +parts[monthD.index];
     let date = +parts[dateD.index];
 
-    console.log("What", month > 12);
-
-    console.log("Year", year, "month", month, "date", date);
     if (month > 12 || date > 32) {
       return false;
     }
