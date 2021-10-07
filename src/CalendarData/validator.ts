@@ -173,7 +173,11 @@ export function isDateValidWithFormat(input: string, format: string): boolean {
     let year = +parts[yearD.index];
     let month = +parts[monthD.index];
     let date = +parts[dateD.index];
-    if (!year && month > 12 && date > 31) {
+
+    console.log("What", month > 12);
+
+    console.log("Year", year, "month", month, "date", date);
+    if (month > 12 || date > 32) {
       return false;
     }
   }
