@@ -133,69 +133,63 @@ export const isInValidRange = (
   }
 };
 
-type DateFormat = {
-  yyyy?: number;
-  mm?: number;
-  m?: number;
-  dd?: number;
-  d?: number;
+type iterator = {
+  index: number;
+  length: number;
 };
 
-export function isDateValidWithFormat(
-  input: string,
-  format: string,
-  throwError?: boolean
-): boolean {
-  if (!format || !input) {
-    if (throwError) {
-      throw new Error(
-        `Date provided or Format  isn't supported. Got date=${input} and format =${format}`
-      );
-    }
-    return false;
-  }
+type DateFormat = {
+  yyyy?: iterator;
+  mm?: iterator;
+  m?: iterator;
+  dd?: iterator;
+  d?: iterator;
+};
+
+export function isDateValidWithFormat(input: string, format: string): boolean {
   format = String(format)?.toLocaleLowerCase(); // default format
   const parts = input.match(/(\d+)/g);
-  if (parts) {
-    let i = 0;
-    const fmt: DateFormat = {};
 
-    format.replace(/(yyyy|dd|d|mm|m)/g, function (part) {
-      fmt[part as keyof DateFormat] = i++;
-      return "";
-    });
+  const formatSymbol = format.replace(/(yyyy|dd|d|mm|m)/g, "");
+  const inputSymbol = input.replace(/\d/g, "");
 
-    const yearIndex = fmt["yyyy"];
-    const monthIndex = fmt["mm"] ?? fmt["m"];
-    const dateIndex = fmt["dd"] ?? fmt["d"];
+  if (!parts) return false;
 
-    if (yearIndex === undefined) {
-      if (throwError)
-        throw new TypeError(
-          `Year isn't Provided in the given date input or the format doesn't contain correct combination of 'yyyy'.  Acceptable formats are the pemutation of 'yyyy', 'mm' and 'dd'  instead got ${format} `
-        );
+  let i = 0;
+  const fmt: DateFormat = {};
+  format.replace(/(yyyy|dd|d|mm|m)/g, function (part) {
+    fmt[part as keyof DateFormat] = { index: i++, length: part.length };
+    return "";
+  });
+
+  if (inputSymbol !== formatSymbol) return false;
+
+  const yearD = fmt["yyyy"];
+
+  const monthD = fmt["mm"] ?? fmt["m"];
+  const dateD = fmt["dd"] ?? fmt["d"];
+
+  if (yearD !== undefined && monthD !== undefined && dateD !== undefined) {
+    let month = +parts[monthD.index];
+    let date = +parts[dateD.index];
+
+    if (month > 12 || date > 32) {
       return false;
     }
-    if (monthIndex === undefined) {
-      if (throwError)
-        throw new TypeError(
-          `Month isn't Provided in the given date input or the format doesn't contain correct combination of 'mm' | 'm'. Acceptable formats are the pemutation of 'yyyy', 'mm','m','d', and 'dd'  instead got ${format} `
-        );
-      return false;
-    }
-    if (dateIndex === undefined) {
-      if (throwError)
-        throw new TypeError(
-          `Date isn't Provided in the given date input or the format doesn't contain correct combination of 'dd' | 'd'. Acceptable formats are the pemutation of 'yyyy', 'mm','m', 'd', and 'dd'  instead got ${format} `
-        );
-      return false;
-    }
-    return true;
-  } else {
-    if (throwError)
-      throw new TypeError(
-        "Passed Input isn't a valid date. Please check again.  Acceptable formats are the pemutation of 'yyyy', 'mm','m','d' and 'dd' "
-      );
-    return false;
   }
+
+  if (yearD !== undefined && monthD !== undefined && dateD !== undefined) {
+    let year = parts[yearD.index];
+    let month = parts[monthD.index];
+    let date = parts[dateD.index];
+
+    if (
+      year.length === yearD.length &&
+      month.length === monthD.length &&
+      date.length === dateD.length
+    )
+      return true;
+  }
+
+  return false;
 }
