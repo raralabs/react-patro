@@ -8,7 +8,7 @@
 
 AD and BS Calendar functions as hooks and component
 
-# [Demo](https://ad-bs-datepicker.firebaseapp.com/)
+# [Demo](https://react-patro.netlify.app/)
 
 # Installation
 
