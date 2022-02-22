@@ -156,6 +156,7 @@ export function isDateValidWithFormat(
   }
   format = String(format)?.toLocaleLowerCase(); // default format
   const parts = input.match(/(\d+)/g);
+
   if (parts) {
     let i = 0;
     const fmt: DateFormat = {};
@@ -169,6 +170,7 @@ export function isDateValidWithFormat(
     const monthIndex = fmt["mm"] ?? fmt["m"];
     const dateIndex = fmt["dd"] ?? fmt["d"];
 
+    console.log({ yearIndex, monthIndex });
     if (yearIndex === undefined) {
       if (throwError)
         throw new TypeError(

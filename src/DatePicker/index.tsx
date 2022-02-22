@@ -12,12 +12,14 @@ import {
   dateFormatter,
   parseDate,
   getDateObj,
+  getDateFromObject,
   // getDateFromObject,
 } from "../date-fns";
 import { isDateValidWithFormat } from "../CalendarData/validator";
 import { formatBsDate } from "../CalendarData";
 // import { ad2bs, bs2ad, formatBsDate, parseBsDate } from "../CalendarData";
 import { IDatePicker } from "../types/main";
+import { getTodaysDate } from "Calendar/util";
 
 const random_id = `rl-nepali-${Math.random()}`;
 
@@ -33,6 +35,8 @@ const DatePicker = (props: IDatePicker) => {
     placehoder,
     hideOnSelect = true,
     onSelect,
+    children,
+    showDelimiter = true,
     ...otherProps
   } = props;
 
@@ -44,7 +48,7 @@ const DatePicker = (props: IDatePicker) => {
   const [selectedDate, setSelectedDate] = useState(value);
 
   //This is what is shown in input field;
-  const [entetereDate, setEnteredDate] = useState("");
+  const [entetereDate, setEnteredDate] = useState(value);
   //Eventually selectedDate and enteredDate is supposed to be equal but not neccesary. When the user is typing on the input field only enteredDate is selected and when s/he stops or blurs or presses enter then only the states are synced.
 
   useEffect(() => {
@@ -53,91 +57,6 @@ const DatePicker = (props: IDatePicker) => {
 
   const { popupRef, inputRef, isVisible, setIsVisible, containerRef } =
     usePopper();
-
-  // const handleBlur = () => {
-  // setEnteredDate(selectedDate);
-
-  // if (isAD) {
-  //   const adDateObj = parseBsDate(selectedDate, dateFormat);
-  //   const bsDateObj = ad2bs(adDateObj.year, adDateObj.month, adDateObj.date);
-  //   const date = getDateFromObject(adDateObj);
-
-  //   typeof onChange === "function" &&
-  //     onChange(selectedDate, adDateObj, bsDateObj, date);
-  // } else {
-  //   const bsDateObj = parseBsDate(selectedDate, dateFormat);
-  //   const adDateObj = bs2ad(bsDateObj.year, bsDateObj.month, bsDateObj.date);
-  //   const date = getDateFromObject(adDateObj);
-
-  //   typeof onChange === "function" &&
-  //     onChange(selectedDate, adDateObj, bsDateObj, date);
-  // }
-  // setIsVisible(false);
-  // };
-  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = evt.currentTarget;
-
-    const today = dateFormatter(new Date(), dateFormat);
-
-    const dateStringOfSelectedDate = parseDate(
-      selectedDate || today,
-      dateFormat
-    );
-
-    const obj = getDateObj(selectedDate || today, dateFormat);
-
-    //TODO static
-    const acceptableFormat = [
-      "dd-mm-yyyy",
-      "dd/mm/yyyy",
-      "yyyy-mm-dd",
-      "yyyy/mm/dd",
-      dateFormat,
-    ];
-
-    acceptableFormat.forEach((format, index) => {
-      if (isDateValidWithFormat(value, format)) {
-        const yearValidator = /\d+.\d+.(\d){4}/;
-        const bool =
-          index === 1 || index === 2 ? value.match(yearValidator) : true;
-
-        if (bool) {
-          const formattedNewDate = changeDateFromOneFormatToAnother(
-            value,
-            format,
-            dateFormat
-          );
-
-          setSelectedDate(formattedNewDate);
-          setEnteredDate(formattedNewDate);
-        }
-      }
-    });
-
-    if (!isNaN(+value)) {
-      if (value.length === 2) {
-        const totalDaysInMonth = new Date(
-          dateStringOfSelectedDate.getFullYear(),
-          dateStringOfSelectedDate.getMonth() + 1,
-          0
-        ).getDate();
-
-        if (obj && +value <= totalDaysInMonth) {
-          obj.date = +value;
-          const newDate = formatBsDate(obj, dateFormat);
-          setSelectedDate(newDate);
-        }
-      }
-      if (value.length === 4) {
-        if (obj) {
-          obj.year = +value;
-          const newDate = formatBsDate(obj, dateFormat);
-          setSelectedDate(newDate);
-        }
-      }
-    }
-    setEnteredDate(value);
-  };
 
   return (
     <div
@@ -150,6 +69,8 @@ const DatePicker = (props: IDatePicker) => {
           visible={!!selectedDate}
           onClick={() => {
             typeof onChange === "function" && onChange("");
+            setSelectedDate("");
+            setEnteredDate("");
           }}
         />
       )}
@@ -158,17 +79,33 @@ const DatePicker = (props: IDatePicker) => {
           ref={inputRef}
           onClick={() => setIsVisible(true)}
           className={`rl-nepali-datepicker-input ${size}`}
-          value={entetereDate} // TODO convert  AD to BS and ....
+          defaultValue={value}
+          value={entetereDate}
           placeholder={`${placehoder ?? dateFormat} (${calendarType})`}
-          onChange={handleChange}
+          onChange={(e) => {
+            console.log("e", e.target.value);
+            setEnteredDate(e.target.value);
+          }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
+              console.log("entered", entetereDate);
+              console.log("dateormate", dateFormat);
+              if (isDateValidWithFormat(entetereDate, dateFormat)) {
+                alert("valid");
+                setSelectedDate(entetereDate);
+                onChange(entetereDate);
+              } else {
+                const x = getTodaysDate();
+                const ad = dateFormatter(getDateFromObject(x.ad), dateFormat);
+                setSelectedDate(ad);
+                onChange(ad);
+                setEnteredDate(ad);
+              }
+
               setIsVisible(false);
               inputRef.current?.blur();
             }
           }}
-          // onFocus={() => setIsVisible(true)}
-          // onBlur={handleBlur}
         />
 
         <CalendarIcon
@@ -194,7 +131,9 @@ const DatePicker = (props: IDatePicker) => {
                 onChange(formattedDate, adDate, bsDate, dateString);
             }}
             {...otherProps}
-          />
+          >
+            {children}
+          </NepaliCalendar>
         </div>
       )}
     </div>

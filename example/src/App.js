@@ -29,7 +29,7 @@ import "./App.css";
 
 const App = () => {
   const [date, setDate] = useState("");
-  const [dateBS, setDateBS] = useState("");
+  const [dateBS, setDateBS] = useState("01-01-2021");
 
   const [selectedDate, setSelectedDate] = useState("2021-07-03");
 
@@ -113,15 +113,25 @@ const App = () => {
         <p>Selected Date: {JSON.stringify(dateBS)}</p>
         New Date Picker
         <div style={{ marginBottom: 150 }}>
+        <input/>
+        <input/>
           <div style={{ width: 250 }}>
+          kjs;lkajs;fkja;jfs
             <DatePicker
               // value={dateBS}
+              value={dateBS}
+              calendarType="AD"
+              dateFormat="dd-mm-yyyy"
               onChange={(val) => {
                 console.log("val",val);
                 setDateBS(val);
               }}
-            />
+            >
+              <button>hello </button>
+            </DatePicker>
           </div>
+        <input/>
+
         </div>
 
         <h1>AD Date Picker</h1>
@@ -143,6 +153,7 @@ const App = () => {
           Base Date: 2021-09-14 Selected Range: {definedRangeSelector.from} -{" "}
           {definedRangeSelector.to}
         </p>
+
         <div style={{ marginBottom: 200 }}>
           <DefinedRangeCalendar
             from={definedRangeSelector.from}

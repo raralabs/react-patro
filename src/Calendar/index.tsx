@@ -11,7 +11,6 @@ import { DateRange, INepaliCalendar, IDateObject } from "../types/main";
 
 const NepaliCalendar = (props: INepaliCalendar) => {
   const {
-    // showToday = true,
     defaultValue,
     dateFormat,
     value,
@@ -27,6 +26,7 @@ const NepaliCalendar = (props: INepaliCalendar) => {
     maxDate,
     minDate,
     range,
+    children,
   } = props;
 
   useEffect(() => {
@@ -146,32 +146,7 @@ const NepaliCalendar = (props: INepaliCalendar) => {
               />
             </tbody>
           </table>
-
-          {/* {showToday && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                padding: 8,
-                paddingBottom: 0,
-              }}
-            >
-              <div
-                className="today-btn hand-cursor"
-                onClick={() => {
-                  setCalendarBSData(
-                    todayDateBS.year,
-                    todayDateBS.month,
-                    todayDateBS.date
-                  );
-                  onChangeDate(todayDateAD);
-                }}
-              >
-                Today
-              </div>
-            </div>
-          )} */}
+          {children}
         </div>
       </div>
     </div>

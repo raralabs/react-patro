@@ -76,10 +76,12 @@ interface IDatePicker extends INepaliCalendar {
   placehoder?: string;
   dateFormat: string;
   hideOnSelect: boolean;
+  children?: React.ReactNode;
+  showDelimiter: boolean;
 }
 
 export interface INepaliCalendar extends DisableProps, RangeProps {
-  showToday?: boolean;
+  children?: React.ReactNode;
   zeroDayName?: string;
   defaultValue?: string | null;
   dateFormat: string;

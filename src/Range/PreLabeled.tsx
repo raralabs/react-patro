@@ -152,7 +152,6 @@ const NepaliCalendarRange = (props: IDefinedRange) => {
         }}
         dateFormat={dateFormat}
         calendarType={calendarType}
-        showToday={false}
       />
     </div>
   );

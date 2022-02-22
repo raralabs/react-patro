@@ -44,7 +44,6 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
         }}
         dateFormat={dateFormat}
         calendarType={calendarType}
-        showToday={false}
       />
 
       <NepaliCalendarForRange
@@ -55,7 +54,6 @@ const NepaliCalendarRange = (props: ICalendarRange) => {
         }}
         dateFormat={dateFormat}
         calendarType={calendarType}
-        showToday={false}
       />
     </div>
   );
