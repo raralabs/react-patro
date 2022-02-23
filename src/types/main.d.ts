@@ -77,7 +77,8 @@ interface IDatePicker extends INepaliCalendar {
   dateFormat: string;
   hideOnSelect: boolean;
   children?: React.ReactNode;
-  showDelimiter: boolean;
+  showDelimiter?: boolean;
+  showCalenderOnlyWhenIconIsClicked?: boolean;
 }
 
 export interface INepaliCalendar extends DisableProps, RangeProps {

@@ -7,20 +7,13 @@ import CrossIcon from "../assets/CrossIcon";
 import { usePopper } from "./usePopper";
 import useCalendarType from "../hooks/useCalendarType";
 
-import {
-  changeDateFromOneFormatToAnother,
-  dateFormatter,
-  parseDate,
-  getDateObj,
-  getDateFromObject,
-  // getDateFromObject,
-} from "../date-fns";
+import { dateFormatter, getDateFromObject } from "../date-fns";
 import {
   isAdDateValid,
   isDateValidWithFormat,
   isBsDateValid,
 } from "../CalendarData/validator";
-import { formatBsDate, parseBsDate } from "../CalendarData";
+import { parseBsDate } from "../CalendarData";
 // import { ad2bs, bs2ad, formatBsDate, parseBsDate } from "../CalendarData";
 import { IDatePicker } from "../types/main";
 import { getTodaysDate } from "Calendar/util";
@@ -28,8 +21,6 @@ import { getTodaysDate } from "Calendar/util";
 const random_id = `rl-nepali-${Math.random()}`;
 
 function addDelimeter(enteredstring: string) {
-  console.log("enteredstring", enteredstring);
-
   if (enteredstring.slice(-1) === "-") return enteredstring;
   if (enteredstring.length === 2) return enteredstring + "-";
   if (enteredstring.length === 5) return enteredstring + "-";
@@ -47,6 +38,7 @@ const DatePicker = (props: IDatePicker) => {
     showMonthDropdown,
     placehoder,
     hideOnSelect = true,
+    showCalenderOnlyWhenIconIsClicked,
     onSelect,
     children,
     showDelimiter = true,
@@ -71,6 +63,51 @@ const DatePicker = (props: IDatePicker) => {
   const { popupRef, inputRef, isVisible, setIsVisible, containerRef } =
     usePopper();
 
+  const syncEnteredwithSelected = () => {
+    if (isDateValidWithFormat(entetereDate, dateFormat)) {
+      const parsedDateObj = parseBsDate(entetereDate, dateFormat);
+      if (isAD && isAdDateValid(parsedDateObj)) {
+        setSelectedDate(entetereDate);
+        onChange(entetereDate);
+      }
+      if (isBsDateValid(parsedDateObj)) {
+        setSelectedDate(entetereDate);
+        onChange(entetereDate);
+      } else {
+        const x = getTodaysDate();
+        const ad = dateFormatter(getDateFromObject(x.ad), dateFormat);
+        setSelectedDate(ad);
+        onChange(ad);
+        setEnteredDate(ad);
+      }
+    } else {
+      const today = getTodaysDate();
+
+      if (entetereDate.length <= 3) {
+        if (entetereDate.slice(-1) === "-") {
+          const sliced = entetereDate.slice(0, entetereDate.length - 1);
+          if (isAD) {
+            today.ad.date = +sliced;
+          } else {
+            today.bs.date = +sliced;
+          }
+        } else {
+          if (isAD) {
+            today.ad.date = +entetereDate;
+          } else {
+            today.bs.date = +entetereDate;
+          }
+        }
+      }
+      const ad = dateFormatter(
+        getDateFromObject(isAD ? today.ad : today.bs),
+        dateFormat
+      );
+      setSelectedDate(ad);
+      onChange(ad);
+      setEnteredDate(ad);
+    }
+  };
   return (
     <div
       id={random_id}
@@ -90,7 +127,9 @@ const DatePicker = (props: IDatePicker) => {
       <div className="input-wrapper">
         <input
           ref={inputRef}
-          onClick={() => setIsVisible(true)}
+          onClick={() =>
+            !showCalenderOnlyWhenIconIsClicked && setIsVisible(true)
+          }
           className={`rl-nepali-datepicker-input ${size}`}
           defaultValue={value}
           value={entetereDate}
@@ -102,59 +141,16 @@ const DatePicker = (props: IDatePicker) => {
               setEnteredDate(e.target.value);
             }
           }}
+          onBlur={() => {
+            syncEnteredwithSelected();
+          }}
           onKeyDown={(e) => {
             if (e.key === "Backspace") {
               if (entetereDate.slice(-1) === "-")
                 setEnteredDate(entetereDate.slice(0, entetereDate.length - 2));
             }
             if (e.key === "Enter") {
-              if (isDateValidWithFormat(entetereDate, dateFormat)) {
-                const parsedDateObj = parseBsDate(entetereDate, dateFormat);
-                if (isAD && isAdDateValid(parsedDateObj)) {
-                  setSelectedDate(entetereDate);
-                  onChange(entetereDate);
-                }
-                if (isBsDateValid(parsedDateObj)) {
-                  setSelectedDate(entetereDate);
-                  onChange(entetereDate);
-                } else {
-                  const x = getTodaysDate();
-                  const ad = dateFormatter(getDateFromObject(x.ad), dateFormat);
-                  setSelectedDate(ad);
-                  onChange(ad);
-                  setEnteredDate(ad);
-                }
-              } else {
-                const today = getTodaysDate();
-
-                if (entetereDate.length <= 3) {
-                  if (entetereDate.slice(-1) === "-") {
-                    const sliced = entetereDate.slice(
-                      0,
-                      entetereDate.length - 1
-                    );
-                    if (isAD) {
-                      today.ad.date = +sliced;
-                    } else {
-                      today.bs.date = +sliced;
-                    }
-                  } else {
-                    if (isAD) {
-                      today.ad.date = +entetereDate;
-                    } else {
-                      today.bs.date = +entetereDate;
-                    }
-                  }
-                }
-                const ad = dateFormatter(
-                  getDateFromObject(isAD ? today.ad : today.bs),
-                  dateFormat
-                );
-                setSelectedDate(ad);
-                onChange(ad);
-                setEnteredDate(ad);
-              }
-
+              syncEnteredwithSelected();
               setIsVisible(false);
               inputRef.current?.blur();
             }

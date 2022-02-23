@@ -119,6 +119,7 @@ const App = () => {
           kjs;lkajs;fkja;jfs
             <DatePicker
               // value={dateBS}
+              showCalenderOnlyWhenIconIsClicked
               value={dateBS}
               calendarType="AD"
               dateFormat="dd-mm-yyyy"

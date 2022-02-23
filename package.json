@@ -1,6 +1,6 @@
 {
   "name": "react-patro",
-  "version": "0.0.3-beta",
+  "version": "0.0.4-beta",
   "description": "AD and BS Calendar functions as hooks and component",
   "license": "MIT",
   "main": "dist/index.js",
