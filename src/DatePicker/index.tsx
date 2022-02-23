@@ -15,13 +15,26 @@ import {
   getDateFromObject,
   // getDateFromObject,
 } from "../date-fns";
-import { isDateValidWithFormat } from "../CalendarData/validator";
-import { formatBsDate } from "../CalendarData";
+import {
+  isAdDateValid,
+  isDateValidWithFormat,
+  isBsDateValid,
+} from "../CalendarData/validator";
+import { formatBsDate, parseBsDate } from "../CalendarData";
 // import { ad2bs, bs2ad, formatBsDate, parseBsDate } from "../CalendarData";
 import { IDatePicker } from "../types/main";
 import { getTodaysDate } from "Calendar/util";
 
 const random_id = `rl-nepali-${Math.random()}`;
+
+function addDelimeter(enteredstring: string) {
+  console.log("enteredstring", enteredstring);
+
+  if (enteredstring.slice(-1) === "-") return enteredstring;
+  if (enteredstring.length === 2) return enteredstring + "-";
+  if (enteredstring.length === 5) return enteredstring + "-";
+  return enteredstring;
+}
 
 const DatePicker = (props: IDatePicker) => {
   const {
@@ -42,7 +55,7 @@ const DatePicker = (props: IDatePicker) => {
 
   const calendarType = useCalendarType(calendarTypeFromProps);
 
-  // const isAD = calendarType === "AD";
+  const isAD = calendarType === "AD";
 
   //This is the data that is sent to the NepaliCalendar
   const [selectedDate, setSelectedDate] = useState(value);
@@ -83,20 +96,60 @@ const DatePicker = (props: IDatePicker) => {
           value={entetereDate}
           placeholder={`${placehoder ?? dateFormat} (${calendarType})`}
           onChange={(e) => {
-            console.log("e", e.target.value);
-            setEnteredDate(e.target.value);
+            if (showDelimiter) {
+              setEnteredDate(addDelimeter(e.target.value));
+            } else {
+              setEnteredDate(e.target.value);
+            }
           }}
           onKeyDown={(e) => {
+            if (e.key === "Backspace") {
+              if (entetereDate.slice(-1) === "-")
+                setEnteredDate(entetereDate.slice(0, entetereDate.length - 2));
+            }
             if (e.key === "Enter") {
-              console.log("entered", entetereDate);
-              console.log("dateormate", dateFormat);
               if (isDateValidWithFormat(entetereDate, dateFormat)) {
-                alert("valid");
-                setSelectedDate(entetereDate);
-                onChange(entetereDate);
+                const parsedDateObj = parseBsDate(entetereDate, dateFormat);
+                if (isAD && isAdDateValid(parsedDateObj)) {
+                  setSelectedDate(entetereDate);
+                  onChange(entetereDate);
+                }
+                if (isBsDateValid(parsedDateObj)) {
+                  setSelectedDate(entetereDate);
+                  onChange(entetereDate);
+                } else {
+                  const x = getTodaysDate();
+                  const ad = dateFormatter(getDateFromObject(x.ad), dateFormat);
+                  setSelectedDate(ad);
+                  onChange(ad);
+                  setEnteredDate(ad);
+                }
               } else {
-                const x = getTodaysDate();
-                const ad = dateFormatter(getDateFromObject(x.ad), dateFormat);
+                const today = getTodaysDate();
+
+                if (entetereDate.length <= 3) {
+                  if (entetereDate.slice(-1) === "-") {
+                    const sliced = entetereDate.slice(
+                      0,
+                      entetereDate.length - 1
+                    );
+                    if (isAD) {
+                      today.ad.date = +sliced;
+                    } else {
+                      today.bs.date = +sliced;
+                    }
+                  } else {
+                    if (isAD) {
+                      today.ad.date = +entetereDate;
+                    } else {
+                      today.bs.date = +entetereDate;
+                    }
+                  }
+                }
+                const ad = dateFormatter(
+                  getDateFromObject(isAD ? today.ad : today.bs),
+                  dateFormat
+                );
                 setSelectedDate(ad);
                 onChange(ad);
                 setEnteredDate(ad);
