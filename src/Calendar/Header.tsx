@@ -61,25 +61,33 @@ const Header = ({
       <div className="month-header">
         <div className="left-actions">
           <button
+            type="button"
             style={{
               border: "none",
               backgroundColor: "inherit",
               color: "White",
             }}
             title="Previous Year"
-            onClick={() => changeYear(-1)}
+            onClick={(e) => {
+              e.stopPropagation();
+              changeYear(-1);
+            }}
             className="prev-year hand-cursor"
           >
             &#10094;&#10094;
           </button>
           <button
+            type="button"
             style={{
               border: "none",
               backgroundColor: "inherit",
               color: "White",
             }}
             title="Previous Month"
-            onClick={() => changeMonth(-1)}
+            onClick={(e) => {
+              e.stopPropagation();
+              changeMonth(-1);
+            }}
             className="prev-month hand-cursor"
           >
             &#10094;
@@ -153,6 +161,7 @@ const Header = ({
 
         <div className="right-actions">
           <button
+            type="button"
             title="Next Month"
             style={{
               border: "none",
@@ -160,7 +169,8 @@ const Header = ({
               color: `${reachedMaxYear && month >= 9 ? "gray" : "white"}`,
             }}
             disabled={reachedMaxYear && month >= 9}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               changeMonth(1);
             }}
             className="next-month hand-cursor"
@@ -168,12 +178,14 @@ const Header = ({
             &#10095;
           </button>
           <button
+            type="button"
             style={{
               border: "none",
               backgroundColor: "inherit",
               color: `${reachedMaxYear ? "gray" : "white"}`,
             }}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               changeYear(1);
             }}
             disabled={reachedMaxYear}
