@@ -1,6 +1,6 @@
 {
   "name": "@raralabs/react-patro",
-  "version": "0.0.4-beta",
+  "version": "1.0.0",
   "author": "Raralabs",
   "license": "MIT",
   "description": "AD and BS Calendar functions as hooks and component",
