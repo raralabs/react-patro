@@ -15,13 +15,13 @@ AD and BS Calendar functions as hooks and component
 The package can be installed via [npm](https://github.com/npm/cli)
 
 ```cli
-npm install react-patro --save
+npm install @raralsbs/react-patro --save
 ```
 
 or via [yarn](https://github.com/yarnpkg/yarn)
 
 ```cli
-yarn add react-patro
+yarn add @raralsbs/react-patro
 ```
 
 ## css
