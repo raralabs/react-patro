@@ -1,8 +1,9 @@
 {
-  "name": "react-patro",
+  "name": "@raralabs/react-patro",
   "version": "0.0.4-beta",
-  "description": "AD and BS Calendar functions as hooks and component",
+  "author": "Raralabs",
   "license": "MIT",
+  "description": "AD and BS Calendar functions as hooks and component",
   "main": "dist/index.js",
   "module": "dist/index.esm",
   "source": "src/index.tsx",
