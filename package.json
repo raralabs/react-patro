@@ -86,5 +86,9 @@
     "dist",
     "package.json",
     "src/styles.css"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }
